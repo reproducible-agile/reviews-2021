@@ -37,3 +37,20 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+2020/
+
+agile-2020-papers.html
+
+.local/
+
+.rstudio/
+
+.venv/
+
+accepted-full-papers/*.pdf
+accepted-full-papers/*.html
+
+submissions/*.pdf
+
+agile-2020-papers_files/
