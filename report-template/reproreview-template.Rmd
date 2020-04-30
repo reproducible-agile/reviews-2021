@@ -1,0 +1,42 @@
+---
+title: "Reproducibility Review Template"
+author: "Augusta Authora"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    toc: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r logo, echo = FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
+temp <- tempfile(fileext = ".pdf")
+download.file(url = "https://github.com/reproducible-agile/reproducible-agile.github.io/raw/master/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
+knitr::include_graphics(temp)
+```
+
+# Summary
+
+- Result of the reproduction
+- main outcome or figure
+
+# Resources
+
+This document reports on the reproduction of the article _ARTICLE REFERENCE HERE_.
+
+This reproduction report is published on OSF at _OSF LINK HERE_.
+
+The code and data used is available online at _ADD REFERENCES/CITATIONS/LINKS_.
+
+\clearpage
+
+# Reproducibility reviewer notes
+
+- technical details about reproduction
+- code snippets
+- summary of communication with author
+- figures/screenshots
+- runtime
+- reproduction efforts
