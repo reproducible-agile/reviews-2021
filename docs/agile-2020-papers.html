@@ -218,7 +218,7 @@ $(document).ready(function () {
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>This document includes scripts and text analysis to support the reproducibility review at the <a href="https://agile-online.org/conference-2020">AGILE conference 2020</a>, in Chania, Greece - <em>“Geospatial Technologies: seeding the future”</em>. The physical conference was cancelled due to the <a href="https://en.wikipedia.org/wiki/Coronavirus_disease_2019">COVID-19 crisis</a>. The full papers were already reviewed at the time the decision to cancel was taken, so these are still published. However, short papers and posters were not sent out to review but are included here in the summary statistics.</p>
-<p>Find out more online <a href="https://doi.org/10.17605/OSF.IO/PHMCE">about reproducible publications at AGILE</a> and the <a href="https://osf.io/eg4qx/">review process</a>, and visit the Reproducible AGILE website: <a href="https://reproducible-agile.github.io/">https://reproducible-agile.github.io/</a>. The code of this document is published on GitHub in the repository <a href="https://github.com/reproducible-agile/reviews-2020">reproducible-agile/reviews-2020</a>, where you can inspect the R code in the file <code>agile-2020-papers.Rmd</code> and find instructions for reproducing the workflow. The <a href="https://bookdown.org/yihui/rmarkdown/parameterized-reports.html">report parameter</a> <code>private_info</code> can be set to <code>yes</code> to show information which cannot be shared publicly, such as author names, titles, or excerpts of not accepted submissions.</p>
+<p>Find out more online <a href="https://doi.org/10.17605/OSF.IO/PHMCE">about reproducible publications at AGILE</a> and the <a href="https://osf.io/eg4qx/">review process</a>, and visit the Reproducible AGILE website: <a href="https://reproducible-agile.github.io/">https://reproducible-agile.github.io/</a>. The code of this document is published on GitHub in the repository <a href="https://github.com/reproducible-agile/reviews-2020">reproducible-agile/reviews-2020</a>, where you can inspect the R code in the file <code>agile-2020-papers.Rmd</code> and find instructions for reproducing the workflow. The <a href="https://bookdown.org/yihui/rmarkdown/parameterized-reports.html">report parameter</a> <code>private_info</code> can be set to <code>yes</code> to show information which cannot be shared publicly, such as author names, titles, or excerpts of not accepted submissions, and to upload review files to private shares, which requires authentication.</p>
 </div>
 <div id="submitted-papers" class="section level2">
 <h2>Submitted papers</h2>
@@ -6455,551 +6455,6 @@ In the future, we could do some text mining to answer questions such as
 ```
 
 
-```r
-# put accepted full papers to private share
-library("googledrive")
-googledrive::drive_auth(use_oob = TRUE)
-
-sapply(file.path(fp_path, list.files(fp_path)), function(the_file) {
-   googledrive::drive_put(media = the_file,
-                          name = basename(the_file),
-                          path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
-})
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 003_reviews.html: 1K-kphLDU7JtiG-rZVkZmvdakI-yjCV0k
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 003.pdf: 10Tg2pbKskBAp1Vp5XQ1_LvePv3VBRQDT
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 004_reviews.html: 145pjF6_p6ZstUftadV4_dohS5aQZ3YHV
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 004.pdf: 1YwlsaH6SvIMC7mTTQ3LZlgzxXERU53w4
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 005_reviews.html: 1lanLbC0ngSKJ6ntmsWlO1Kr9AHVhkX17
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 005.pdf: 1Fo78LrvcVGk5oY9sC_Wm7YNoRjMR_7J5
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 006_reviews.html: 1PHe1esYy2-C3hn6V843JdSnU57KRm-Cl
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 006.pdf: 1eVoq6eljigk4DgAR_8n6zm4_277H-dxD
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 008_reviews.html: 1h6t3PzD_nlXvP88ErhmNMjV9MV0umqI-
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 008.pdf: 1yJkG4evxodz0pvN4LjiUQLDAbPXl4xKU
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 009_reviews.html: 1C14gxWN0KTIoBWtc47hbPT_6PZGTYJMS
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 009.pdf: 1AZntt5loLiew4yDo3hLRAnAdXmt-EOIi
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 011_reviews.html: 1OuxobQn3MmfNyUnqku5FnoBnj8s33LhG
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 011.pdf: 1pOiJWWFkNiAQTF_mdhvXXfARXbvPr8-x
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 012_reviews.html: 1sqZCSNzOnfLNI5Jtlo1Ou4Ge633FIUOV
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 012.pdf: 1cSO6lf08bhkGQ0kxxvjA1prLcAObEJkI
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 015_reviews.html: 1-3HW-Z0YzoRMr-ewJtVwqxVtBZSFZHjS
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 015.pdf: 1kaZO8KPCZpgeYIdzxDBRF37VrYdwEdjt
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 016_reviews.html: 1JisOZN7qHDOx6ISdShlT2VhjeR3O7MLh
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 016.pdf: 1QZfyq-yqdvfO4_BrC_4T3LWe6I-X-Xgq
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 017_reviews.html: 1JVO2bsQZcLLdcCFMJYOp0GY3GandQrq4
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 017.pdf: 1KC3asW5ZuFcdhb8KHrY9vcEH21eKF4jb
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 018_reviews.html: 1CqbFrkaawTEh8vUyi8dxcjMBTiSMlWpw
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 018.pdf: 1k3qmyseDpP_S79IGGoQYLyspOgOvVs0a
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 019_reviews.html: 1pYleGrDxzZs3RamRzmpSqX9kM5OxyNwV
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 019.pdf: 1Dotg_hXGMHYokuRa1T6Kl_uDIEx9Ide2
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 020_reviews.html: 18dwP9271lECEC2iXNo4PI0BYluz9x6Rh
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 020.pdf: 1oZGoXz3HdilWZ_fvpWasOMpz4QptNpc0
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 021_reviews.html: 1wKjpcc8t-dHe7CrqrAqarrdDc2dYxWZL
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 021.pdf: 1Fp7mqPeP5tjhtajEfWnVT4h5e2wzFyLQ
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 023_reviews.html: 1BphCDy44RCRiHThgMcU54e72RSNmU6zi
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 023.pdf: 1n9FidGdY3QyOkMTIKffb4oV9nrh-9xtQ
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 024_reviews.html: 1ja68nE1N49RAUSrf3PcHnqKjAQLmKqeM
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 024.pdf: 1hogCr4q70cBbqK092X-hBfjBUIpsxrq2
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 026_reviews.html: 12MTYiVjP8xez9A7IX-rF7nL2xOx0xGac
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 026.pdf: 1JHSNrS9ueY58LVFlMnZse3OJg8RqNa_S
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 027_reviews.html: 1oQyPogz4gjVMNNcwJ7lBhgbgxqlOrE7D
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 027.pdf: 1aLH6JcXViWf5_z_vmy4EeCS25BibInfQ
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 029_reviews.html: 1Sb63FctlrRHgpfpzEnI2KGLFAGI31LwL
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 029.pdf: 1i53EDU35WFzwf0X8mqAMvfwg97fbIsTA
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 031_reviews.html: 1_5LDbiw_wR0WlH28xx87Dw9abKFeS-kA
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 031.pdf: 1cJcr_zjYxxKJ6gFcY7afcon5-tinvyzN
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 032_reviews.html: 1wAQvQdMm9-vYuRsRrqxCpAOglEPTO-nc
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 032.pdf: 13f8bZcVXoTl9iAIcSXKZZuSS6Pib8pB-
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 034_reviews.html: 1StQ8uDYMbzZjKFjNRM-ZnWXi20JfvYOv
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * 034.pdf: 1w98VorhlqXLjxUZDYvm2K4tnqqMPzvdn
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-```
-
-```
-## File updated:
-##   * review_data.csv: 1gswKEGVwZ62-Dg1KtoJtlvA7UcicyHtT
-```
-
-```
-##                /home/rstudio/accepted-full-papers/003_reviews.html /home/rstudio/accepted-full-papers/003.pdf
-## name           "003_reviews.html"                                  "003.pdf"                                 
-## id             "1K-kphLDU7JtiG-rZVkZmvdakI-yjCV0k"                 "10Tg2pbKskBAp1Vp5XQ1_LvePv3VBRQDT"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/004_reviews.html /home/rstudio/accepted-full-papers/004.pdf
-## name           "004_reviews.html"                                  "004.pdf"                                 
-## id             "145pjF6_p6ZstUftadV4_dohS5aQZ3YHV"                 "1YwlsaH6SvIMC7mTTQ3LZlgzxXERU53w4"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/005_reviews.html /home/rstudio/accepted-full-papers/005.pdf
-## name           "005_reviews.html"                                  "005.pdf"                                 
-## id             "1lanLbC0ngSKJ6ntmsWlO1Kr9AHVhkX17"                 "1Fo78LrvcVGk5oY9sC_Wm7YNoRjMR_7J5"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/006_reviews.html /home/rstudio/accepted-full-papers/006.pdf
-## name           "006_reviews.html"                                  "006.pdf"                                 
-## id             "1PHe1esYy2-C3hn6V843JdSnU57KRm-Cl"                 "1eVoq6eljigk4DgAR_8n6zm4_277H-dxD"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/008_reviews.html /home/rstudio/accepted-full-papers/008.pdf
-## name           "008_reviews.html"                                  "008.pdf"                                 
-## id             "1h6t3PzD_nlXvP88ErhmNMjV9MV0umqI-"                 "1yJkG4evxodz0pvN4LjiUQLDAbPXl4xKU"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/009_reviews.html /home/rstudio/accepted-full-papers/009.pdf
-## name           "009_reviews.html"                                  "009.pdf"                                 
-## id             "1C14gxWN0KTIoBWtc47hbPT_6PZGTYJMS"                 "1AZntt5loLiew4yDo3hLRAnAdXmt-EOIi"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/011_reviews.html /home/rstudio/accepted-full-papers/011.pdf
-## name           "011_reviews.html"                                  "011.pdf"                                 
-## id             "1OuxobQn3MmfNyUnqku5FnoBnj8s33LhG"                 "1pOiJWWFkNiAQTF_mdhvXXfARXbvPr8-x"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/012_reviews.html /home/rstudio/accepted-full-papers/012.pdf
-## name           "012_reviews.html"                                  "012.pdf"                                 
-## id             "1sqZCSNzOnfLNI5Jtlo1Ou4Ge633FIUOV"                 "1cSO6lf08bhkGQ0kxxvjA1prLcAObEJkI"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/015_reviews.html /home/rstudio/accepted-full-papers/015.pdf
-## name           "015_reviews.html"                                  "015.pdf"                                 
-## id             "1-3HW-Z0YzoRMr-ewJtVwqxVtBZSFZHjS"                 "1kaZO8KPCZpgeYIdzxDBRF37VrYdwEdjt"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/016_reviews.html /home/rstudio/accepted-full-papers/016.pdf
-## name           "016_reviews.html"                                  "016.pdf"                                 
-## id             "1JisOZN7qHDOx6ISdShlT2VhjeR3O7MLh"                 "1QZfyq-yqdvfO4_BrC_4T3LWe6I-X-Xgq"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/017_reviews.html /home/rstudio/accepted-full-papers/017.pdf
-## name           "017_reviews.html"                                  "017.pdf"                                 
-## id             "1JVO2bsQZcLLdcCFMJYOp0GY3GandQrq4"                 "1KC3asW5ZuFcdhb8KHrY9vcEH21eKF4jb"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/018_reviews.html /home/rstudio/accepted-full-papers/018.pdf
-## name           "018_reviews.html"                                  "018.pdf"                                 
-## id             "1CqbFrkaawTEh8vUyi8dxcjMBTiSMlWpw"                 "1k3qmyseDpP_S79IGGoQYLyspOgOvVs0a"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/019_reviews.html /home/rstudio/accepted-full-papers/019.pdf
-## name           "019_reviews.html"                                  "019.pdf"                                 
-## id             "1pYleGrDxzZs3RamRzmpSqX9kM5OxyNwV"                 "1Dotg_hXGMHYokuRa1T6Kl_uDIEx9Ide2"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/020_reviews.html /home/rstudio/accepted-full-papers/020.pdf
-## name           "020_reviews.html"                                  "020.pdf"                                 
-## id             "18dwP9271lECEC2iXNo4PI0BYluz9x6Rh"                 "1oZGoXz3HdilWZ_fvpWasOMpz4QptNpc0"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/021_reviews.html /home/rstudio/accepted-full-papers/021.pdf
-## name           "021_reviews.html"                                  "021.pdf"                                 
-## id             "1wKjpcc8t-dHe7CrqrAqarrdDc2dYxWZL"                 "1Fp7mqPeP5tjhtajEfWnVT4h5e2wzFyLQ"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/023_reviews.html /home/rstudio/accepted-full-papers/023.pdf
-## name           "023_reviews.html"                                  "023.pdf"                                 
-## id             "1BphCDy44RCRiHThgMcU54e72RSNmU6zi"                 "1n9FidGdY3QyOkMTIKffb4oV9nrh-9xtQ"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/024_reviews.html /home/rstudio/accepted-full-papers/024.pdf
-## name           "024_reviews.html"                                  "024.pdf"                                 
-## id             "1ja68nE1N49RAUSrf3PcHnqKjAQLmKqeM"                 "1hogCr4q70cBbqK092X-hBfjBUIpsxrq2"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/026_reviews.html /home/rstudio/accepted-full-papers/026.pdf
-## name           "026_reviews.html"                                  "026.pdf"                                 
-## id             "12MTYiVjP8xez9A7IX-rF7nL2xOx0xGac"                 "1JHSNrS9ueY58LVFlMnZse3OJg8RqNa_S"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/027_reviews.html /home/rstudio/accepted-full-papers/027.pdf
-## name           "027_reviews.html"                                  "027.pdf"                                 
-## id             "1oQyPogz4gjVMNNcwJ7lBhgbgxqlOrE7D"                 "1aLH6JcXViWf5_z_vmy4EeCS25BibInfQ"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/029_reviews.html /home/rstudio/accepted-full-papers/029.pdf
-## name           "029_reviews.html"                                  "029.pdf"                                 
-## id             "1Sb63FctlrRHgpfpzEnI2KGLFAGI31LwL"                 "1i53EDU35WFzwf0X8mqAMvfwg97fbIsTA"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/031_reviews.html /home/rstudio/accepted-full-papers/031.pdf
-## name           "031_reviews.html"                                  "031.pdf"                                 
-## id             "1_5LDbiw_wR0WlH28xx87Dw9abKFeS-kA"                 "1cJcr_zjYxxKJ6gFcY7afcon5-tinvyzN"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/032_reviews.html /home/rstudio/accepted-full-papers/032.pdf
-## name           "032_reviews.html"                                  "032.pdf"                                 
-## id             "1wAQvQdMm9-vYuRsRrqxCpAOglEPTO-nc"                 "13f8bZcVXoTl9iAIcSXKZZuSS6Pib8pB-"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/034_reviews.html /home/rstudio/accepted-full-papers/034.pdf
-## name           "034_reviews.html"                                  "034.pdf"                                 
-## id             "1StQ8uDYMbzZjKFjNRM-ZnWXi20JfvYOv"                 "1w98VorhlqXLjxUZDYvm2K4tnqqMPzvdn"       
-## drive_resource List,1                                              List,1                                    
-##                /home/rstudio/accepted-full-papers/review_data.csv
-## name           "review_data.csv"                                 
-## id             "1gswKEGVwZ62-Dg1KtoJtlvA7UcicyHtT"               
-## drive_resource List,1
-```
-
-```r
-googledrive::drive_put(media = review_data_csv_file,
-                       name = basename(review_data_csv_file),
-                       path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
-```
-
-```
-## Pre-existing file found at this filepath. Calling `drive_update()`.
-## File updated:
-##   * review_data.csv: 1gswKEGVwZ62-Dg1KtoJtlvA7UcicyHtT
-```
 
 -->
 </div>
@@ -7009,30 +6464,22 @@ googledrive::drive_put(media = review_data_csv_file,
 <li>Familiarise yourself with the <a href="https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#heading=h.oheeg2s92zdm">AGILE Reproducibility Review Process</a>; the following steps are just tl;dr version</li>
 <li>Take a look at the <a href="https://github.com/reproducible-agile/reviews-2020/blob/master/report-template/reproreview-template.Rmd">review report template</a></li>
 <li>Go to the <a href="https://docs.google.com/spreadsheets/d/1K6_8NqDfXH5uI07LBmBmgnapVP2fYlvU2QcE84UeqD0/">master spreadsheet</a> and find your assignments</li>
-<li>Conduct your reproducibility review and write the report</li>
-</ol>
+<li>Conduct your reproducibility review and write the report
 <ul>
-<li>Don’t forget to take a look at the scientific reviews for comments on reproducibility; do <em>not</em> worry about the science or read the full paper, unless it really interests you
-<ul>
+<li>Don’t forget to take a look at the scientific reviews for comments on reproducibility; do <em>not</em> worry about the science or read the full paper, unless it really interests you</li>
 <li>If code is available on GitHub, you can fork the project into the <a href="https://github.com/reproducible-agile/">Reproducible AGILE organisation</a>, same <a href="https://gitlab.com/reproducible-agile/reviews">on GitLab in the subgroup “reviews”</a></li>
 <li>If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review</li>
 </ul></li>
-</ul>
-<ol start="5" style="list-style-type: decimal">
 <li>Send the report to the original authors of the paper and add the reproducibility chair in CC, see template below; <em>only if the authors agree</em> with a publication of the report, proceed with the following steps</li>
-<li>Add a new component to the <a href="https://osf.io/6k5fh/">OSF project for 2020 reproducibility reviews</a></li>
-</ol>
+<li>Add a new component to the <a href="https://osf.io/6k5fh/">OSF project for 2020 reproducibility reviews</a>
 <ul>
-<li>Use the European storage location, “Frankfurt”
-<ul>
+<li>Use the European storage location, “Frankfurt”</li>
 <li>Name the component <code>Reproducibility review of: FULL PAPER TITLE</code></li>
 <li>Add all contributors to the project</li>
 <li>Publish the component and mint a DOI</li>
 <li>Add the DOI to your report</li>
 <li>Upload a PDF of your report and any useful supplemental files</li>
 </ul></li>
-</ul>
-<ol start="7" style="list-style-type: decimal">
 <li>Add link to the OSF project in the master spreadsheet</li>
 </ol>
 <div id="author-contact-template" class="section level4">
@@ -7064,115 +6511,59 @@ NAME</code></pre>
 <h2>Colophon</h2>
 <p>This document is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. All contained code is licensed under the <a href="https://choosealicense.com/licenses/apache-2.0/">Apache License 2.0</a>.</p>
 <p><strong>Runtime environment description:</strong></p>
-<pre><code>## ─ Session info ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+<pre><code>## R version 3.6.0 (2019-04-26)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Debian GNU/Linux 9 (stretch)
 ## 
-## ─ Packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-##  package      * version date       lib source                                
-##  askpass        1.1     2019-01-13 [1] CRAN (R 3.6.0)                        
-##  assertthat     0.2.1   2019-03-21 [1] CRAN (R 3.6.0)                        
-##  backports      1.1.4   2019-04-10 [1] CRAN (R 3.6.0)                        
-##  base         * 3.6.0   2019-07-10 [2] local                                 
-##  broom          0.5.2   2019-04-07 [1] CRAN (R 3.6.0)                        
-##  callr          3.3.0   2019-07-04 [1] CRAN (R 3.6.0)                        
-##  cellranger     1.1.0   2016-07-27 [1] CRAN (R 3.6.0)                        
-##  cli            1.1.0   2019-03-19 [1] CRAN (R 3.6.0)                        
-##  colorspace     1.4-1   2019-03-18 [1] CRAN (R 3.6.0)                        
-##  compiler       3.6.0   2019-07-10 [2] local                                 
-##  crayon         1.3.4   2017-09-16 [1] CRAN (R 3.6.0)                        
-##  curl           3.3     2019-01-10 [1] CRAN (R 3.6.0)                        
-##  data.table     1.12.2  2019-04-07 [1] CRAN (R 3.6.0)                        
-##  datasets     * 3.6.0   2019-07-10 [2] local                                 
-##  desc           1.2.0   2018-05-01 [1] CRAN (R 3.6.0)                        
-##  devtools       2.0.2   2019-04-08 [1] CRAN (R 3.6.0)                        
-##  digest         0.6.20  2019-07-04 [1] CRAN (R 3.6.0)                        
-##  dplyr        * 0.8.3   2019-07-04 [1] CRAN (R 3.6.0)                        
-##  evaluate       0.14    2019-05-28 [1] CRAN (R 3.6.0)                        
-##  fastmatch      1.1-0   2017-01-28 [1] CRAN (R 3.6.0)                        
-##  forcats      * 0.4.0   2019-02-17 [1] CRAN (R 3.6.0)                        
-##  fs             1.3.1   2019-05-06 [1] CRAN (R 3.6.0)                        
-##  gargle         0.3.0   2019-06-27 [1] CRAN (R 3.6.0)                        
-##  generics       0.0.2   2018-11-29 [1] CRAN (R 3.6.0)                        
-##  ggplot2      * 3.2.0   2019-06-16 [1] CRAN (R 3.6.0)                        
-##  glue           1.3.1   2019-03-12 [1] CRAN (R 3.6.0)                        
-##  googledrive  * 1.0.0   2020-05-27 [1] Github (tidyverse/googledrive@e2ffbbb)
-##  graphics     * 3.6.0   2019-07-10 [2] local                                 
-##  grDevices    * 3.6.0   2019-07-10 [2] local                                 
-##  grid           3.6.0   2019-07-10 [2] local                                 
-##  gtable         0.3.0   2019-03-25 [1] CRAN (R 3.6.0)                        
-##  haven          2.1.1   2019-07-04 [1] CRAN (R 3.6.0)                        
-##  here         * 0.1     2017-05-28 [1] CRAN (R 3.6.0)                        
-##  highr          0.8     2019-03-20 [1] CRAN (R 3.6.0)                        
-##  hms            0.4.2   2018-03-10 [1] CRAN (R 3.6.0)                        
-##  htmltools      0.3.6   2017-04-28 [1] CRAN (R 3.6.0)                        
-##  httr         * 1.4.0   2018-12-11 [1] CRAN (R 3.6.0)                        
-##  janeaustenr    0.1.5   2017-06-10 [1] CRAN (R 3.6.0)                        
-##  jsonlite       1.6     2018-12-07 [1] CRAN (R 3.6.0)                        
-##  kableExtra   * 1.1.0   2019-03-16 [1] CRAN (R 3.6.0)                        
-##  knitr          1.23    2019-05-18 [1] CRAN (R 3.6.0)                        
-##  labeling       0.3     2014-08-23 [1] CRAN (R 3.6.0)                        
-##  lattice        0.20-38 2018-11-04 [2] CRAN (R 3.6.0)                        
-##  lazyeval       0.2.2   2019-03-15 [1] CRAN (R 3.6.0)                        
-##  lubridate      1.7.4   2018-04-11 [1] CRAN (R 3.6.0)                        
-##  magrittr       1.5     2014-11-22 [1] CRAN (R 3.6.0)                        
-##  Matrix         1.2-17  2019-03-22 [2] CRAN (R 3.6.0)                        
-##  memoise        1.1.0   2017-04-21 [1] CRAN (R 3.6.0)                        
-##  methods      * 3.6.0   2019-07-10 [2] local                                 
-##  mime           0.7     2019-06-11 [1] CRAN (R 3.6.0)                        
-##  modelr         0.1.4   2019-02-18 [1] CRAN (R 3.6.0)                        
-##  munsell        0.5.0   2018-06-12 [1] CRAN (R 3.6.0)                        
-##  nlme           3.1-139 2019-04-09 [2] CRAN (R 3.6.0)                        
-##  pdftools     * 2.2     2019-03-10 [1] CRAN (R 3.6.0)                        
-##  pillar         1.4.2   2019-06-29 [1] CRAN (R 3.6.0)                        
-##  pkgbuild       1.0.3   2019-03-20 [1] CRAN (R 3.6.0)                        
-##  pkgconfig      2.0.2   2018-08-16 [1] CRAN (R 3.6.0)                        
-##  pkgload        1.0.2   2018-10-29 [1] CRAN (R 3.6.0)                        
-##  prettyunits    1.0.2   2015-07-13 [1] CRAN (R 3.6.0)                        
-##  processx       3.4.0   2019-07-03 [1] CRAN (R 3.6.0)                        
-##  ps             1.3.0   2018-12-21 [1] CRAN (R 3.6.0)                        
-##  purrr        * 0.3.2   2019-03-15 [1] CRAN (R 3.6.0)                        
-##  qpdf           1.1     2019-03-07 [1] CRAN (R 3.6.0)                        
-##  quanteda     * 1.5.0   2019-07-04 [1] CRAN (R 3.6.0)                        
-##  R6             2.4.0   2019-02-14 [1] CRAN (R 3.6.0)                        
-##  RColorBrewer * 1.1-2   2014-12-07 [1] CRAN (R 3.6.0)                        
-##  Rcpp           1.0.1   2019-03-17 [1] CRAN (R 3.6.0)                        
-##  RcppParallel   4.4.3   2019-05-22 [1] CRAN (R 3.6.0)                        
-##  readr        * 1.3.1   2018-12-21 [1] CRAN (R 3.6.0)                        
-##  readxl         1.3.1   2019-03-13 [1] CRAN (R 3.6.0)                        
-##  remotes        2.1.0   2019-06-24 [1] CRAN (R 3.6.0)                        
-##  rlang          0.4.0   2019-06-25 [1] CRAN (R 3.6.0)                        
-##  rmarkdown      1.13    2019-05-22 [1] CRAN (R 3.6.0)                        
-##  rprojroot      1.3-2   2018-01-03 [1] CRAN (R 3.6.0)                        
-##  rstudioapi     0.10    2019-03-19 [1] CRAN (R 3.6.0)                        
-##  rvest        * 0.3.4   2019-05-15 [1] CRAN (R 3.6.0)                        
-##  scales         1.0.0   2018-08-09 [1] CRAN (R 3.6.0)                        
-##  selectr        0.4-1   2018-04-06 [1] CRAN (R 3.6.0)                        
-##  sessioninfo    1.1.1   2018-11-05 [1] CRAN (R 3.6.0)                        
-##  SnowballC      0.6.0   2019-01-15 [1] CRAN (R 3.6.0)                        
-##  spacyr         1.2     2019-07-04 [1] CRAN (R 3.6.0)                        
-##  stats        * 3.6.0   2019-07-10 [2] local                                 
-##  stopwords      0.9.0   2017-12-14 [1] CRAN (R 3.6.0)                        
-##  stringi        1.4.3   2019-03-12 [1] CRAN (R 3.6.0)                        
-##  stringr      * 1.4.0   2019-02-10 [1] CRAN (R 3.6.0)                        
-##  testthat       2.1.1   2019-04-23 [1] CRAN (R 3.6.0)                        
-##  tibble       * 2.1.3   2019-06-06 [1] CRAN (R 3.6.0)                        
-##  tidyr        * 0.8.3   2019-03-01 [1] CRAN (R 3.6.0)                        
-##  tidyselect     0.2.5   2018-10-11 [1] CRAN (R 3.6.0)                        
-##  tidytext     * 0.2.1   2019-06-14 [1] CRAN (R 3.6.0)                        
-##  tidyverse    * 1.2.1   2017-11-14 [1] CRAN (R 3.6.0)                        
-##  tokenizers     0.2.1   2018-03-29 [1] CRAN (R 3.6.0)                        
-##  tools          3.6.0   2019-07-10 [2] local                                 
-##  usethis        1.5.1   2019-07-04 [1] CRAN (R 3.6.0)                        
-##  utils        * 3.6.0   2019-07-10 [2] local                                 
-##  viridisLite    0.3.0   2018-02-01 [1] CRAN (R 3.6.0)                        
-##  webshot        0.5.1   2018-09-28 [1] CRAN (R 3.6.0)                        
-##  withr          2.1.2   2018-03-15 [1] CRAN (R 3.6.0)                        
-##  wordcloud    * 2.6     2018-08-24 [1] CRAN (R 3.6.0)                        
-##  xfun           0.8     2019-06-25 [1] CRAN (R 3.6.0)                        
-##  xml2         * 1.2.0   2018-01-24 [1] CRAN (R 3.6.0)                        
-##  yaml           2.2.0   2018-07-25 [1] CRAN (R 3.6.0)                        
+## Matrix products: default
+## BLAS/LAPACK: /usr/lib/libopenblasp-r0.2.19.so
 ## 
-## [1] /usr/local/lib/R/site-library
-## [2] /usr/local/lib/R/library</code></pre>
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] rvest_0.3.4        xml2_1.2.0         httr_1.4.0        
+##  [4] kableExtra_1.1.0   googledrive_1.0.0  quanteda_1.5.0    
+##  [7] here_0.1           wordcloud_2.6      RColorBrewer_1.1-2
+## [10] tidytext_0.2.1     forcats_0.4.0      dplyr_0.8.3       
+## [13] purrr_0.3.2        readr_1.3.1        tidyr_0.8.3       
+## [16] tibble_2.1.3       ggplot2_3.2.0      tidyverse_1.2.1   
+## [19] stringr_1.4.0      pdftools_2.2      
+## 
+## loaded via a namespace (and not attached):
+##  [1] nlme_3.1-139       fs_1.3.1           usethis_1.5.1     
+##  [4] lubridate_1.7.4    devtools_2.0.2     webshot_0.5.1     
+##  [7] rprojroot_1.3-2    SnowballC_0.6.0    tools_3.6.0       
+## [10] backports_1.1.4    R6_2.4.0           lazyeval_0.2.2    
+## [13] colorspace_1.4-1   withr_2.1.2        tidyselect_0.2.5  
+## [16] prettyunits_1.0.2  processx_3.4.0     curl_3.3          
+## [19] compiler_3.6.0     cli_1.1.0          desc_1.2.0        
+## [22] labeling_0.3       scales_1.0.0       callr_3.3.0       
+## [25] askpass_1.1        digest_0.6.20      rmarkdown_1.13    
+## [28] pkgconfig_2.0.2    htmltools_0.3.6    sessioninfo_1.1.1 
+## [31] highr_0.8          rlang_0.4.0        readxl_1.3.1      
+## [34] rstudioapi_0.10    generics_0.0.2     jsonlite_1.6      
+## [37] tokenizers_0.2.1   magrittr_1.5       Matrix_1.2-17     
+## [40] Rcpp_1.0.1         munsell_0.5.0      stringi_1.4.3     
+## [43] yaml_2.2.0         pkgbuild_1.0.3     grid_3.6.0        
+## [46] crayon_1.3.4       lattice_0.20-38    haven_2.1.1       
+## [49] hms_0.4.2          knitr_1.23         ps_1.3.0          
+## [52] pillar_1.4.2       stopwords_0.9.0    pkgload_1.0.2     
+## [55] fastmatch_1.1-0    glue_1.3.1         evaluate_0.14     
+## [58] qpdf_1.1           data.table_1.12.2  remotes_2.1.0     
+## [61] RcppParallel_4.4.3 modelr_0.1.4       selectr_0.4-1     
+## [64] testthat_2.1.1     cellranger_1.1.0   gtable_0.3.0      
+## [67] assertthat_0.2.1   xfun_0.8           mime_0.7          
+## [70] broom_0.5.2        janeaustenr_0.1.5  viridisLite_0.3.0 
+## [73] gargle_0.3.0       memoise_1.1.0      spacyr_1.2</code></pre>
 <p><strong>The used MRAN snapshot is <a href="https://mran.microsoft.com/snapshot/2019-07-05" class="uri">https://mran.microsoft.com/snapshot/2019-07-05</a></strong>.</p>
 </div>
 

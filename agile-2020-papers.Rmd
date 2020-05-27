@@ -20,7 +20,7 @@ The full papers were already reviewed at the time the decision to cancel was tak
 
 Find out more online [about reproducible publications at AGILE](https://doi.org/10.17605/OSF.IO/PHMCE) and the [review process](https://osf.io/eg4qx/), and visit the Reproducible AGILE website: [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
 The code of this document is published on GitHub in the repository [reproducible-agile/reviews-2020](https://github.com/reproducible-agile/reviews-2020), where you can inspect the R code in the file `agile-2020-papers.Rmd` and find instructions for reproducing the workflow.
-The [report parameter](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html) `private_info` can be set to `yes` to show information which cannot be shared publicly, such as author names, titles, or excerpts of not accepted submissions.
+The [report parameter](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html) `private_info` can be set to `yes` to show information which cannot be shared publicly, such as author names, titles, or excerpts of not accepted submissions, and to upload review files to private shares, which requires authentication.
 
 ```{r load_libraries, message=FALSE, warning=FALSE, include=FALSE}
 library("pdftools")
@@ -606,18 +606,20 @@ In the future, we could do some text mining to answer questions such as
 - How many comments are there regarding reproducibility?
 
 ```{r accepted_fp_files, echo=FALSE}
-review_files <- review_data %>%
-  filter(type == "Full-paper") %>%
-  dplyr::filter(decision != "REJECT") %>%
-  select(id, submission_id, decision, title, file, paper)
-
-# first, re-download all accepted full paper PDFs to make sure we have latest copies
-for (i in 1:nrow(review_files)) {
-  current <- review_files[i,]
-  filename <- file.path(fp_path, paste0(current$id, ".pdf"))
-  httr::GET(url = current$paper,
-              httr::write_disk(path = filename,
-                               overwrite = TRUE))
+if (params$private_info) {
+  review_files <- review_data %>%
+    filter(type == "Full-paper") %>%
+    dplyr::filter(decision != "REJECT") %>%
+    select(id, submission_id, decision, title, file, paper)
+  
+  # first, re-download all accepted full paper PDFs to make sure we have latest copies
+  for (i in 1:nrow(review_files)) {
+    current <- review_files[i,]
+    filename <- file.path(fp_path, paste0(current$id, ".pdf"))
+    httr::GET(url = current$paper,
+                httr::write_disk(path = filename,
+                                 overwrite = TRUE))
+  }
 }
 ```
 
@@ -691,19 +693,21 @@ for(i in c(1:nrow(review_files))) {
 ```
 
 ```{r review_files_upload_to_share, echo=FALSE}
-# put accepted full papers to private share
-library("googledrive")
-googledrive::drive_auth(use_oob = TRUE)
-
-sapply(file.path(fp_path, list.files(fp_path)), function(the_file) {
-   googledrive::drive_put(media = the_file,
-                          name = basename(the_file),
-                          path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
-})
-
-googledrive::drive_put(media = review_data_csv_file,
-                       name = basename(review_data_csv_file),
-                       path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
+if (params$private_info) {
+  # put accepted full papers to private share
+  library("googledrive")
+  googledrive::drive_auth(use_oob = TRUE)
+  
+  sapply(file.path(fp_path, list.files(fp_path)), function(the_file) {
+     googledrive::drive_put(media = the_file,
+                            name = basename(the_file),
+                            path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
+  })
+  
+  googledrive::drive_put(media = review_data_csv_file,
+                         name = basename(review_data_csv_file),
+                         path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
+}
 ```
 
 `r if(!params$private_info) {"-->"}`
@@ -714,17 +718,17 @@ googledrive::drive_put(media = review_data_csv_file,
 2. Take a look at the [review report template](https://github.com/reproducible-agile/reviews-2020/blob/master/report-template/reproreview-template.Rmd)
 3. Go to the [master spreadsheet](https://docs.google.com/spreadsheets/d/1K6_8NqDfXH5uI07LBmBmgnapVP2fYlvU2QcE84UeqD0/) and find your assignments
 4. Conduct your reproducibility review and write the report
-  - Don't forget to take a look at the scientific reviews for comments on reproducibility; do _not_ worry about the science or read the full paper, unless it really interests you
-  - If code is available on GitHub, you can fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/), same [on GitLab in the subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews)
-  - If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review
+    - Don't forget to take a look at the scientific reviews for comments on reproducibility; do _not_ worry about the science or read the full paper, unless it really interests you
+    - If code is available on GitHub, you can fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/), same [on GitLab in the subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews)
+    - If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review
 5. Send the report to the original authors of the paper and add the reproducibility chair in CC, see template below; _only if the authors agree_ with a publication of the report, proceed with the following steps
 6. Add a new component to the [OSF project for 2020 reproducibility reviews](https://osf.io/6k5fh/)
-  - Use the European storage location, "Frankfurt"
-  - Name the component `Reproducibility review of: FULL PAPER TITLE`
-  - Add all contributors to the project
-  - Publish the component and mint a DOI
-  - Add the DOI to your report
-  - Upload a PDF of your report and any useful supplemental files
+    - Use the European storage location, "Frankfurt"
+    - Name the component `Reproducibility review of: FULL PAPER TITLE`
+    - Add all contributors to the project
+    - Publish the component and mint a DOI
+    - Add the DOI to your report
+    - Upload a PDF of your report and any useful supplemental files
 7. Add link to the OSF project in the master spreadsheet
 
 #### Author contact template
@@ -763,7 +767,7 @@ All contained code is licensed under the [Apache License 2.0](https://choosealic
 **Runtime environment description:**
 
 ```{r session_info, echo=FALSE}
-devtools::session_info(include_base = TRUE)
+sessionInfo()
 ```
 
 **The used MRAN snapshot is `r paste(options("repos"))`**.
