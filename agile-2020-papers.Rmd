@@ -690,7 +690,7 @@ for(i in c(1:nrow(review_files))) {
 }
 ```
 
-```{r review_files_upload_to_share}
+```{r review_files_upload_to_share, echo=FALSE}
 # put accepted full papers to private share
 library("googledrive")
 googledrive::drive_auth(use_oob = TRUE)
@@ -776,4 +776,11 @@ drive_put(media = "agile-2020-papers.html",
                  ".html"),
           path = "https://drive.google.com/drive/folders/1jyYj1hFqbR74D9ljjjcScR4lD3aWCO2U/")
 drive_put("agile-2020-papers.Rmd", path = "https://drive.google.com/drive/folders/1jyYj1hFqbR74D9ljjjcScR4lD3aWCO2U/")
+```
+
+```{r render_public_version, eval=FALSE, include=FALSE}
+rmarkdown::render(input = "agile-2020-papers.Rmd",
+                  params = list(private_info = FALSE),
+                  output_dir = here::here("docs/"),
+                  output_format = rmarkdown::html_document(toc = TRUE, self_contained = FALSE))
 ```
