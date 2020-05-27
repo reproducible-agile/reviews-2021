@@ -136,7 +136,7 @@ for (i in 1:nrow(submission_table)) {
   current <- submission_table[i,]
   filename <- file.path(submissions_path, paste0(current$id, ".pdf"))
   if(!file.exists(filename)) {
-    httr::GET(url = submission_table[i,]$paper,
+    httr::GET(url = current$paper,
               httr::write_disk(path = filename,
                                overwrite = TRUE))
   }
@@ -576,10 +576,29 @@ review_data %>%
 
 `r if(!params$private_info) {"<!--"}`
 
-### Reproducibility Reviewer information
+## Reproducibility reviews
 
-The review comments for each paper are stored in an HTML file.
-This file includes the full names of the original reviewers.
+### About
+
+The assignment of reviews is done via a privately shared spreadsheet, to handle potential non-public comments.
+The main outcome of the reviews is a _report_, which is published in individual OSF projects as components of the [OSF project for the reproducibility reviews 2020](https://osf.io/6k5fh/).
+The report should be based on a template from this repository in [`report-template`](report-template).
+Find the details on the review process in [this document]https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#).
+
+### Prepare data for reviewers
+
+The review comments for each paper are stored in an HTML file next to the PDF of the submission and uploaded to [a private share](https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP) so that reproducibility reviewers can access them.
+This file includes the full reviews, including the names of the original reviewers, and cannot be publicly shared.
+
+```{r upload_settings}
+review_data_csv_file <- file.path(fp_path, "review_data.csv")
+```
+
+
+1. Download PDFs to directory `r fp_path`
+2. Create HTML from review page and safe to `r fp_path`
+3. Write paper metadata (ID, decision, title) to a CSV file `r review_data_csv_file`
+4. **Manually** [import the paper metadata into the spreadsheet](https://www.tillerhq.com/how-to-import-csv-into-a-google-spreadsheet/) (Select cell `A1` then "File" > "Import" > "Import File" > "My Drive" then search for `review_data` and find `review_data.csv` then select the file > "Replace data at selected cell" and click "Import data")
 
 In the future, we could do some text mining to answer questions such as
 
@@ -587,15 +606,26 @@ In the future, we could do some text mining to answer questions such as
 - How many comments are there regarding reproducibility?
 
 ```{r accepted_fp_files, echo=FALSE}
-# TODO copy accepted full papers to fp_path
 review_files <- review_data %>%
   filter(type == "Full-paper") %>%
   dplyr::filter(decision != "REJECT") %>%
-  select(id, submission_id, file)
+  select(id, submission_id, decision, title, file, paper)
 
-for(i in c(1:nrow(review_files))) {
-  file.copy(review_files[i,]$file, fp_path)
+# first, re-download all accepted full paper PDFs to make sure we have latest copies
+for (i in 1:nrow(review_files)) {
+  current <- review_files[i,]
+  filename <- file.path(fp_path, paste0(current$id, ".pdf"))
+  httr::GET(url = current$paper,
+              httr::write_disk(path = filename,
+                               overwrite = TRUE))
 }
+```
+
+```{r review_data_csv, echo=FALSE}
+readr::write_csv(review_files %>%
+                   select(ID = id, Decision = decision, Title = title),
+                 path = review_data_csv_file,
+                 append = FALSE)
 ```
 
 ```{r reviewer_comments, echo=FALSE}
@@ -660,7 +690,7 @@ for(i in c(1:nrow(review_files))) {
 }
 ```
 
-```{r review_files_upload_to_share, eval=FALSE}
+```{r review_files_upload_to_share}
 # put accepted full papers to private share
 library("googledrive")
 googledrive::drive_auth(use_oob = TRUE)
@@ -671,11 +701,61 @@ sapply(file.path(fp_path, list.files(fp_path)), function(the_file) {
                           path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
 })
 
+googledrive::drive_put(media = review_data_csv_file,
+                       name = basename(review_data_csv_file),
+                       path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
 ```
 
 `r if(!params$private_info) {"-->"}`
 
-## License & Metadata
+### Reproducibility reviewer instructions
+
+1. Familiarise yourself with the [AGILE Reproducibility Review Process](https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#heading=h.oheeg2s92zdm); the following steps are just tl;dr version
+2. Take a look at the [review report template](https://github.com/reproducible-agile/reviews-2020/blob/master/report-template/reproreview-template.Rmd)
+3. Go to the [master spreadsheet](https://docs.google.com/spreadsheets/d/1K6_8NqDfXH5uI07LBmBmgnapVP2fYlvU2QcE84UeqD0/) and find your assignments
+4. Conduct your reproducibility review and write the report
+  - Don't forget to take a look at the scientific reviews for comments on reproducibility; do _not_ worry about the science or read the full paper, unless it really interests you
+  - If code is available on GitHub, you can fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/), same [on GitLab in the subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews)
+  - If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review
+5. Send the report to the original authors of the paper and add the reproducibility chair in CC, see template below; _only if the authors agree_ with a publication of the report, proceed with the following steps
+6. Add a new component to the [OSF project for 2020 reproducibility reviews](https://osf.io/6k5fh/)
+  - Use the European storage location, "Frankfurt"
+  - Name the component `Reproducibility review of: FULL PAPER TITLE`
+  - Add all contributors to the project
+  - Publish the component and mint a DOI
+  - Add the DOI to your report
+  - Upload a PDF of your report and any useful supplemental files
+7. Add link to the OSF project in the master spreadsheet
+
+#### Author contact template
+
+```
+Dear AUTHORS,
+
+congratulations to the acceptance of your submission "TITLE" as a full paper at the AGILE conference 2020. As part of the Reproducible AGILE initative (https://reproducible-agile.github.io/) I attempted to reproduce the results from your paper. Attached to this email you find my report on your results.
+
+As part of the AGILE reproducibility review (see https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#heading=h.oheeg2s92zdm for details) I hereby ask you if you agree to the report being published on OSF (see https://osf.io/6k5fh/). A publication of the reproduction attempt gives credit to my work as a reproducibility reviewer and helps to improve future work.
+
+Please don't hesitate to get in touch with me and Daniel Nüst (CC'ed), AGILE conference's Reproducibility Chair, if you have any questions.
+
+YOUR SALUTATION OF CHOICE,
+NAME
+```
+
+```
+Dear AUTHORS,
+
+thank you for your participation in a real open science endeavour!
+
+The reproducibility review report on your paper is now published at DOI URL HERE.
+
+Please don't hesitate to get in touch with Daniel Nüst (CC'ed), AGILE conference's Reproducibility Chair, if you have any questions.
+
+YOUR SALUTATION OF CHOICE,
+NAME
+```
+
+## Colophon
 
 This document is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
 All contained code is licensed under the [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/).
