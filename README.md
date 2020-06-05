@@ -3,7 +3,7 @@
 ## About
 
 This repository contains code used for the organisation and management of the reproducibility review at AGILE 2020.
-Read more about the review process and the reproducibility committee here: [https://reproducible-agile.github.io/2020/#reproducibility-review.
+Read more about the review process and the reproducibility committee here: https://reproducible-agile.github.io/2020/#reproducibility-review.
 
 To work on the main R Markdown file, `agile-2020-papers.Rmd`, which includes _all_ information and documentation of the reproducibility review, run
 
