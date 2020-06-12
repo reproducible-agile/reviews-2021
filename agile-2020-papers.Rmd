@@ -51,8 +51,10 @@ set.seed(23) # 23rd AGILE!
 submissions_path <- here::here("submissions")
 dir.create(submissions_path, recursive = TRUE, showWarnings = FALSE)
 
-fp_path <- here::here("accepted-full-papers")
-dir.create(fp_path, recursive = TRUE, showWarnings = FALSE)
+review_files_path <- here::here("review-material")
+dir.create(review_files_path, recursive = TRUE, showWarnings = FALSE)
+
+cr_path <- here::here("camera-ready-full-papers")
 ```
 
 ### Submission metadata
@@ -591,12 +593,11 @@ The review comments for each paper are stored in an HTML file next to the PDF of
 This file includes the full reviews, including the names of the original reviewers, and cannot be publicly shared.
 
 ```{r upload_settings}
-review_data_csv_file <- file.path(fp_path, "review_data.csv")
+review_data_csv_file <- file.path(review_files_path, "review_data.csv")
 ```
 
-
-1. Download PDFs to directory `r fp_path`
-2. Create HTML from review page and safe to `r fp_path`
+1. ~~Download PDFs to directory `r review_files_path`~~ Skipped: The camera-ready PDFs are managed outsdie of EasyChair and must be available locall in the directory `r cr_path`, from where they are copied to `r review_files_path`
+2. Create HTML from review page and safe to `r review_files_path`
 3. Write paper metadata (ID, decision, title) to a CSV file `r review_data_csv_file`
 4. **Manually** [import the paper metadata into the spreadsheet](https://www.tillerhq.com/how-to-import-csv-into-a-google-spreadsheet/) (Select cell `A1` then "File" > "Import" > "Import File" > "My Drive" then search for `review_data` and find `review_data.csv` then select the file > "Replace data at selected cell" and click "Import data")
 
@@ -605,21 +606,41 @@ In the future, we could do some text mining to answer questions such as
 - Do reviewers findings match the automatic detection of DASA?
 - How many comments are there regarding reproducibility?
 
-```{r accepted_fp_files, echo=FALSE}
-if (params$private_info) {
-  review_files <- review_data %>%
-    filter(type == "Full-paper") %>%
-    dplyr::filter(decision != "REJECT") %>%
-    select(id, submission_id, decision, title, file, paper)
-  
-  # first, re-download all accepted full paper PDFs to make sure we have latest copies
-  for (i in 1:nrow(review_files)) {
-    current <- review_files[i,]
-    filename <- file.path(fp_path, paste0(current$id, ".pdf"))
-    httr::GET(url = current$paper,
-                httr::write_disk(path = filename,
-                                 overwrite = TRUE))
-  }
+```{r accepted_fp_files_download_easychair, echo=FALSE, eval=FALSE}
+# DO NOT RUN - latest PDFs are not on EasyChair, use next chunk
+#if (params$private_info) {
+#  review_files <- review_data %>%
+#    filter(type == "Full-paper") %>%
+#    dplyr::filter(decision != "REJECT") %>%
+#    select(id, submission_id, decision, title, file, paper)
+#  
+#  # first, re-download all accepted full paper PDFs to make sure we have latest copies
+#  for (i in 1:nrow(review_files)) {
+#    current <- review_files[i,]
+#    filename <- file.path(review_files_path, paste0(current$id, ".pdf"))
+#    httr::GET(url = current$paper,
+#                httr::write_disk(path = filename,
+#                                 overwrite = TRUE))
+#  }
+#}
+```
+
+```{r update_camera_ready_file_paths, echo=FALSE}
+review_data <- review_data %>%
+  filter(type == "Full-paper") %>%
+  dplyr::filter(decision == "ACCEPT") %>%
+  dplyr::mutate(file = stringr::str_replace(review_files$file, pattern = "submissions", replacement = "camera-ready-full-papers"))
+
+review_files <- review_data %>%
+  filter(type == "Full-paper") %>%
+  dplyr::filter(decision == "ACCEPT") %>%
+  select(id, submission_id, decision, title, file, paper)
+
+# copy camera ready files to upload directory
+for (i in 1:nrow(review_files)) {
+  current <- review_files[i,]
+  file.copy(from = file.path(cr_path, paste0(current$id, ".pdf")),
+            to = file.path(review_files_path, paste0(current$id, ".pdf")))
 }
 ```
 
@@ -631,7 +652,7 @@ readr::write_csv(review_files %>%
 ```
 
 ```{r reviewer_comments, echo=FALSE}
-# TODO get review contents for each paper
+# get review contents for each paper
 conference_id <- "24268236"
 
 # https://easychair.org/conferences/submission_reviews?submission=4788883;a=24268236#{fr:EZIcStd1tVrf}
@@ -680,7 +701,7 @@ retrieve_review <- function(id, submission_id) {
     xml2::xml_add_child(review_body, review_content[[i]])
   }
   
-  reviews_html_path <- file.path(fp_path, paste0(id, "_reviews.html"))
+  reviews_html_path <- file.path(review_files_path, paste0(id, "_reviews.html"))
   xml2::write_html(review_doc, reviews_html_path)
   reviews_html_path
 }
@@ -698,7 +719,7 @@ if (params$private_info) {
   library("googledrive")
   googledrive::drive_auth(use_oob = TRUE)
   
-  sapply(file.path(fp_path, list.files(fp_path)), function(the_file) {
+  sapply(list.files(review_files_path, full.names = TRUE), function(the_file) {
      googledrive::drive_put(media = the_file,
                             name = basename(the_file),
                             path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
