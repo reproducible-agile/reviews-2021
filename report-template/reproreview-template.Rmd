@@ -25,6 +25,8 @@ header-includes:
     \pic{orcidlogo};
     \end{tikzpicture}
     }{|}}}}}
+    \definecolor{agileblue}{RGB}{0,77,155}
+urlcolor: agileblue
 ---
 
 ```{r setup, include=FALSE}
