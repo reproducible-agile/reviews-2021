@@ -316,6 +316,7 @@ dasa_stats <- dasa_stats %>%
 
 dasa_stats %>%
   arrange(desc(n)) %>%
+  rename(`with DASA` =)
   kable() %>%
   kable_styling("striped")
 ```
@@ -522,8 +523,6 @@ dasa_vs_accepted <- tibble(papers = c("submitted",
                   "submitted with DASA",
                   "accepted",
                   "accepted with DASA",
-                  "conditionally accepted",
-                  "conditionally accepted with DASA",
                   "rejected with DASA"),
        n = c(review_data %>%
                filter(type == "Full-paper") %>%
@@ -538,15 +537,6 @@ dasa_vs_accepted <- tibble(papers = c("submitted",
                nrow(.),
              review_data %>%
                dplyr::filter(decision == "ACCEPT") %>%
-               filter(type == "Full-paper") %>%
-               filter(!is.na(dasa_text)) %>% 
-               nrow(.),
-             review_data %>%
-               dplyr::filter(decision == "accept?") %>%
-               filter(type == "Full-paper") %>%
-               nrow(.),
-             review_data %>%
-               dplyr::filter(decision == "accept?") %>%
                filter(type == "Full-paper") %>%
                filter(!is.na(dasa_text)) %>% 
                nrow(.),
@@ -568,12 +558,13 @@ review_data %>%
   filter(type == "Full-paper") %>%
   group_by(type, `has DASA`, decision) %>%
   summarise(n = n()) %>%
-  ggplot(aes(x=decision, y=n, fill=`has DASA`)) +
+  ggplot(aes(x = decision, y = n, fill = `has DASA`)) +
   geom_bar(stat="identity") + 
   scale_fill_brewer(palette="Paired") +
-  labs(title = "AGILE 2020 Submissions Transparency & Reproducibility",
-       subtitle = "Data and Software Availability Sections (DASA) across accepted, conditionally accepted, and\nrejected full paper submissions") +
-  theme_minimal()
+  labs(title = "AGILE 2020 Submissions: Transparency & Reproducibility",
+       subtitle = "Data and Software Availability Sections (DASA) across accepted full paper submissions") +
+  theme_minimal() + 
+  theme(axis.title.y = element_text(angle = 360, hjust = 1, vjust = 0.5))
 ```
 
 `r if(!params$private_info) {"<!--"}`
@@ -626,14 +617,10 @@ In the future, we could do some text mining to answer questions such as
 ```
 
 ```{r update_camera_ready_file_paths, echo=FALSE}
-review_data <- review_data %>%
-  filter(type == "Full-paper") %>%
-  dplyr::filter(decision == "ACCEPT") %>%
-  dplyr::mutate(file = stringr::str_replace(review_files$file, pattern = "submissions", replacement = "camera-ready-full-papers"))
-
 review_files <- review_data %>%
   filter(type == "Full-paper") %>%
   dplyr::filter(decision == "ACCEPT") %>%
+  dplyr::mutate(file = stringr::str_replace(.$file, pattern = "submissions", replacement = "camera-ready-full-papers")) %>%
   select(id, submission_id, decision, title, file, paper)
 
 # copy camera ready files to upload directory
