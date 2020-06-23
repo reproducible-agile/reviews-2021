@@ -550,21 +550,41 @@ dasa_vs_accepted %>%
   kable_styling("striped")
 ```
 
-```{r accepted_dasa_barplot, echo=FALSE, fig.cap="Barplot of Data and Software Availability sections across accepted and rejected full paper submissions"}
-review_data %>%
-  mutate(`has DASA` = !is.na(dasa_text)) %>%
-  filter(!is.na(decision)) %>%
-  #filter(decision != "REJECT") %>%
-  filter(type == "Full-paper") %>%
-  group_by(type, `has DASA`, decision) %>%
-  summarise(n = n()) %>%
-  ggplot(aes(x = decision, y = n, fill = `has DASA`)) +
-  geom_bar(stat="identity") + 
-  scale_fill_brewer(palette="Paired") +
-  labs(title = "AGILE 2020 Submissions: Transparency & Reproducibility",
-       subtitle = "Data and Software Availability Sections (DASA) across accepted full paper submissions") +
-  theme_minimal() + 
-  theme(axis.title.y = element_text(angle = 360, hjust = 1, vjust = 0.5))
+```{r accepted_dasa_barplot_label}
+review_data_figure_label <- if(params$private_info) {
+  "Barplot of Data and Software Availability sections across accepted and rejected full paper submissions"
+} else {
+  "Barplot of Data and Software Availability sections across accepted full paper submissions"
+}
+```
+
+```{r accepted_dasa_barplot, echo=FALSE, fig.cap=review_data_figure_label, fig.height=4}
+if(params$private_info) {
+  review_data_figure_data <- review_data %>%
+    mutate(`has DASA` = !is.na(dasa_text)) %>%
+    filter(!is.na(decision)) %>%
+    filter(type == "Full-paper") %>%
+    group_by(type, `has DASA`, decision) %>%
+    summarise(n = n())
+} else {
+  review_data_figure_data <- review_data %>%
+    mutate(`has DASA` = !is.na(dasa_text)) %>%
+    filter(!is.na(decision)) %>%
+    filter(type == "Full-paper", decision == "ACCEPT") %>%
+    group_by(type, `has DASA`, decision) %>%
+    summarise(n = n())
+}
+
+review_data_figure <- review_data_figure_data  %>%
+    ggplot(aes(x = decision, y = n, fill = `has DASA`)) +
+    geom_bar(stat="identity", width = 0.5) + 
+    scale_fill_brewer(palette="Paired") +
+    labs(title = "AGILE 2020 Submissions: Transparency & Reproducibility",
+         subtitle = "Data and Software Availability Sections (DASA) across full papers") +
+    theme_minimal() + 
+    theme(axis.title.y = element_text(angle = 360, hjust = 1, vjust = 0.5))
+
+review_data_figure
 ```
 
 `r if(!params$private_info) {"<!--"}`
@@ -768,6 +788,27 @@ Please don't hesitate to get in touch with Daniel Nüst (CC'ed), AGILE conferenc
 YOUR SALUTATION OF CHOICE,
 NAME
 ```
+
+## AGILE General Meeting
+
+```{r general_meeting_figures, fig.height=4, fig.width=4}
+data <- tibble(`reproduction attempts` = c(0, 8))
+
+review_data_2019 <- tibble(#id = c(1:19),
+                           `has DASA` = factor("FALSE", levels = c("FALSE", "TRUE")),
+                           decision = "Accept",
+                           n = 19)
+review_data_2019 %>%
+  ggplot(aes(x = decision, y = n, fill = `has DASA`)) +
+  geom_bar(stat="identity", width = 0.5) + 
+  scale_fill_brewer(palette="Paired", drop = FALSE) +
+  labs(title = "AGILE 2019 Submissions",
+       subtitle = "DASA sections in full paper submissions") +
+  ylim(ggplot_build(review_data_figure)$layout$panel_scales_y[[1]]$range$range) +
+  theme_minimal() + 
+  theme(axis.title.y = element_text(angle = 360, hjust = 1, vjust = 0.5))
+```
+
 
 ## Colophon
 
