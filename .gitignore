@@ -70,3 +70,6 @@ reports/2020-008/AGILECA/
 reports/**/*.zip
 
 reports/**/*.pdf
+
+reports/**/*.eml
+reports/2020-018/11407371/
