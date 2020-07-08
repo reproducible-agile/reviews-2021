@@ -64,3 +64,9 @@ camera-ready-full-papers/
 review-material/
 
 README.html
+
+reports/2020-008/AGILECA/
+
+reports/**/*.zip
+
+reports/**/*.pdf
