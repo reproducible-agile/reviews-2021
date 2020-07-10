@@ -149,7 +149,7 @@ def rasterizeTimeslices(timeslices: dict, slice_datetime: datetime.datetime, ras
             minAgents = min(minAgents, timeslices[hour][minute][timeslices[hour][minute].countReachable > 3].countReachable.min())
             maxAgents = max(maxAgents, timeslices[hour][minute].countReachable.max())
 
-    multproc = True
+    multproc = False
     hours = sorted(timeslices.keys())
     minutes = range(0, 60, 10)
 
@@ -170,7 +170,7 @@ def rasterizeTimeslices(timeslices: dict, slice_datetime: datetime.datetime, ras
         print(f"\rRendering timeslices [" + ''.join(['#' for _ in range(numBlocks)]).ljust(steps) + f"] ({str(c_hour).rjust(2)} {str(c_minute).rjust(2)})", end="", flush=True)
 
 
-
+    log.info(f"Starting processing (multiprocessing: {multproc})")
     if multproc:
         pool = multiprocessing.Pool()
         for hour in hours:
@@ -334,7 +334,7 @@ def visualizeOverview(timeslices: dict, imagePath: str, startTime: datetime.date
     ax.set_xlim(datetime.datetime(year=startTime.year, month=startTime.month, day=startTime.day, hour=0, minute=0),
                 datetime.datetime(year=startTime.year, month=startTime.month, day=startTime.day, hour=23, minute=59), emit=False)
 
-    ax.set_ylim(250,900)
+    # removed for small sample based reproduction # ax.set_ylim(250,900)
 
     fig.autofmt_xdate()
     ax.legend()

@@ -5,6 +5,8 @@ import pytz
 import shutil
 import argparse
 
+from pathlib import Path
+
 logging.getLogger("cacher").setLevel(INFO)
 logging.getLogger("analyzer").setLevel(DEBUG)
 logging.getLogger("pickupDropoff").setLevel(ERROR)
@@ -59,6 +61,9 @@ if __name__ == "__main__":
     df_agents_parking = pd.read_csv(args.csvPath, sep=";", parse_dates=["parkingStartTime", "parkingEndTime", "parkingDuration"])
     df_agents_parking["parkingDuration"] = pd.to_timedelta(df_agents_parking["parkingDuration"])
 
+    # use small sample for review
+    df_agents_parking = df_agents_parking.sample(frac=0.1)
+
     startDate = df_agents_parking.parkingStartTime.dt.date.min()
     endDate = df_agents_parking.parkingStartTime.dt.date.max()
     endDate = datetime.date(year=endDate.year, month=endDate.month, day=endDate.day+1) # set endDate to the day after the last dataframe entry, therefore fully including it
@@ -92,18 +97,32 @@ if __name__ == "__main__":
             log.info(f"Visualizing overview at {args.day}")
             startDate = args.day
             endDate = startDate + datetime.timedelta(days=1)
-            nodes = generateNodes(df_agents_timespan=df_agents_parking, startDate=startDate, nodesPath=args.nodesPath)
+            
+            nodesFilePath = os.path.join(args.nodesPath, f"nodes-{startDate.strftime('%d.%m.%y')}-{endDate.strftime('%d.%m.%y')}.pkl.xz")
+            if Path(nodesFilePath).is_file():
+                log.info(f"Loading nodes from {nodesFilePath}")
+                with lzma.open(nodesFilePath, "r") as infile:
+                    nodes = pickle.load(infile)
+            else:
+                nodes = generateNodes(df_agents_timespan=df_agents_parking, startDate=_startDate, nodesPath=args.nodesPath) 
+            
             timeslices = exportTimeslicedNodes(nodes=nodes, timeslicesPath=args.timeslicesPath,
                                                startDate=startDate, cacher=cacher, write_out=False)
-            visualizeOverview(timeslices, args.imagePath, startDate, endDate)
+            visualizeOverview(timeslices, args.imagePath, startDate, endDate, write_out=True)
         else:
             log.info(f"Visualizing overview from {startDate} to {endDate}")
-            for day in range(dif.days): # overview visualization for multiple days
-                _startDate, _endDate = localize_dates_offset(year=args.startDate.year, month=args.startDate.month, day=args.startDate.day, offset=day)
-                nodes = generateNodes(df_agents_timespan=df_agents_parking, startDate=_startDate, nodesPath=args.nodesPath)
+            for day in range(dif.days): # overview visualization for multiple days                
+                nodesFilePath = os.path.join(args.nodesPath, f"nodes-{startDate.strftime('%d.%m.%y')}-{endDate.strftime('%d.%m.%y')}.pkl.xz")
+                if Path(nodesFilePath).is_file():
+                    log.info(f"Loading nodes from {nodesFilePath}")
+                    with lzma.open(nodesFilePath, "r") as infile:
+                        nodes = pickle.load(infile)
+                else:
+                    nodes = generateNodes(df_agents_timespan=df_agents_parking, startDate=startDate, nodesPath=args.nodesPath)
+                
                 timeslices = exportTimeslicedNodes(nodes=nodes, timeslicesPath=args.timeslicesPath,
-                                                   startDate=_startDate, cacher=cacher, write_out=False)
-                visualizeOverview(timeslices, args.imagePath, _startDate, _endDate)
+                                                   startDate=startDate, cacher=cacher, write_out=False)
+                visualizeOverview(timeslices, args.imagePath, startDate, endDate, write_out=True)
 
 
     elif args.analysisType == 'rasterizeTimeslices':
@@ -114,7 +133,17 @@ if __name__ == "__main__":
         if args.day: # raster visualization for one day
             log.info(f"Generating rasters at {args.day}")
             _startDate = args.day
-            nodes = generateNodes(df_agents_timespan=df_agents_parking, startDate=_startDate, nodesPath=args.nodesPath)
+            _endDate = _startDate + datetime.timedelta(days=1)
+            
+            nodesFilePath = os.path.join(args.nodesPath, f"nodes-{_startDate.strftime('%d.%m.%y')}-{_endDate.strftime('%d.%m.%y')}.pkl.xz")
+            if Path(nodesFilePath).is_file():
+                log.info(f"Loading nodes from {nodesFilePath}")
+                with lzma.open(nodesFilePath, "r") as infile:
+                    nodes = pickle.load(infile)
+            else:
+                nodes = generateNodes(df_agents_timespan=df_agents_parking, startDate=_startDate, nodesPath=args.nodesPath)
+              
+            
             timeslices = exportTimeslicedNodes(nodes=nodes, timeslicesPath=args.timeslicesPath,
                                                startDate=_startDate, cacher=cacher, write_out=False)
 
