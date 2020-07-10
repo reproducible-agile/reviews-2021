@@ -1,10 +1,11 @@
 ---
 title: "Reproducibility review of: PAPER TITLE"
-author: "NAME \\orcid{0000-0000-0000-0000}"
+author: "TODO \\orcid{0000-0000-0000-TODO}"
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
   pdf_document:
     toc: false
+papersize: a4
 header-includes:
   - |
     % https://tex.stackexchange.com/questions/445563/ieeetran-how-to-include-orcid-in-tex-pdf-with-pdflatex/445583 (works with pdflatex)
@@ -31,6 +32,12 @@ urlcolor: agileblue
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
 ```
 
 ```{r logo, echo = FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
@@ -65,3 +72,7 @@ ADD FULL CITATION
 - figures/screenshots
 - runtime
 - reproduction efforts
+
+```{bash some_code, , size="scriptsize"}
+command line code
+```
