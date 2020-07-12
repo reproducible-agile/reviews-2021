@@ -1,0 +1,33 @@
+https://github.com/MedadAmine/Spatial-nominal-entity-recognition
+no license (-> public domain?)
+
+# Data
+
+## Original hiking texts
+not available, although there is a list of words
+
+## Lexicon
+not available
+
+## Corpus
+entire corpus not available, although there is a list of words
+
+## Samples for analysis
+available (named corpus), but not documentation as to the meaning
+
+# Processing
+
+uses open source libraries
+
+## Model building
+Scripts and hyper-parameters available
+Script have little to no documentation
+language is French, withoug decent knowledge (or lots of Google translate) impossible
+
+## Models
+all available
+
+
+# Results
+
+Because too much of the input data and the processing is insufficiently annotated, any reproduction will take a lot of time, and is unlikely to reproduce the results as reported in tables 2 and 3 on the first attempt

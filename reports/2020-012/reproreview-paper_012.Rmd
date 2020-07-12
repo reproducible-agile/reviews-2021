@@ -1,0 +1,87 @@
+---
+title: "Comparing supervised learning algorithms for Spatial Nominal Entity recognition"
+author: "NAME \\orcid{0000-0002-9317-8291}"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  pdf_document:
+    toc: false
+header-includes:
+  - |
+    % https://tex.stackexchange.com/questions/445563/ieeetran-how-to-include-orcid-in-tex-pdf-with-pdflatex/445583 (works with pdflatex)
+    \usepackage{scalerel}
+    \usepackage{tikz}
+    \usetikzlibrary{svg.path}
+    \definecolor{orcidlogocol}{HTML}{A6CE39}
+    \tikzset{
+      orcidlogo/.pic={
+        \fill[orcidlogocol] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3    ,256,128z};
+        \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                     svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z     M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                     svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88    .7,51.3,88.7,56.8z};
+      }
+    }
+    \newcommand\orcid[1]{\href{https://orcid.org/#1}{\raisebox{0.15 em}{\mbox{\scalerel*{
+    \begin{tikzpicture}[yscale=-1, transform shape]
+    \pic{orcidlogo};
+    \end{tikzpicture}
+    }{|}}}}}
+    \definecolor{agileblue}{RGB}{0,77,155}
+urlcolor: agileblue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r logo, echo = FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
+temp <- tempfile(fileext = ".pdf")
+download.file(url = "https://github.com/reproducible-agile/reproducible-agile.github.io/raw/master/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
+knitr::include_graphics(temp)
+```
+
+This report is part of the reproducibility review at the AGILE conference.
+For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
+This document is published on OSF at OSF LINK HERE.
+To cite the report use
+
+> FULL REPORT CITATION HERE
+
+# Reviewed paper
+
+Amine Medad, Mauro Gaio Ludovic Moncla, Sébastien Mustière, and Yannick Le Nir. Comparing supervised learning algorithms for Spatial Nominal Entity recognition. The 23rd AGILE International Conference on Geographic Information Science. 2020
+https://github.com/MedadAmine/Spatial-nominal-entity-recognition
+
+# Summary
+
+The authors have done a commendable job at providing all required input data, scripts, and documentation to run the analysis. Unfortunately, the reproduction failed because of an error caused by one of the libraries. This is most probably due to the computational environement of the reviewer. It should be noted that the analysis requires substantial downloads, disk space, and processing power to run. 
+
+\clearpage
+
+# Reproducibility reviewer notes
+
+The materials on GitHub do not have an explicit license -> public domain?
+
+## Data 
+
+Original hiking texts:not available, although there is a list of words
+
+Lexicon
+FastText freely available online
+
+Corpus
+entire corpus not available, although there is a list of words
+
+Samples for analysis available (named corpus), but not documentation as to the meaning
+
+## Processing
+uses open source libraries
+Scripts and hyper-parameters are available
+using requirements.txt to install libraries in new virtual environment throws error (incompatible versions), fixed through manual install of libraries
+pre-trained FastText model is massive to download 
+example for installation path of model doesn't match load path in scripts
+cudart64 error (ignored) for Tensorflow, depending on GPU
+TreeTaggerError: "Can't locate TreeTagger directory (and no TAGDIR specified)"
+
+## Results
+
+The direct link between paper and code/models still has to be inferred. This review couldn't test (within acceptable time frame) whether output is the same because of the TreeTaggerError. However, documentation and code seems complete, it is highly likely that with more time and expertise, reproduction is possible.
