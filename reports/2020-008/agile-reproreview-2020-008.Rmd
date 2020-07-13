@@ -48,7 +48,7 @@ To cite the report use
 
 # Reviewed paper
 
-> _Hojati, Majid and Robertson, Colin: Integrating cellular automata and discrete global grid systems: a case study into wildfire modelling. AGILE GiScience Ser., 1, 5. https://doi.org/10.5194/agile-giss-1-5-2020, 2020._
+> _Hojati, Majid and Robertson, Colin: Integrating cellular automata and discrete global grid systems: a case study into wildfire modelling. AGILE GiScience Ser., 1, 6. https://doi.org/10.5194/agile-giss-1-6-2020, 2020._
 
 # Summary
 
@@ -194,8 +194,9 @@ project <- osfr::osf_retrieve_node("ztc7m")
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here("2020-008"), pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$|png$)", full.names = TRUE),
-                          here("2020-008", "LICENSE"),
-                          here("2020-008", "AGILECA", "run-model.html"))
+                 path = c(list.files(here("2020-008"), pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$|png$)", full.names = TRUE) #,
+                          #here("2020-008", "LICENSE"),
+                          #here("2020-008", "AGILECA", "run-model.html")
+                          )
                  )
 ```

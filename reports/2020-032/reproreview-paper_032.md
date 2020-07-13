@@ -1,23 +1,28 @@
 This report is part of the reproducibility review at the AGILE
 conference.
 
-For more information see <https://reproducible-agile.github.io/>
+For more information see
+[[https://reproducible-agile.github.io/]{.underline}](https://reproducible-agile.github.io/).
 
-This document is published on OSF at <https://osf.io/xs5yr/>
+This document is published on OSF at
+[[https://osf.io/xs5yr/]{.underline}](https://osf.io/xs5yr/).
 
-To cite the report use
+To cite this report use
 
-Ostermann, F. O. (2020, July). Reproducibility review of: Tracking
-Hurricane Dorian in GDELT and Twitter.
-<https://doi.org/10.17605/OSF.IO/XS5YR>
+> *Ostermann, F. O., and Nüst, D. (2020, July 12). Reproducibility
+> review of: Tracking Hurricane Dorian in GDELT and Twitter.
+> [[https://doi.org/10.17605/OSF.IO/XS5YR]{.underline}](https://doi.org/10.17605/OSF.IO/XS5YR)
+> *
 
 Reviewed paper
 
-Owuor, Innocensia, Hochmair, Hartwig and Cvetojevic, Sreten: Tracking
-Hurricane Dorian in GDELT and Twitter. AGILE GiScience Ser., 1, 18.
-<https://doi.org/10.5194/agile-giss-1-18-2020> , 2020.
+> *Owuor, Innocensia, Hochmair, Hartwig and Cvetojevic, Sreten: Tracking
+> Hurricane Dorian in GDELT and Twitter. AGILE GiScience Ser., 1, 19.
+> [[https://doi.org/10.5194/agile-giss-1-19-2020]{.underline}](https://doi.org/10.5194/agile-giss-1-19-2020),
+> 2020.*
 
-<https://github.com/InnocensiaO/Tracking-Hurricane-Dorian-in-GDELT-and-Twitter>
+Code repository:
+[[https://github.com/InnocensiaO/Tracking-Hurricane-Dorian-in-GDELT-and-Twitter]{.underline}](https://github.com/InnocensiaO/Tracking-Hurricane-Dorian-in-GDELT-and-Twitter)
 
 Summary
 =======
@@ -29,6 +34,8 @@ explains what the scripts are doing, and in which order they are to be
 run. While the paper\'s boxplots were successfully reproduced, the maps
 cannot be reproduced with the materials provided. Overall, the
 reproduction was thus partially successful.
+
+ 
 
 Reproducibility reviewer notes
 ==============================
@@ -94,6 +101,8 @@ Tweet\_WilcoxMedianDifferences.r
 Tweets\_GdeltCountiesCorrelation.r (only stepwise execution, skipping
 line causing an error)
 
+ 
+
 Results
 -------
 
@@ -103,12 +112,13 @@ provide the ArcGIS project files. The boxplots could be reproduced using
 the R script boxplots.r: It created a plot matching Figure 3 of the
 paper in labels, range and by visual inspection also matching data.
 
-![](media/image1.png){width="6.3in" height="3.8409722222222222in"}
+![](media/image1.png){width="5.586805555555555in" height="3.40625in"}
 
 Tweets\_GdeltCountiesCorrelation.r line 29 created a plot similar to
 Figure 6, while the remaining plots failed on my system.
 
-![](media/image2.png){width="6.3in" height="2.75625in"}
+![](media/image2.png){width="5.6097222222222225in"
+height="2.4541666666666666in"}
 
 It was not entirely clear at the time of the attempted reproduction what
 the supposed output of the other scripts is. The additional

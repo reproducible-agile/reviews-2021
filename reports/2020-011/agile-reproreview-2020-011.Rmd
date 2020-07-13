@@ -55,7 +55,7 @@ To cite the report use
 
 # Reviewed paper
 
-> _Tobias Werner and Thomas Brinkhoff: Window Operators for Processing Spatio-Temporal Data Streams on Unmanned Vehicles. AGILE GiScience Ser., 1, 20. https://doi.org/10.5194/agile-giss-1-20-2020, 2020. _
+> _Tobias Werner and Thomas Brinkhoff: Window Operators for Processing Spatio-Temporal Data Streams on Unmanned Vehicles. AGILE GiScience Ser., 1, 21. https://doi.org/10.5194/agile-giss-1-21-2020, 2020._
 
 # Summary
 
@@ -281,7 +281,8 @@ project <- osfr::osf_retrieve_node("7twr2")
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here::here("2020-011"), pattern = "(pdf$|Rmd$|png$)", full.names = TRUE) #,
+                 path = c(list.files(here::here("2020-011"), pattern = "(pdf$|Rmd$)", full.names = TRUE) #,
+                          #c(list.files(here::here("2020-011"), pattern = "png$", full.names = TRUE),
                           #list.files(here::here("2020-011", "updated_figshare_content"), pattern = ".*(png$)", full.names = TRUE),
                           #list.files(here::here("2020-011"), pattern = "Pip", full.names = TRUE)
                           #here("2020-011", "LICENSE"),

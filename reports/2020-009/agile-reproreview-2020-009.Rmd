@@ -55,7 +55,7 @@ To cite the report use
 
 # Reviewed paper
 
-> _Steffen Illium, Philipp Friese, Robert Müller and Sebastian Feld: What to do in the meantime: An Service Coverage Analysis for Parked Autonomous Vehicles. AGILE GiScience Ser., 1, 6. https://doi.org/10.5194/agile-giss-1-6-2020, 2020._
+> _Steffen Illium, Philipp Andreas Friese, Robert Müller and Sebastian Feld: What to do in the meantime: A Service Coverage Analysis for Parked Autonomous Vehicles. AGILE GiScience Ser., 1, 7. https://doi.org/10.5194/agile-giss-1-7-2020, 2020._
 
 # Summary
 
@@ -311,14 +311,17 @@ project <- osfr::osf_retrieve_node("5svmt")
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
                  path = c(list.files(here("2020-009"),
-                                     pattern = "(pdf$|Rmd$|png$)",
-                                     full.names = TRUE),
-                          list.files(here("2020-009", "images"),
-                                     pattern = "(png$|csv$)",
-                                     full.names = TRUE),
-                          "computational-workflow/reachability-python/src/main.py",
-                          "computational-workflow/reachability-python/src/visualizer.py",
-                          "computational-workflow/reachability-python/requirements.txt"
+                                     pattern = "(pdf$|Rmd$)",
+                                     full.names = TRUE) #,
+                          #list.files(here("2020-009"),
+                          #           pattern = "png$",
+                          #           full.names = TRUE),
+                          #list.files(here("2020-009", "images"),
+                          #           pattern = "(png$|csv$)",
+                          #           full.names = TRUE),
+                          #"computational-workflow/reachability-python/src/main.py",
+                          #"computational-workflow/reachability-python/src/visualizer.py",
+                          #"computational-workflow/reachability-python/requirements.txt"
                           )
                  )
 ```
