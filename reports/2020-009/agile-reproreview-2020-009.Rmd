@@ -42,7 +42,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 ```{r logo, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
 temp <- tempfile(fileext = ".pdf")
-download.file(url = "https://github.com/reproducible-agile/reproducible-agile.github.io/raw/master/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
+download.file(url = "https://reproducible-agile.github.io/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
 knitr::include_graphics(temp)
 ```
 
@@ -280,12 +280,18 @@ Changes are summarised as follows:
 
 2. Build the image with the database (file paths depends on working directory)
 
-   `docker build --no-cache -t agile-reproduction-2020-009 --file docker-postgres/Dockerfile .`
-
+   ```
+   docker build --no-cache -t agile-reproduction-2020-009 \
+      --file docker-postgres/Dockerfile .`
+   ```
+   
 3. Run the image without the mount (file paths depends on working directory)
 
-   `docker run --name docker-postgres --rm -it -p '5432:5432' agile-reproduction-2020-009`
-
+   ```
+   docker run --name docker-postgres --rm -it \
+      -p '5432:5432' agile-reproduction-2020-009`
+   ```
+   
 Finally, the installation of the python dependencies failed due to an error between Fiona and GDAL, which stopped the reproduction exercise at this point.
 
 In summary, given the disparity of OS among authors and repo reviewers, authors are strongly advised to encapsulate their contributions (data, analysis, dependencies) as much as possible in a single container as a preferred option.
