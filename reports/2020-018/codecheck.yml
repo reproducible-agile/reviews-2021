@@ -1,0 +1,34 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2020 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/25"
+
+paper:
+  title: "Extracting interrogative intents and concepts from geo-analytic questions."
+  authors:
+    - name: Haiqi Xu
+    - name: Ehsan Hamzei
+      ORCID: 0000-0002-4712-230X
+    - name: Enkhbold Nyamsuren
+    - name: Han Kruiger
+      ORCID: 0000-0002-0901-202X
+    - name: Stephan Winter
+      ORCID: 0000-0002-3403-6939
+    - name: Martin Tomko
+      ORCID: 0000-0002-5736-4679
+    - name: Simon Scheider
+      ORCID: 0000-0002-2267-4810
+  reference: https://doi.org/10.5194/agile-giss-1-23-2020
+
+codechecker:
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/OSF.IO/7XRQG
+summary: |
+  The workflow could be executed using the provided instructions and the provided scripts created a subset of the included figures. Although some key figures were not created by the provided data and code, the reproduction was partially successful.
+repository: https://figshare.com/s/b3f8b0834ca63b6c5d60
+check_time: "2020-07-13 11:54:00"
+certificate: 2020-022

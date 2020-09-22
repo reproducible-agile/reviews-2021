@@ -1,0 +1,25 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2020 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/25"
+
+paper:
+  title: "Integrating cellular automata and discrete global grid systems: a case study into wildfire modelling"
+  authors:
+    - name:  Majid Hojati
+      ORCID: 0000-0001-7350-0055
+    - name:  Colin Robertson
+  reference: https://doi.org/10.5194/agile-giss-1-6-2020
+
+codechecker:
+  - name: Daniel N.
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/OSF.IO/ZTC7M
+summary: |
+    The check was straightforward as all material was provided and documented well, but computations took about 3 hours to run.
+repository: https://github.com/reproducible-agile/AGILECA
+check_time: "2020-07-13 11:32:00"
+certificate: 2020-018

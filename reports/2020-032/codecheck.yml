@@ -1,0 +1,29 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2020 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/25"
+
+paper:
+  title: "Tracking Hurricane Dorian in GDELT and Twitter"
+  authors:
+    - name:  Innocensia Owuor
+    - name:  Hartwig H. Hochmair
+      ORCID: 0000-0002-7064-8238
+    - name:  Sreten Cvetojevic
+      ORCID: 0000-0001-6069-5324
+  reference: https://doi.org/10.5194/agile-giss-1-19-2020
+
+codechecker:
+  - name: Frank Ostermann
+    ORCID: 0000-0002-9317-8291
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/OSF.IO/XS5YR
+summary: |
+    After initial problems because of absence of documentation, the reproduction was successful for some of the paper's figures, but not the maps.
+repository: https://github.com/reproducible-agile/Spatial-nominal-entity-recognition
+check_time: "2020-07-13 12:00:00"
+certificate: 2020-023
