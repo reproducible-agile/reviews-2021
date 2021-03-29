@@ -68,5 +68,3 @@ reports/**/*.eml
 *.docx
 
 .cache/
-
-agile-reproducibility-reviews_files/

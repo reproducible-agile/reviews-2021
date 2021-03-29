@@ -668,8 +668,15 @@ retrieve_review <- function(id, submission_id) {
     "[[:digit:]]"),
     width = 3, side = "left", pad = "0")
   
+  cat(id, " -- ", title_id, "\n")
+  
+  if(is.na(id) || is.na(title_id)) {
+    warning(paste("Ids are both NA for submission", submission_id), "\n")
+    return(NA)
+  }
+  
   if(id != title_id)
-    warning(paste("Ids mismatch, id: ", id, " id in reponse: ", title_id))
+    warning(paste("Ids mismatch, id: ", id, " id in reponse: ", title_id), "\n")
   
   # TODO replace lines with <td>PC member:</td> in the reviews for anonymity
   review_doc <- xml_new_root(xml_dtd(name = "html", external_id = "-//W3C//DTD XHTML 1.0 Transitional//EN", system_id = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"))
