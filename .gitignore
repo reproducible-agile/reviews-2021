@@ -38,10 +38,6 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
-2020/
-
-/agile-2020-papers.html
-
 .local/
 
 .rstudio/
@@ -65,41 +61,12 @@ review-material/
 
 README.html
 
-reports/2020-008/AGILECA/
-
 reports/**/*.zip
-
 reports/**/*.pdf
-
 reports/**/*.eml
-reports/2020-018/11407371/
-
-reports/2020-011/11412006/
-
-reports/2020-011/updated_figshare_content/
-
-reports/2020-011/GStream/
-
-reports/2020-012/Spatial-nominal-entity-recognition
-
-reports/2020-026/TemporalBiases
-
-reports/2020-031/arcgis-online-search-engine
-
-reports/2020-032/Tracking-Hurricane-Dorian-in-GDELT-and-Twitter
-
-reports/2020-009/dataset/
-
-reports/2020-009/computational-workflow/
-
-reports/2020-009/LICENSE.txt
-
-reports/2020-009/caches/
-
-reports/2020-009/nodes/
-
-reports/2020-009/images/
-
-reports/2020-009/README.md
 
 *.docx
+
+.cache/
+
+agile-reproducibility-reviews_files/

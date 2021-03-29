@@ -1,5 +1,5 @@
 ---
-title: "Reproducibility Review AGILE 2020"
+title: "Reproducibility Review AGILE 2021"
 author: "Daniel Nüst"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -14,12 +14,12 @@ params:
 
 ## Introduction
 
-This document includes scripts and text analysis to support the reproducibility review at the [AGILE conference 2020](https://agile-online.org/conference-2020), in Chania, Greece - _"Geospatial Technologies: seeding the future"_.
+This document includes scripts and text analysis to support the reproducibility review at the [AGILE conference 2021](https://agile-online.org/conference-2021), which happens online but is organised by a team from Chania, Greece.
 The physical conference was cancelled due to the [COVID-19 crisis](https://en.wikipedia.org/wiki/Coronavirus_disease_2019).
 The full papers were already reviewed at the time the decision to cancel was taken, so these are still published. However, short papers and posters were not sent out to review but are included here in the summary statistics.
 
 Find out more online [about reproducible publications at AGILE](https://doi.org/10.17605/OSF.IO/PHMCE) and the [review process](https://osf.io/eg4qx/), and visit the Reproducible AGILE website: [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
-The code of this document is published on GitHub in the repository [reproducible-agile/reviews-2020](https://github.com/reproducible-agile/reviews-2020), where you can inspect the R code in the file `agile-2020-papers.Rmd` and find instructions for reproducing the workflow.
+The code of this document is published on GitHub in the repository [reproducible-agile/reviews-2021](https://github.com/reproducible-agile/reviews-2021), where you can inspect the R code in the file `agile-reproducibility-reviews.Rmd` and find instructions for reproducing the workflow.
 The [report parameter](https://bookdown.org/yihui/rmarkdown/parameterized-reports.html) `private_info` can be set to `yes` to show information which cannot be shared publicly, such as author names, titles, or excerpts of not accepted submissions, and to upload review files to private shares, which requires authentication.
 
 ```{r load_libraries, message=FALSE, warning=FALSE, include=FALSE}
@@ -42,7 +42,7 @@ library("httr")
 ```
 
 ```{r seed, echo=FALSE}
-set.seed(23) # 23rd AGILE!
+set.seed(24) # 24th AGILE!
 ```
 
 ## Submitted papers
@@ -61,6 +61,7 @@ cr_path <- here::here("camera-ready-full-papers")
 
 Retrieve all information about submissions from the EasyChair submissions system.
 The full submission information is not included in the public rendering of this report.
+Make sure that the shown columns in the submission table include the colums required in the code below.
 
 ```{r easychair_login}
 if(is.na(Sys.getenv("easychair_username", unset = NA)) || is.na(Sys.getenv("easychair_password", unset = NA))) {
@@ -80,7 +81,7 @@ if(is.null(login_response)) {
 ```
 
 ```{r submissions, echo=FALSE}
-submission_page <- httr::GET(url = "https://easychair.org/conferences/submissions?a=24268236")
+submission_page <- httr::GET(url = "https://easychair.org/conferences/submissions?a=26091618")
 submission_html <- xml2::read_html(submission_page)
 submission_table_full <- html_node(submission_html, "#ec\\:table1")
 # remove first header row and set names manually later, because the vertical table headers are miages anyway
@@ -244,7 +245,9 @@ words_per_doc <- all_words %>%
 type_counts_totals <- submission_table %>%
   group_by(type) %>%
   tally()
-type_counts_totals$type <- c("FP", "PO", "SP")
+type_counts_totals$type <- c("FP",
+                             #"PO",
+                             "SP")
 type_counts_totals <- paste(
   paste(type_counts_totals$type, type_counts_totals$n, sep = ":"),
   collapse = "|")
@@ -270,19 +273,11 @@ bind_rows(words_joined, summary_row) %>%
 ### Which papers include a "Data and Software Availability" section?
 
 According the the [AGILE Reproducible Paper Guidelines](https://osf.io/c8gtq/), all authors must add a _Data and Software Availability_ section to their paper.
-The guidelines themselves are not mandatory yet in 2020, but let's see how many authors did include the statement.
+The guidelines themselves are mandatory for the first time in 2021.
 This detection naturally relies on the loaded texts _with_ stop words.
 
-```{r pdfgrep, echo=FALSE, eval=FALSE}
-# Quick version with `pdfgrep`
-cmd <- paste("pdfgrep", "-e 'Data and Software Availability'", "-i", "-A 3", "2020/*/*")
-output <- system(cmd, intern = TRUE)
-print(cmd)
-print(output)
-```
-
 ```{r dasa_section, echo=FALSE}
-dasa_pattern <- regex("Data and Software Availability", ignore_case = TRUE)
+dasa_pattern <- regex("(Data and Software Availability|Software and Data Availability)", ignore_case = TRUE)
 tidy_texts <- tidy_texts %>%
   mutate(has_dasa = str_detect(tidy_texts$text, pattern = dasa_pattern))
 
@@ -316,7 +311,7 @@ dasa_stats <- dasa_stats %>%
 
 dasa_stats %>%
   arrange(desc(n)) %>%
-  rename(`with DASA` =)
+  rename(`with DASA` = n) %>%
   kable() %>%
   kable_styling("striped")
 ```
@@ -378,7 +373,7 @@ top_wordstems %>%
   scroll_box(height = "320px")
 ```
 
-```{r wordstemcloud, dpi=150, echo=FALSE, fig.cap="Wordstem cloud of AGILE 2020 full paper submissions"}
+```{r wordstemcloud, dpi=150, echo=FALSE, fig.cap="Wordstem cloud of AGILE 2021 full paper submissions"}
 wordcloud(cloud_wordstems$wordstem, cloud_wordstems$n,
           max.words = Inf,
           random.order = FALSE,
@@ -478,7 +473,7 @@ There is "accept" and "conditionally accept" (after second review)!
 
 ```{r scrape_accepted, echo=FALSE}
 submission_table %>%
-  filter(type == "Full-paper") %>%
+  filter(type == "Full-paper submission") %>%
   group_by(decision) %>%
   summarise(count = n()) %>%
   kable() %>%
@@ -486,7 +481,7 @@ submission_table %>%
 ```
 
 ```{r compile review data, echo=FALSE}
-#page <- httr::GET(url = "https://easychair.org/conferences/status?a=24268236")
+#page <- httr::GET(url = "https://easychair.org/conferences/status?a=26091618")
 #review_status_page <- xml2::read_html(page)
 #review_table <- rvest::html_table(html_nodes(review_status_page, ".paperTable")[[1]], header = TRUE)
 #names(review_table)[4] <- "average"
@@ -507,8 +502,8 @@ review_data <- left_join(submission_table, dasa_texts %>% select(-type),
 
 if(params$private_info) {
   review_data %>%
-    dplyr::filter(decision == "ACCEPT" | decision == "accept?") %>%
-    filter(type == "Full-paper") %>%
+    #TODO re-add when accepted papers are decided !!!! dplyr::filter(decision == "ACCEPT" | decision == "accept?") %>%
+    filter(type == "Full-paper submission") %>%
     arrange(id) %>%
     kable() %>%
     kable_styling("striped") %>%
@@ -525,19 +520,19 @@ dasa_vs_accepted <- tibble(papers = c("submitted",
                   "accepted with DASA",
                   "rejected with DASA"),
        n = c(review_data %>%
-               filter(type == "Full-paper") %>%
+               filter(type == "Full-paper submission") %>%
                nrow(.),
              review_data %>%
-               filter(type == "Full-paper") %>%
+               filter(type == "Full-paper submission") %>%
                filter(!is.na(dasa_text)) %>% 
                nrow(.),
              review_data %>%
                dplyr::filter(decision == "ACCEPT") %>%
-               filter(type == "Full-paper") %>%
+               filter(type == "Full-paper submission") %>%
                nrow(.),
              review_data %>%
                dplyr::filter(decision == "ACCEPT") %>%
-               filter(type == "Full-paper") %>%
+               filter(type == "Full-paper submission") %>%
                filter(!is.na(dasa_text)) %>% 
                nrow(.),
              review_data %>%
@@ -563,14 +558,14 @@ if(params$private_info) {
   review_data_figure_data <- review_data %>%
     mutate(`has DASA` = !is.na(dasa_text)) %>%
     filter(!is.na(decision)) %>%
-    filter(type == "Full-paper") %>%
+    filter(type == "Full-paper submission") %>%
     group_by(type, `has DASA`, decision) %>%
     summarise(n = n())
 } else {
   review_data_figure_data <- review_data %>%
     mutate(`has DASA` = !is.na(dasa_text)) %>%
     filter(!is.na(decision)) %>%
-    filter(type == "Full-paper", decision == "ACCEPT") %>%
+    filter(type == "Full-paper submission", decision == "ACCEPT") %>%
     group_by(type, `has DASA`, decision) %>%
     summarise(n = n())
 }
@@ -579,7 +574,7 @@ review_data_figure <- review_data_figure_data  %>%
     ggplot(aes(x = decision, y = n, fill = `has DASA`)) +
     geom_bar(stat="identity", width = 0.5) + 
     scale_fill_brewer(palette="Paired") +
-    labs(title = "AGILE 2020 Submissions: Transparency & Reproducibility",
+    labs(title = "AGILE 2021 Submissions: Transparency & Reproducibility",
          subtitle = "Data and Software Availability Sections (DASA) across full papers") +
     theme_minimal() + 
     theme(axis.title.y = element_text(angle = 360, hjust = 1, vjust = 0.5))
@@ -594,51 +589,44 @@ review_data_figure
 ### About
 
 The assignment of reviews is done via a privately shared spreadsheet, to handle potential non-public comments.
-The main outcome of the reviews is a _report_, which is published in individual OSF projects as components of the [OSF project for the reproducibility reviews 2020](https://osf.io/6k5fh/).
+The main outcome of the reviews is a _report_, which is published in individual OSF projects as components of the [OSF project for the reproducibility reviews 2021](https://osf.io/h64sd/).
 The report should be based on a template from this repository in [`report-template`](report-template).
-Find the details on the review process in [this document]https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#).
 
 ### Prepare data for reviewers
 
-The review comments for each paper are stored in an HTML file next to the PDF of the submission and uploaded to [a private share](https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP) so that reproducibility reviewers can access them.
-This file includes the full reviews, including the names of the original reviewers, and cannot be publicly shared.
+The review comments for each paper are stored in an HTML file next to the PDF of the submission and uploaded to [a private share](https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH) so that reproducibility reviewers can access them.
+The following includes the full reviews, including the names of the original reviewers, and cannot be publicly shared.
 
 ```{r upload_settings}
 review_data_csv_file <- file.path(review_files_path, "review_data.csv")
 ```
 
-1. ~~Download PDFs to directory `r review_files_path`~~ Skipped: The camera-ready PDFs are managed outsdie of EasyChair and must be available locall in the directory `r cr_path`, from where they are copied to `r review_files_path`
-2. Create HTML from review page and safe to `r review_files_path`
-3. Write paper metadata (ID, decision, title) to a CSV file `r review_data_csv_file`
-4. **Manually** [import the paper metadata into the spreadsheet](https://www.tillerhq.com/how-to-import-csv-into-a-google-spreadsheet/) (Select cell `A1` then "File" > "Import" > "Import File" > "My Drive" then search for `review_data` and find `review_data.csv` then select the file > "Replace data at selected cell" and click "Import data")
+1. Create HTML from review page and safe to `r review_files_path`
+2. Write paper metadata (ID, decision, title) to a CSV file `r review_data_csv_file`
+3. **Manually** [import the paper metadata into the spreadsheet](https://www.tillerhq.com/how-to-import-csv-into-a-google-spreadsheet/) (Select cell `A1` then "File" > "Import" > "Import File" > "My Drive" then search for `review_data` and find `review_data.csv` then select the file > "Replace data at selected cell" and click "Import data")
 
-In the future, we could do some text mining to answer questions such as
-
-- Do reviewers findings match the automatic detection of DASA?
-- How many comments are there regarding reproducibility?
-
-```{r accepted_fp_files_download_easychair, echo=FALSE, eval=FALSE}
-# DO NOT RUN - latest PDFs are not on EasyChair, use next chunk
-#if (params$private_info) {
-#  review_files <- review_data %>%
-#    filter(type == "Full-paper") %>%
-#    dplyr::filter(decision != "REJECT") %>%
-#    select(id, submission_id, decision, title, file, paper)
-#  
-#  # first, re-download all accepted full paper PDFs to make sure we have latest copies
-#  for (i in 1:nrow(review_files)) {
-#    current <- review_files[i,]
-#    filename <- file.path(review_files_path, paste0(current$id, ".pdf"))
-#    httr::GET(url = current$paper,
-#                httr::write_disk(path = filename,
-#                                 overwrite = TRUE))
-#  }
-#}
+```{r accepted_fp_files_download_easychair, echo=FALSE, eval=TRUE}
+if (params$private_info) {
+  review_files <- review_data %>%
+    filter(type == "Full-paper submission") %>%
+    #TODO re-add when accepted papers are decided !!!! dplyr::filter(decision != "REJECT") %>%
+    select(id, submission_id, decision, title, file, paper)
+  
+  # first, re-download all accepted full paper PDFs to make sure we have latest copies
+  for (i in 1:nrow(review_files)) {
+    current <- review_files[i,]
+    filename <- file.path(review_files_path, paste0(current$id, ".pdf"))
+    httr::GET(url = current$paper,
+                httr::write_disk(path = filename,
+                                 overwrite = TRUE))
+  }
+}
 ```
 
 ```{r update_camera_ready_file_paths, echo=FALSE}
+# Use this chunk if camera ready files are not managed via EasyChair
 review_files <- review_data %>%
-  filter(type == "Full-paper") %>%
+  filter(type == "Full-paper submission") %>%
   dplyr::filter(decision == "ACCEPT") %>%
   dplyr::mutate(file = stringr::str_replace(.$file, pattern = "submissions", replacement = "camera-ready-full-papers")) %>%
   select(id, submission_id, decision, title, file, paper)
@@ -660,9 +648,9 @@ readr::write_csv(review_files %>%
 
 ```{r reviewer_comments, echo=FALSE}
 # get review contents for each paper
-conference_id <- "24268236"
+conference_id <- "26091618"
 
-# https://easychair.org/conferences/submission_reviews?submission=4788883;a=24268236#{fr:EZIcStd1tVrf}
+# Example page: https://easychair.org/conferences/submission_reviews?a=26091618;submission=5333543
 retrieve_review <- function(id, submission_id) {
   url <- parse_url("https://easychair.org/conferences/submission_reviews")
   url$query <- list(submission = submission_id, a = conference_id)
@@ -704,8 +692,12 @@ retrieve_review <- function(id, submission_id) {
   
   review_content <- xml2::xml_find_all(content,
                                        xpath = "//h3[contains(., 'Reviews and Comments')]/following-sibling::div")
-  for (i in c(1:length(review_content))) {
-    xml2::xml_add_child(review_body, review_content[[i]])
+  if(length(review_content) > 0) {
+    for (i in c(1:length(review_content))) {
+      xml2::xml_add_child(review_body, review_content[[i]])
+    }
+  } else {
+    xml2::xml_add_child(review_body, xml2::read_xml("<strong>No reviews available yet.</strong>"))
   }
   
   reviews_html_path <- file.path(review_files_path, paste0(id, "_reviews.html"))
@@ -729,12 +721,12 @@ if (params$private_info) {
   sapply(list.files(review_files_path, full.names = TRUE), function(the_file) {
      googledrive::drive_put(media = the_file,
                             name = basename(the_file),
-                            path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
+                            path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
   })
   
   googledrive::drive_put(media = review_data_csv_file,
                          name = basename(review_data_csv_file),
-                         path = "https://drive.google.com/drive/folders/1FMsRlvouWPkpnHU4mJ6dIMDeTwSRgpUP")
+                         path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
 }
 ```
 
@@ -743,14 +735,14 @@ if (params$private_info) {
 ### Reproducibility reviewer instructions
 
 1. Familiarise yourself with the [AGILE Reproducibility Review Process](https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#heading=h.oheeg2s92zdm); the following steps are just tl;dr version
-2. Take a look at the [review report template](https://github.com/reproducible-agile/reviews-2020/blob/master/report-template/reproreview-template.Rmd)
-3. Go to the [master spreadsheet](https://docs.google.com/spreadsheets/d/1K6_8NqDfXH5uI07LBmBmgnapVP2fYlvU2QcE84UeqD0/) and find your assignments
+2. Take a look at the [review report template](https://github.com/reproducible-agile/reviews-2021/blob/master/report-template/reproreview-template.Rmd) - even if you're not using it, it gives you guidance
+3. Go to the [Discoure forum discussion for reproducibility reviewers](https://discourse.agile-online.org/t/repro-review-tasks-and-coordination/40) and find your assignments
 4. Conduct your reproducibility review and write the report
     - Don't forget to take a look at the scientific reviews for comments on reproducibility; do _not_ worry about the science or read the full paper, unless it really interests you
-    - If code is available on GitHub, you can fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/), same [on GitLab in the subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews)
+    - If code is available on GitHub/Lab, you can fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/) respectively the [GitLab subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews); ask Daniel to get the permissions
     - If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review
 5. Send the report to the original authors of the paper and add the reproducibility chair in CC, see template below; _only if the authors agree_ with a publication of the report, proceed with the following steps
-6. Add a new component to the [OSF project for 2020 reproducibility reviews](https://osf.io/6k5fh/)
+6. Add a new component to the [OSF project for 2021 reproducibility reviews](https://osf.io/h64sd/)
     - Use the European storage location, "Frankfurt"
     - Name the component `Reproducibility review of: FULL PAPER TITLE`
     - Add all contributors to the project
@@ -764,13 +756,13 @@ if (params$private_info) {
 ```
 Dear AUTHORS,
 
-congratulations to the acceptance of your submission "TITLE" as a full paper at the AGILE conference 2020. As part of the Reproducible AGILE initative (https://reproducible-agile.github.io/) I attempted to reproduce the results from your paper. Attached to this email you find my report on your results.
+congratulations to the acceptance of your submission "TITLE" as a full paper at the AGILE conference 2021. As part of the Reproducible AGILE initative (https://reproducible-agile.github.io/) I attempted to reproduce the results from your paper. Attached to this email you find my report on your results.
 
 As part of the AGILE reproducibility review (see https://docs.google.com/document/d/1JHCQV7GP3YkKwp0Nii3dt3p3Y45hU56Xz2cr-xJVz34/edit#heading=h.oheeg2s92zdm for details) I hereby ask you if you agree to the report being published on OSF (see https://osf.io/6k5fh/). A publication of the reproduction attempt gives credit to my work as a reproducibility reviewer and helps to improve future work.
 
 [OPTIONAL:] Alongside the report I would like to publish an archive of the used data and script files, and the output files generated by myself. Note these would be published under a CC-BY license on OSF, though the original source and license are noted in the report.
 
-Please don't hesitate to get in touch with me and Daniel Nüst (CC'ed), AGILE conference's Reproducibility Chair, if you have any questions.  Please also include your coauthors in any further communication as you see fit.
+Please don't hesitate to get in touch with me and Daniel Nüst (CC'ed), AGILE conference's Reproducibility Chair, if you have any questions. Please also include your coauthors in any further communication as you see fit.
 
 YOUR SALUTATION OF CHOICE,
 NAME
@@ -789,27 +781,6 @@ YOUR SALUTATION OF CHOICE,
 NAME
 ```
 
-## AGILE General Meeting
-
-```{r general_meeting_figures, fig.height=4, fig.width=4}
-data <- tibble(`reproduction attempts` = c(0, 8))
-
-review_data_2019 <- tibble(#id = c(1:19),
-                           `has DASA` = factor("FALSE", levels = c("FALSE", "TRUE")),
-                           decision = "Accept",
-                           n = 19)
-review_data_2019 %>%
-  ggplot(aes(x = decision, y = n, fill = `has DASA`)) +
-  geom_bar(stat="identity", width = 0.5) + 
-  scale_fill_brewer(palette="Paired", drop = FALSE) +
-  labs(title = "AGILE 2019 Submissions",
-       subtitle = "DASA sections in full paper submissions") +
-  ylim(ggplot_build(review_data_figure)$layout$panel_scales_y[[1]]$range$range) +
-  theme_minimal() + 
-  theme(axis.title.y = element_text(angle = 360, hjust = 1, vjust = 0.5))
-```
-
-
 ## Colophon
 
 This document is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
@@ -825,17 +796,18 @@ sessionInfo()
 
 ```{r upload_to_drive, eval=FALSE, include=FALSE}
 # upload the HTML file and source code to the Reproducibility Committee shared folder
-drive_put(media = "agile-2020-papers.html",
-          name = paste0("agile-2020-papers_",
+drive_put(media = "agile-reproducibility-reviews.html",
+          name = paste0("agile-reproducibility-reviews_",
                  ifelse(params$private_info, "PRIVATE", "public"),
                  ".html"),
-          path = "https://drive.google.com/drive/folders/1jyYj1hFqbR74D9ljjjcScR4lD3aWCO2U/")
-drive_put("agile-2020-papers.Rmd", path = "https://drive.google.com/drive/folders/1jyYj1hFqbR74D9ljjjcScR4lD3aWCO2U/")
+          path = "https://drive.google.com/drive/folders/1Y2905cRV1APIE0fSbX7Kmy-xvRMXj_0y")
+drive_put("agile-reproducibility-reviews.Rmd", path = "https://drive.google.com/drive/folders/1Y2905cRV1APIE0fSbX7Kmy-xvRMXj_0y")
 ```
 
 ```{r render_public_version, eval=FALSE, include=FALSE}
-rmarkdown::render(input = "agile-2020-papers.Rmd",
+rmarkdown::render(input = "agile-reproducibility-reviews.Rmd",
                   params = list(private_info = FALSE),
                   output_dir = here::here("docs/"),
                   output_format = rmarkdown::html_document(toc = TRUE, self_contained = FALSE))
 ```
+

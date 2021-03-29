@@ -6,7 +6,7 @@ runcontainer: venv install.R
 
 clean: clean-venv
 	rm -r .venv/
-	rm agile-2020-papers.html
+	rm agile-reproducibility-reviews.html
 
 # https://github.com/sio/Makefile.venv
 include Makefile.venv

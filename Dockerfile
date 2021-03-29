@@ -1,6 +1,6 @@
 # This Dockerfile is based on the rocker/binder example Dockerfile from https://github.com/rocker-org/binder/
-# We use 3.6.0 because it is a recent version of R that has a fixed MRAN date in the Rocker image.
-FROM rocker/binder:3.6.0
+# We use 3.6.3 because it is a recent version of R that has a fixed MRAN date in the Rocker image and the 4.x images don't work with Binder yet
+FROM rocker/binder:3.6.3
 
 ## Declares build arguments
 ARG NB_USER
@@ -11,6 +11,7 @@ USER root
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     libpoppler-cpp-dev \
+    pdfgrep \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
@@ -32,11 +33,11 @@ RUN dpkg --list > dpkg-list.txt && \
 
 # --- Metadata ---
 LABEL maintainer="daniel.nuest@uni-muenster.de" \
-  Name="AGILE reproducibility reviews 2020" \
-  org.opencontainers.image.created="2020-04" \
+  Name="AGILE reproducibility reviews 2021" \
+  org.opencontainers.image.created="2021-03" \
   org.opencontainers.image.authors="Daniel Nüst" \
-  org.opencontainers.image.url="https://github.com/reproducible-agile/reviews-2020" \
-  org.opencontainers.image.documentation="https://github.com/reproducible-agile/reviews-2020" \
+  org.opencontainers.image.url="https://github.com/reproducible-agile/reviews-2021" \
+  org.opencontainers.image.documentation="https://github.com/reproducible-agile/reviews-2021" \
   org.label-schema.description="AGILE reproducibility reviews workflow image (license: Apache 2.0)"
 
 # --- Development instructions ---
@@ -53,5 +54,5 @@ LABEL maintainer="daniel.nuest@uni-muenster.de" \
 # It will show the Jupyter start page and you can now open RStudio via the menu "New".
 #
 ## Run the image to render the PDF for the assessment figures or the text analysis
-# $ docker run -i -v $(pwd):/review --user $UID repro-review Rscript -e 'setwd("/review"); rmarkdown::render("agile-2020-papers.Rmd")'
-# $ docker run -i -v $(pwd):/review --user $UID repro-review Rscript -e 'setwd("/review"); rmarkdown::render("agile-2020-papers.Rmd")'
+# $ docker run -i -v $(pwd):/review --user $UID repro-review Rscript -e 'setwd("/review"); rmarkdown::render("agile-reproducibility-reviews.Rmd")'
+# $ docker run -i -v $(pwd):/review --user $UID repro-review Rscript -e 'setwd("/review"); rmarkdown::render("agile-reproducibility-reviews.Rmd")'

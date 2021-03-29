@@ -11,7 +11,7 @@ The reproducibility reviews are published on OSF: [10.17605/OSF.IO/6K5FH](https:
 
 ## Contents
 
-To work on the main R Markdown file, `agile-2020-papers.Rmd`, which includes _all_ information and documentation of the reproducibility review, run (requires GNU Make, and virtualenv for Python)
+To work on the main R Markdown file, `agile-reproducibility-reviews.Rmd`, which includes _all_ information and documentation of the reproducibility review, run (requires GNU Make, and virtualenv for Python)
 
 ```bash
 make
