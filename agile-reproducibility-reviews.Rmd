@@ -245,9 +245,9 @@ words_per_doc <- all_words %>%
 type_counts_totals <- submission_table %>%
   group_by(type) %>%
   tally()
-type_counts_totals$type <- c("FP",
-                             #"PO",
-                             "SP")
+type_counts_totals$type <- c("Full-paper submission",
+                             "Poster submission",
+                             "Short-paper submission")
 type_counts_totals <- paste(
   paste(type_counts_totals$type, type_counts_totals$n, sep = ":"),
   collapse = "|")
@@ -320,7 +320,7 @@ dasa_stats %>%
 The following table shows the first `r excerpt_length` characters of these sections.
 `r if(!params$private_info) {"-->"}`
 
-```{r dasa_section_table, echo=FALSE}
+```{r dasa_section_table_md, echo=FALSE}
 if(params$private_info) {
   dasa_texts %>%
     arrange(id) %>%
@@ -500,14 +500,15 @@ submission_table %>%
 review_data <- left_join(submission_table, dasa_texts %>% select(-type),
                          by = "id")
 
-if(params$private_info) {
-  review_data %>%
-    #TODO re-add when accepted papers are decided !!!! dplyr::filter(decision == "ACCEPT" | decision == "accept?") %>%
+accepted_papers <- review_data %>%
+    dplyr::filter(decision == "ACCEPT" | decision == "accept?") %>%
     filter(type == "Full-paper submission") %>%
     arrange(id) %>%
     kable() %>%
     kable_styling("striped") %>%
     scroll_box(height = "480px")
+if(params$private_info) {
+  accepted_papers
 }
 ```
 
@@ -594,22 +595,23 @@ The report should be based on a template from this repository in [`report-templa
 
 ### Prepare data for reviewers
 
-The review comments for each paper are stored in an HTML file next to the PDF of the submission and uploaded to [a private share](https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH) so that reproducibility reviewers can access them.
-The following includes the full reviews, including the names of the original reviewers, and cannot be publicly shared.
+#### Overview and files
+
+Reproducibility reviewers have access to the submission and reviews through EasyChair.
+The following snippets helpt to create a shared Google Spreadsheet to manage the status of reproductions.
 
 ```{r upload_settings}
 review_data_csv_file <- file.path(review_files_path, "review_data.csv")
 ```
 
-1. Create HTML from review page and safe to `r review_files_path`
-2. Write paper metadata (ID, decision, title) to a CSV file `r review_data_csv_file`
-3. **Manually** [import the paper metadata into the spreadsheet](https://www.tillerhq.com/how-to-import-csv-into-a-google-spreadsheet/) (Select cell `A1` then "File" > "Import" > "Import File" > "My Drive" then search for `review_data` and find `review_data.csv` then select the file > "Replace data at selected cell" and click "Import data")
+1. Write paper metadata (ID, decision, title) to a CSV file `r review_data_csv_file`
+1. **Manually** [import the paper metadata into the spreadsheet](https://www.tillerhq.com/how-to-import-csv-into-a-google-spreadsheet/) (Select cell `A1` then "File" > "Import" > "Import File" > "My Drive" then search for `review_data` and find `review_data.csv` then select the file > "Replace data at selected cell" and click "Import data")
 
 ```{r accepted_fp_files_download_easychair, echo=FALSE, eval=TRUE}
 if (params$private_info) {
   review_files <- review_data %>%
     filter(type == "Full-paper submission") %>%
-    #TODO re-add when accepted papers are decided !!!! dplyr::filter(decision != "REJECT") %>%
+    dplyr::filter(decision == "ACCEPT") %>%
     select(id, submission_id, decision, title, file, paper)
   
   # first, re-download all accepted full paper PDFs to make sure we have latest copies
@@ -646,6 +648,8 @@ readr::write_csv(review_files %>%
                  append = FALSE)
 ```
 
+#### Reviewer comments
+
 ```{r reviewer_comments, echo=FALSE}
 # get review contents for each paper
 conference_id <- "26091618"
@@ -678,7 +682,6 @@ retrieve_review <- function(id, submission_id) {
   if(id != title_id)
     warning(paste("Ids mismatch, id: ", id, " id in reponse: ", title_id), "\n")
   
-  # TODO replace lines with <td>PC member:</td> in the reviews for anonymity
   review_doc <- xml_new_root(xml_dtd(name = "html", external_id = "-//W3C//DTD XHTML 1.0 Transitional//EN", system_id = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"))
   review_head <- xml2::xml_add_child(review_doc, "head")
   review_style <- xml2::xml_add_child(review_head, "style")
@@ -698,9 +701,15 @@ retrieve_review <- function(id, submission_id) {
                                            xpath = "//h3[contains(., 'Submission')]/following-sibling::div"))
   
   review_content <- xml2::xml_find_all(content,
-                                       xpath = "//h3[contains(., 'Reviews and Comments')]/following-sibling::div")
+                                       xpath = "//h3[starts-with(., 'Reviews')]/following-sibling::div")
   if(length(review_content) > 0) {
     for (i in c(1:length(review_content))) {
+      
+      # remove PC member name
+      xml2::xml_replace(xml2::xml_find_all(review_content,
+                                           xpath = "//td[starts-with(., 'PC')]/following-sibling::td"),
+                        xml2::xml_comment("anonymised"))
+      
       xml2::xml_add_child(review_body, review_content[[i]])
     }
   } else {
@@ -719,18 +728,104 @@ for(i in c(1:nrow(review_files))) {
 }
 ```
 
+#### Author contacts
+
+```{r author_contacts, echo=FALSE}
+# get review contents for each paper
+conference_id <- "26091618"
+
+# Example page: https://easychair.org/conferences/submission_view?a=26091618;submission=5333543
+retrieve_authors <- function(id, submission_id) {
+  url <- parse_url("https://easychair.org/conferences/submission_view")
+  url$query <- list(submission = submission_id, a = conference_id)
+  response <- httr::GET(url = build_url(url))
+  content <- content(response)
+  page_title <- as.character(
+    xml_contents(
+      html_node(
+        content(response), "title")))
+  if(grepl("Log in", page_title))
+     stop("You must (re)login to EasyChair")
+  
+  # check if id matches
+  title_id <- str_pad(str_extract(page_title,
+    "[[:digit:]]"),
+    width = 3, side = "left", pad = "0")
+  
+  cat(id, " -- ", title_id, "\n")
+  
+  if(is.na(id) || is.na(title_id)) {
+    warning(paste("Ids are both NA for submission", submission_id), "\n")
+    return(NA)
+  }
+  
+  if(id != title_id)
+    warning(paste("Ids mismatch, id: ", id, " id in reponse: ", title_id), "\n")
+  
+  authors_doc <- xml_new_root(xml_dtd(name = "html", external_id = "-//W3C//DTD XHTML 1.0 Transitional//EN", system_id = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"))
+  authors_head <- xml2::xml_add_child(authors_doc, "head")
+  authors_style <- xml2::xml_add_child(authors_head, "style")
+  xml_text(authors_style) <- "
+  table, th, td {
+    border: 1px solid black;
+    padding: 5px;
+  }
+  table {
+    margin-bottom: 20px;
+  }
+  .pagetitle {
+    font-size: 20px;
+    padding: 0px 0px 20px 0px;
+  }"
+  
+  authors_body <- xml2::xml_add_child(authors_doc, "body")
+  
+  xml2::xml_add_child(authors_body,
+                      xml2::xml_find_first(content,
+                                           xpath = "//div[@class='pagetitle']"))
+  
+  xml2::xml_add_child(authors_body,
+                      xml2::xml_find_first(content,
+                                           xpath = "//table[@id='ec:table2']"))
+  
+  
+  authors_html_path <- file.path(review_files_path, paste0(id, "_authors.html"))
+  xml2::write_html(authors_doc, authors_html_path)
+  authors_html_path
+}
+
+#retrieve_authors(review_files[1,]$id, review_files[1,]$submission_id)
+
+for(i in c(1:nrow(review_files))) {
+  retrieve_authors(review_files[i,]$id, review_files[i,]$submission_id)
+}
+```
+
+#### Upload submissions, reviews, and author contacts, to share
+
 ```{r review_files_upload_to_share, echo=FALSE}
 if (params$private_info) {
   # put accepted full papers to private share
   library("googledrive")
   googledrive::drive_auth(use_oob = TRUE)
   
-  sapply(list.files(review_files_path, full.names = TRUE), function(the_file) {
+  sapply(list.files(review_files_path, pattern = "pdf", full.names = TRUE), function(the_file) {
+     googledrive::drive_put(media = the_file,
+                            name = basename(the_file),
+                            path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
+  })
+  sapply(list.files(review_files_path, pattern = "reviews", full.names = TRUE), function(the_file) {
+     googledrive::drive_put(media = the_file,
+                            name = basename(the_file),
+                            path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
+  })
+  sapply(list.files(review_files_path, pattern = "authors", full.names = TRUE), function(the_file) {
      googledrive::drive_put(media = the_file,
                             name = basename(the_file),
                             path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
   })
   
+  # upload review data file for manual import (see above)
   googledrive::drive_put(media = review_data_csv_file,
                          name = basename(review_data_csv_file),
                          path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
