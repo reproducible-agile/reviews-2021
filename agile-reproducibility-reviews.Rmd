@@ -910,6 +910,25 @@ Regards,
 AGILE Reproducibility Reviews 2021
 ```
 
+### Reminder DASA + synthetic data for proprietary data
+
+```
+Dear <AUTHORS>,
+
+I'm contacting you as the corresponding author of the paper "<TITLE>" submitted to AGILE 2021.
+I'm the reproducibility reviewer your paper has been assigned to.
+
+The scientific reviewers <SELECT: have, have not> note that your paper does not include a dedicated Data and Software Availability ("DASA") section. This section should provide a concise statement if and where data and software is available, or why it is not public. Please note that a DASA section is mandatory (https://reproducible-agile.github.io/2021/), even if data or code is not available.
+Refer to the AGLIE Reproducible Paper Guidelines (https://osf.io/cb7z8/) for detailed information and possible DASA section statements. Please don't hesitate to get in touch with me if you have any questions!
+
+In your manuscript you state that both code and data cannot be shared due to licensing issues. Is it possible for you to provide a synthetic dataset or subset and the code in order for us to reproduce your methodology?
+
+Kind regards,
+<NAME>
+
+AGILE Reproducibility Reviews 2021
+```
+
 #### Share report draft
 
 ```
