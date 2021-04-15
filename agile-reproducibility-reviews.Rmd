@@ -39,6 +39,7 @@ library("rvest")
 library("tidyr")
 library("ggplot2")
 library("httr")
+library("glue")
 ```
 
 ```{r seed, echo=FALSE}
@@ -57,11 +58,7 @@ dir.create(review_files_path, recursive = TRUE, showWarnings = FALSE)
 cr_path <- here::here("camera-ready-full-papers")
 ```
 
-### Submission metadata
-
-Retrieve all information about submissions from the EasyChair submissions system.
-The full submission information is not included in the public rendering of this report.
-Make sure that the shown columns in the submission table include the colums required in the code below.
+### EasyChair login
 
 ```{r easychair_login}
 if(is.na(Sys.getenv("easychair_username", unset = NA)) || is.na(Sys.getenv("easychair_password", unset = NA))) {
@@ -79,6 +76,12 @@ if(is.null(login_response)) {
                          encode = "form")
 }
 ```
+
+### Submission metadata
+
+Retrieve all information about submissions from the EasyChair submissions system.
+The full submission information is not included in the public rendering of this report.
+Make sure that the shown columns in the submission table include the colums required in the code below.
 
 ```{r submissions, echo=FALSE}
 submission_page <- httr::GET(url = "https://easychair.org/conferences/submissions?a=26091618")
@@ -631,7 +634,7 @@ review_files <- review_data %>%
   filter(type == "Full-paper submission") %>%
   dplyr::filter(decision == "ACCEPT") %>%
   dplyr::mutate(file = stringr::str_replace(.$file, pattern = "submissions", replacement = "camera-ready-full-papers")) %>%
-  select(id, submission_id, decision, title, file, paper)
+  select(id, submission_id, decision, authors, title, file, paper)
 
 # copy camera ready files to upload directory
 for (i in 1:nrow(review_files)) {
@@ -735,7 +738,7 @@ for(i in c(1:nrow(review_files))) {
 conference_id <- "26091618"
 
 # Example page: https://easychair.org/conferences/submission_view?a=26091618;submission=5333543
-retrieve_authors <- function(id, submission_id) {
+retrieve_authors <- function(id, submission_id, authors, title) {
   url <- parse_url("https://easychair.org/conferences/submission_view")
   url$query <- list(submission = submission_id, a = conference_id)
   response <- httr::GET(url = build_url(url))
@@ -762,7 +765,7 @@ retrieve_authors <- function(id, submission_id) {
   if(id != title_id)
     warning(paste("Ids mismatch, id: ", id, " id in reponse: ", title_id), "\n")
   
-  authors_doc <- xml_new_root(xml_dtd(name = "html", external_id = "-//W3C//DTD XHTML 1.0 Transitional//EN", system_id = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"))
+  authors_doc <- xml_new_root("html")
   authors_head <- xml2::xml_add_child(authors_doc, "head")
   authors_style <- xml2::xml_add_child(authors_head, "style")
   xml_text(authors_style) <- "
@@ -776,6 +779,11 @@ retrieve_authors <- function(id, submission_id) {
   .pagetitle {
     font-size: 20px;
     padding: 0px 0px 20px 0px;
+  }
+  .contact {
+    font-size: 20px;
+    padding: 10px;
+    border: 3px solid red;
   }"
   
   authors_body <- xml2::xml_add_child(authors_doc, "body")
@@ -788,16 +796,44 @@ retrieve_authors <- function(id, submission_id) {
                       xml2::xml_find_first(content,
                                            xpath = "//table[@id='ec:table2']"))
   
+  # make clickable email links and extract author names
+  authors_table <- xml2::xml_find_all(authors_body, xpath = "//tr[@class='green']")
+  names <- c()
+  emails <- c()
+  for (a in authors_table) {
+    cells <- xml2::xml_children(a)
+    names <- c(names, paste(xml2::xml_text(cells[[1]]),
+                            xml2::xml_text(cells[[2]]))
+               )
+    emails <- c(emails, xml2::xml_text(cells[[3]]))
+  }
+  
+  contact <- xml2::xml_add_child(authors_body, "div")
+  xml2::xml_set_attr(contact, "class", "contact")
+  names_xml <- xml2::xml_add_child(contact, "div")
+  #xml2::xml_text(names_xml) <- glue::glue_collapse(x = names, sep = ",", last = " and ")
+  xml2::xml_text(names_xml) <- authors
+  
+  link_xml <- xml2::xml_add_child(xml2::xml_add_child(contact, "div"), "a")
+  xml2::xml_set_attr(link_xml, "href", paste0(
+    "mailto:",
+    glue::glue_collapse(x = emails, sep = ";"),
+    "?subject=AGILE conference reproducibility review",
+    "&cc=daniel.nuest@uni-muenster.de",
+    "&body=Dear ", authors, ",",
+    "%0D%0A%0D%0AYour submission '", title, "'"
+  ))
+  xml2::xml_text(link_xml) <- "Send email to authors (CC reproducibility chair)"
   
   authors_html_path <- file.path(review_files_path, paste0(id, "_authors.html"))
-  xml2::write_html(authors_doc, authors_html_path)
+  xml2::write_html(authors_doc, authors_html_path, encoding = "ISO-8859-1")
   authors_html_path
 }
 
 #retrieve_authors(review_files[1,]$id, review_files[1,]$submission_id)
 
 for(i in c(1:nrow(review_files))) {
-  retrieve_authors(review_files[i,]$id, review_files[i,]$submission_id)
+  retrieve_authors(review_files[i,]$id, review_files[i,]$submission_id, review_files[i,]$authors, review_files[i,]$title)
 }
 ```
 
@@ -853,9 +889,9 @@ if (params$private_info) {
     - Upload a PDF of your report and any useful supplemental files
 7. Add link to the OSF project in the master spreadsheet
 
-#### Author contact templates
+### Author contact templates
 
-##### Reminder DASA
+#### Reminder DASA
 
 ```
 Dear <AUTHORS>,
@@ -874,7 +910,7 @@ Regards,
 AGILE Reproducibility Reviews 2021
 ```
 
-##### Share report draft
+#### Share report draft
 
 ```
 Dear AUTHORS,
@@ -893,7 +929,7 @@ Best regards,
 AGILE Reproducibility Reviews 2021
 ```
 
-##### Report published
+#### Report published
 
 ```
 Dear <AUTHORS>,
@@ -909,6 +945,8 @@ Best regards,
 
 AGILE Reproducibility Reviews 2021
 ```
+
+TODO: pre-fill the templates with the information and save to the `xxx_authors.html` file, with a ready to click link for the corresponding author email.
 
 ## Colophon
 
