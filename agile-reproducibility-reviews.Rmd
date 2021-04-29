@@ -6,8 +6,6 @@ output:
   html_document:
     toc: yes
     self_contained: true
-  #pdf_document:
-  #  toc: yes
 params:
   private_info: yes
 ---
@@ -703,6 +701,11 @@ retrieve_review <- function(id, submission_id) {
                       xml2::xml_find_first(content,
                                            xpath = "//h3[contains(., 'Submission')]/following-sibling::div"))
   
+  # remove missing reviewer name(s)
+  xml2::xml_replace(xml2::xml_find_all(review_body,
+                                       xpath = "//td[starts-with(., 'Missing')]/following-sibling::td"),
+                    xml2::xml_comment("anonymised"))
+  
   review_content <- xml2::xml_find_all(content,
                                        xpath = "//h3[starts-with(., 'Reviews')]/following-sibling::div")
   if(length(review_content) > 0) {
@@ -724,7 +727,7 @@ retrieve_review <- function(id, submission_id) {
   reviews_html_path
 }
 
-#retrieve_review(review_files[1,]$id, review_files[1,]$submission_id)
+#retrieve_review(review_files[17,]$id, review_files[17,]$submission_id)
 
 for(i in c(1:nrow(review_files))) {
   retrieve_review(review_files[i,]$id, review_files[i,]$submission_id)
@@ -818,7 +821,8 @@ retrieve_authors <- function(id, submission_id, authors, title) {
   xml2::xml_set_attr(link_xml, "href", paste0(
     "mailto:",
     glue::glue_collapse(x = emails, sep = ";"),
-    "?subject=AGILE conference reproducibility review",
+    "?subject=AGILE conference reproducibility review for submission ",
+    id,
     "&cc=daniel.nuest@uni-muenster.de",
     "&body=Dear ", authors, ",",
     "%0D%0A%0D%0AYour submission '", title, "'"
@@ -830,7 +834,8 @@ retrieve_authors <- function(id, submission_id, authors, title) {
   authors_html_path
 }
 
-#retrieve_authors(review_files[1,]$id, review_files[1,]$submission_id)
+#test_id <- 17
+#retrieve_authors(review_files[test_id,]$id, review_files[test_id,]$submission_id, review_files[test_id,]$authors, review_files[test_id,]$title)
 
 for(i in c(1:nrow(review_files))) {
   retrieve_authors(review_files[i,]$id, review_files[i,]$submission_id, review_files[i,]$authors, review_files[i,]$title)
@@ -850,11 +855,13 @@ if (params$private_info) {
                             name = basename(the_file),
                             path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
   })
+  
   sapply(list.files(review_files_path, pattern = "reviews", full.names = TRUE), function(the_file) {
      googledrive::drive_put(media = the_file,
                             name = basename(the_file),
                             path = "https://drive.google.com/drive/folders/1A_fqbv1I5hdwdNf3Kr8adB13cRqmDcqH")
   })
+  
   sapply(list.files(review_files_path, pattern = "authors", full.names = TRUE), function(the_file) {
      googledrive::drive_put(media = the_file,
                             name = basename(the_file),
