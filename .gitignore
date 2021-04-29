@@ -70,3 +70,7 @@ reports/**/*.eml
 .cache/
 
 agile-reproducibility-reviews_files/
+
+reports/010/agile-submission-2021/
+
+reports/025/COVID-19-TweetIDs/

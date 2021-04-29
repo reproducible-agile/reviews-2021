@@ -1,0 +1,47 @@
+{
+   "template":"twitter",
+   "mappings":{
+         "properties":{
+            "created_at":{
+               "type":"date",
+               "format":"EEE MMM dd HH:mm:ss Z yyyy"
+            
+		},
+            "retweeted_status.created_at":{
+               "type":"date",
+               "format":"EEE MMM dd HH:mm:ss Z yyyy"
+            
+		},
+            "user.created_at":{
+               "type":"date",
+               "format":"EEE MMM dd HH:mm:ss Z yyyy"
+            
+		},
+            "retweeted_status.user.created_at":{
+               "type":"date",
+               "format":"EEE MMM dd HH:mm:ss Z yyyy"
+            
+		},
+            "coordinates.coordinates":{
+               "type":"geo_point"
+            
+		},
+            "place.bounding_box":{
+               "type":"geo_shape",
+               "coerce":true,
+               "ignore_malformed":true
+            
+		},
+            "rest_user_osm.centroid" :{
+               "ignore_malformed": true,
+               "type":"geo_point"
+         },
+            "rest_user_osm.extent" :{
+               "ignore_malformed": true,
+               "coerce":true,
+               "type" : "polygon",
+               "type":"geo_shape"
+         }
+      }
+	}
+}
