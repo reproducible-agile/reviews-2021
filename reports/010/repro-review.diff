@@ -1,0 +1,178 @@
+diff --git a/HRNetBinarySegmentation/evaluate.py b/HRNetBinarySegmentation/evaluate.py
+index 239b345..3ad751f 100644
+--- a/HRNetBinarySegmentation/evaluate.py
++++ b/HRNetBinarySegmentation/evaluate.py
+@@ -28,7 +28,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/HRNetBinarySegmentation/predict.py b/HRNetBinarySegmentation/predict.py
+index 4fb6b2e..d4bd0f2 100644
+--- a/HRNetBinarySegmentation/predict.py
++++ b/HRNetBinarySegmentation/predict.py
+@@ -28,7 +28,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/HRNetBinarySegmentation/predict_sliding.py b/HRNetBinarySegmentation/predict_sliding.py
+index 45d8665..88104ec 100644
+--- a/HRNetBinarySegmentation/predict_sliding.py
++++ b/HRNetBinarySegmentation/predict_sliding.py
+@@ -28,7 +28,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/HRNetBinarySegmentation/train_segmenter.py b/HRNetBinarySegmentation/train_segmenter.py
+index b549c60..1b52712 100644
+--- a/HRNetBinarySegmentation/train_segmenter.py
++++ b/HRNetBinarySegmentation/train_segmenter.py
+@@ -29,7 +29,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/SegnetBinarySegmentation/evaluate.py b/SegnetBinarySegmentation/evaluate.py
+index 5472b3b..f6b12fd 100644
+--- a/SegnetBinarySegmentation/evaluate.py
++++ b/SegnetBinarySegmentation/evaluate.py
+@@ -29,7 +29,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/SegnetBinarySegmentation/predict.py b/SegnetBinarySegmentation/predict.py
+index eda40a9..8c658c8 100644
+--- a/SegnetBinarySegmentation/predict.py
++++ b/SegnetBinarySegmentation/predict.py
+@@ -29,7 +29,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/SegnetBinarySegmentation/predict_sliding.py b/SegnetBinarySegmentation/predict_sliding.py
+index 3f795c0..27e2eba 100644
+--- a/SegnetBinarySegmentation/predict_sliding.py
++++ b/SegnetBinarySegmentation/predict_sliding.py
+@@ -29,7 +29,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/SegnetBinarySegmentation/train_segmenter.py b/SegnetBinarySegmentation/train_segmenter.py
+index ca5b5c0..b66e3d9 100644
+--- a/SegnetBinarySegmentation/train_segmenter.py
++++ b/SegnetBinarySegmentation/train_segmenter.py
+@@ -31,7 +31,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/multiclassSegmentation/evaluate.py b/multiclassSegmentation/evaluate.py
+index 2295669..cfdeb6b 100644
+--- a/multiclassSegmentation/evaluate.py
++++ b/multiclassSegmentation/evaluate.py
+@@ -27,7 +27,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ from sklearn.metrics import classification_report
+diff --git a/multiclassSegmentation/predict.py b/multiclassSegmentation/predict.py
+index da9dbea..0fba5cc 100644
+--- a/multiclassSegmentation/predict.py
++++ b/multiclassSegmentation/predict.py
+@@ -27,7 +27,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/multiclassSegmentation/predict_sliding.py b/multiclassSegmentation/predict_sliding.py
+index f456798..b52e40b 100644
+--- a/multiclassSegmentation/predict_sliding.py
++++ b/multiclassSegmentation/predict_sliding.py
+@@ -28,7 +28,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/multiclassSegmentation/train_segmenter.py b/multiclassSegmentation/train_segmenter.py
+index 802d67d..43ba4a9 100644
+--- a/multiclassSegmentation/train_segmenter.py
++++ b/multiclassSegmentation/train_segmenter.py
+@@ -30,7 +30,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+ import logging
+ import os
+ import sys
+-import ogr
++from osgeo import ogr
+ import keras
+ from sklearn.model_selection import train_test_split
+ import argparse
+diff --git a/utils/utils.py b/utils/utils.py
+index 95db452..a88ee1f 100644
+--- a/utils/utils.py
++++ b/utils/utils.py
+@@ -9,7 +9,7 @@ np.random.seed(42)
+ tf.set_random_seed(42)
+ random.seed(42)
+ 
+-import gdal, gdalconst
++from osgeo import gdal, gdalconst
+ 
+ import os
+ 
+@@ -18,7 +18,7 @@ from sklearn.model_selection import train_test_split
+ import skimage.io
+ import skimage.transform
+ 
+-import ogr, osr
++from osgeo import ogr, osr
+ from glob import glob
+ 
+ def normalize_raster_locally(x):

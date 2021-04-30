@@ -86,21 +86,21 @@ mkvirtualenv agile-010 -p python3.5 -r requirements.txt
 pip install GDAL==3.2.1
 ```
 
-Next, I downloaded and unzipped the data per instructions.
+Next, I downloaded and unzipped the data per instructions, and tried to run the script.
 
 ```{bash create_dataset, eval=FALSE, size="tiny"}
 python create_dataset.py
 ```
 
-Leads to an error
+Leads to an error:
 
 ```txt
 libcublas.so.9.0: cannot open shared object file: No such file or directory
 ```
 
-So, let's check if I have a CIDA-compatible graphics card:
+So, let's check if I have a CUDA-compatible graphics card:
 
-```bash
+```{bash cuda, eval=FALSE, size="tiny"}
 sudo lshw -C display
 
 *-display                 
@@ -117,9 +117,8 @@ sudo lshw -C display
        resources: irq:150 memory:bb000000-bbffffff memory:60000000-7fffffff ioport:3000(size=64) memory:c0000-dffff
 ```
 
-Problem: I don't have the right graphics card.
-
-Author said it should be possible with `tensorflow-cpu`, so I create `requirements-cpu.txt` with `tensorflow-cpu` version `1.15.0`, the only one for version `1.x`.
+Problem: I don't have the right graphics card!
+The authors said it should be possible with `tensorflow-cpu`, so I create `requirements-cpu.txt` with `tensorflow-cpu` version `1.15.0`, the only one for version `1.x`.
 Furthermore, I needed to move a file to a different folder.
 
 ```{bash cpu, eval=FALSE, size="tiny"}
@@ -131,7 +130,7 @@ mv data/dtms/test_labels.tif data/labels/
 
 Need to make adjustments in `utils/utils.py` for my version of GDAL, later also in `HRNetBinary../evaluate.py`
 
-```python
+```{python imports, eval=FALSE, size="tiny"}
 # instead of import gdal, gdalconst
 from osgeo import gdal, gdalconst
 
@@ -146,20 +145,11 @@ python create_dataset.py
 
 Creates a lot of `.tif` files in `data/test`.
 
-```{bash tree, eval=FALSE, size="tiny"}
-tree -L 2 --du -h data/
-data/
-├── [385M]  dtms
-│   └── [385M]  test_dtm.tif
-├── [124M]  labels
-│   └── [124M]  test_labels.tif
-└── [320K]  test
-    ├── [ 52K]  filenames.txt
-    ├── [132K]  x
-    └── [132K]  y
-
- 509M used in 5 directories, 3 files
+```{r tree, size="tiny"}
+list.dirs("agile-submission-2021/data/")
 ```
+
+## Evaluate segmentations
 
 Next step in the instructions, binary segmentation wit HRNet:
 
@@ -173,24 +163,108 @@ Non-trainable params: 13,570
 # [..]
 ```
 
-Takes some time to run...
-
+Takes some time to run... then finishes with
 
 ```{bash, eval=FALSE, size="tiny"}
+[...]
+192/192 [==============================] - 663s 3s/step
+[0.2579103708461288, 0.9069677637591589, 0.7762661981036123, 0.8187425669110917, 0.7393777735160645]
 ```
+
+And the file `evaluation_file.csv` is created as mentioned in the instructions.
+The values in the file match the column `HRNet` of Table 1, within a level of precision to be expected from such a classification.
+
+```{bash, eval=FALSE, size="tiny"}
+# note the file name in the instructions has different capitalisation
+cd SegnetBinarySegmentation
+python3 evaluate.py --evaluation_file=evaluation_file.csv
+```
+
+This finished with a minute!
+These values match the column `SegNet` of Table 1, within a level of precision to be expected from such a classification.
+
+```{r table1, size="scriptsize", message=FALSE, caption = "Reproduction of Table 1 in the paper"}
+hrnet <- read.csv("agile-submission-2021/HRNetBinarySegmentation/files/evaluation_file.csv")
+segnet <- read.csv("agile-submission-2021/SegnetBinarySegmentation//files/evaluation_file.csv")
+
+suppressPackageStartupMessages(library("tidyverse"))
+dplyr::full_join(hrnet, segnet) %>%
+  knitr::kable()
+```
+
+Run the next segmentation:
+
+```{bash, eval=FALSE, size="tiny"}
+cd multiclassSegmentation
+python3 evaluate.py --evaluation_file=evaluation_file.csv
+```
+
+This completes and recreates the data in Table 3 within reasonable numerical precision based on the file `multiClassEvaluation.csv`.
+It is unclear to me how Table 2 can be constructed from `evaluation_file.csv` of this segmentation, but I assume it can be.
+
+```{r table2, size="scriptsize", message=FALSE, caption = "Reproduction of Table 3 in the paper"}
+multi <- read.csv("agile-submission-2021/multiclassSegmentation/files/multiClassEvaluation.csv")
+
+rows <- lapply(c(0:5), function(class) {
+  classValues <- multi %>%
+    dplyr::select(dplyr::ends_with(as.character(class)))
+  names(classValues) <- c("sparse_iou", "prediction", "recall", "f1.score", "support")
+  c(`Class label` = as.character(class), classValues)
+})
+
+dplyr::bind_rows(rows) %>%
+  knitr::kable()
+```
+
+## Train and make predictions
+
+In each experiment folder:
+
+```{bash, eval=FALSE, size="tiny"}
+python3 train_segmenter.py
+python3 predict_sliding.py --output_shp_file=vector.shp --input_dtm=test_dtm.tif
+```
+
+```{bash, eval=FALSE, size="tiny"}
+Leads to an error:
+Traceback (most recent call last):
+  File "train_segmenter.py", line 111, in <module>
+    with open(os.path.join(train_dir, 'filenames.txt'), 'r') as reader:
+FileNotFoundError: [Errno 2] No such file or directory: '../data/train/filenames.txt'
+```
+
+The path seems to be wrong, there only is  `filenames.txt` in `data/test`, but when using that, the code is missing the file `../data/valid/filenames.txt`.
+
+ASK FOR TRINING AND VALIDATION DATA.
+
+```{bash, echo=FALSE}
+cd agile-submission-2021
+git diff --ignore-all-space > ../repro-review.diff
+```
+
+The diff of all changes made to the repository is stored in the file `repro-review.diff` published with this report.
+
+---------
+
+The workflow was partly reproduced. The data preparation (extraction with ArcGIS) is not reproducible, but the different segmentation algorithms could be executed.
+The actual training of the models and prediction was not reproducible because of missing training and validation datasets.
+No code was provided to recreate any figures.
 
 # Comments to the authors
 
-- Mostly a good job with the instructions in the README - please always test your own instructions - the file `test_labels.tif` was at the wrong location in the seafile share
+A decent project, but there are always some things you can do better, here are some suggestions.
+
+- Mostly a good job with the instructions in the README - please always test your own instructions - the file `test_labels.tif` was at the wrong location in the file share; ideally you store these file in a more long term location, for example by publishing your GitHub repo and the files in a Zenodo repository
 - Suggest to provide a small script or CLI command to download the dataset, or mention to which directory the downloaded files should be extracted (`<project root>/data/dtms` or `<project root>/dtms`?)
 - Note the code you "borrowed" from <https://github.com/niecongchong/HRNet-keras-semantic-segmentation> does not have a license attached to it, so I assume you asked the original author explicitly for permission to republish the code under the MIT license
+- Please provide more explicit documentation what part of the code reflects what part of the paper (mentioning chapters in the README, mentioning scripts in the paper)
 
 ```{r, echo=FALSE, eval=FALSE, results='hide'}
 # create ZIP of reproduction files and upload to OSF
 library("zip")
 library("here")
 
-zipfile <- here::here("PATH/agile-reproreview-YEAR-NUMBER.zip")
+zipfile <- here::here("PATH/agile-reproreview-2021-010.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
           here::here("2020-018/files to add to the zip, if any"))
