@@ -1,0 +1,119 @@
+---
+title: "Reproducibility review of: A Comparative Study of Typing and Speech For Map Metadata Creation"
+author: "F.O. Ostermann \\orcid{0000-0002-9317-8291} and Daniel Nüst \\orcid{0000-0002-0024-5046}"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  pdf_document:
+    toc: false
+papersize: a4
+header-includes:
+  - |
+    % https://tex.stackexchange.com/questions/445563/ieeetran-how-to-include-orcid-in-tex-pdf-with-pdflatex/445583 (works with pdflatex)
+    \usepackage{scalerel}
+    \usepackage{tikz}
+    \usetikzlibrary{svg.path}
+    \definecolor{orcidlogocol}{HTML}{A6CE39}
+    \tikzset{
+      orcidlogo/.pic={
+        \fill[orcidlogocol] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z};
+        \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                     svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z     M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                     svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+      }
+    }
+    \newcommand\orcid[1]{\href{https://orcid.org/#1}{\raisebox{0.15 em}{\mbox{\scalerel*{
+    \begin{tikzpicture}[yscale=-1, transform shape]
+    \pic{orcidlogo};
+    \end{tikzpicture}
+    }{|}}}}}
+    \definecolor{agileblue}{RGB}{0,77,155}
+urlcolor: agileblue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+```{r logo, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
+temp <- tempfile(fileext = ".pdf")
+download.file(url = "https://reproducible-agile.github.io/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
+knitr::include_graphics(temp)
+```
+
+This report is part of the reproducibility review at the AGILE conference.
+For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
+This document is published on OSF at OSF LINK HERE.
+To cite the report use
+
+> Ostermann, F. O., & Nüst, D. (2021, May 3). Reproducibility review of: A Comparative Study of Typing and Speech For Map Metadata Creation. 
+
+# Reviewed paper
+
+> Lai, Pei-Chun and Degbelo, Auriol: A Comparative Study of Typing and Speech For Map Metadata Creation
+
+# Summary
+
+The paper presents the results of a user experiment to improve GI-metadata using speech. A complete reproduction is practically impossible to achieve.
+This reproducibility report therefore investigated two components: First, whether sufficient information is provided to replicate the experiment elsewhere with a different group of participants. Second, whether sufficient informatin is provided to reproduce the analysis of the experimental results. The conclusion is positive for both: To replicate the experiment, detailed information on participants is given. Further, a Github repository (https://github.com/duckravel/Metadata) contains the source code of the prototype that was implemented for the user experiment, and the original prototype is accessible (https://enigmatic-basin-78677.herokuapp.com/#/welcome) at the time of this writing. To reproduce the results, the provided input data, R code, and Excel spreadsheet (https://figshare.com/s/4c62ca5bf468d7be6e7d) lead to the same results as given in the paper. 
+
+\clearpage
+
+# Reproducibility reviewer notes
+
+This review focuses on the reproduction of the analysis results. No in-depth examination of the prototype's code nor the running prototype was done. At cursory investigation, it appears to be complete and working. A clear license is missing in the repository. The most important information (software architecture overview, exact questionnaire, maps used in the experiment) is also provided as supplementary material (PDF) on Figshare. What is missing is the actual output of the participants, i.e., the annotations and metadata they produced. This not an an impediment to reproduce this paper, because the content was not analyzed in depth (some examples are given). For a paper that would analyze the content of the produced metadata, this would have to be provided.   
+
+The input data and code for the analysis of the experimental results is provided on Figshare in a Zip-Archive, which contains a short readme-file and five folders that are named according to the tables in the paper where the outputs are presented. 
+
+Each folder contains a CSV input file with header and a short R-Script that performs descriptive statistical analysis on the input data, but does not produce the tables in the paper directly. The script logic is simple to follow. One line of code needs manual adjustment to point to the correct path for the input data. This is obvious, but also explained in the readme-file. 
+
+All scripts ran without error at negligible runtime and produce the results presented in the paper. The most demanding task for the reviewer was to link the results from the scripts with the content in the tables, since neither variable names nor layout (scripts don't produce tables) match those in the paper. Reliable matching was possible through simple comparison of outputs and paper content. 
+
+One folder contained Excel spreadsheets which apparently are from an external source and contain several tabs with statistical analysis of the user experience questionnaire. No source is given except an author name on the first tab. 
+
+The initial version of the paper had a Data and Software Availability section, but only anonymized links to Github and Figshare. The authors provided these immediately upon request.
+
+Overall, the authors did a commendable job at making a paper on user experiments as reproducible as possible. The following recommendations for improvement are desirable:
+
+1. data on participants (age, gender, experience with maps, etc.) are "hidden" in the input CSV files - an explicit file with that information would be convenient
+2. the link between the variable names in the script and the tables in the paper is not always immediately clear, but can be inferred
+3. the origin of the Excel tables need to be clarified - where do these come from? an author is given, but that is insufficent
+4. the repository needs a license file for both the software and the data
+
+
+```{bash some_code, eval=FALSE, size="scriptsize"}
+command line code
+```
+
+```{r, echo=FALSE, eval=FALSE, results='hide'}
+# create ZIP of reproduction files and upload to OSF
+library("zip")
+library("here")
+
+zipfile <- here::here("PATH/agile-reproreview-YEAR-NUMBER.zip")
+file.remove(zipfile)
+zip::zipr(zipfile,
+          here::here("2020-018/files to add to the zip, if any"))
+
+library("osfr") # See docs at https://docs.ropensci.org/osfr/
+# OSF_PAT is in .Renviron in parent directory
+# We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
+
+# retrieve project
+project <- osfr::osf_retrieve_node("OSF ID")
+
+# upload files
+osfr::osf_upload(x = project,
+                 conflicts = "overwrite",
+                 path = c(list.files(here::here("PATH"),
+                                     pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$)",
+                                     full.names = TRUE),
+                          "COPYRIGHT"
+                          )
+                 )
+```
