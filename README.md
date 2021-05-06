@@ -1,11 +1,11 @@
-# AGILE Reproducibility Reviews 2020
+# AGILE Reproducibility Reviews 2021
 
 ## About
 
-This repository contains code used for the organisation and management of the reproducibility review at AGILE 2020.
-Read more about the review process and the reproducibility committee here: https://reproducible-agile.github.io/2020/#reproducibility-review.
+This repository contains code used for the organisation and management of the reproducibility review at AGILE 2021.
+Read more about the review process and the reproducibility committee here: https://reproducible-agile.github.io/2021/#reproducibility-review.
 
-The reproducibility reviews are published on OSF: [10.17605/OSF.IO/6K5FH](https://doi.org/10.17605/OSF.IO/6K5FH)
+The reproducibility reviews are published on OSF: https://osf.io/h64sd/
 
 [![Reproducible AGILE badge](https://raw.githubusercontent.com/reproducible-agile/reproducible-agile.github.io/master/public/images/badge/AGILE-reproducible-badge_square.png)](https://reproducible-agile.github.io/)
 
