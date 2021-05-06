@@ -376,7 +376,7 @@ top_wordstems %>%
 
 ```{r wordstemcloud, dpi=150, echo=FALSE, fig.cap="Wordstem cloud of AGILE 2021 full paper submissions"}
 wordcloud(cloud_wordstems$wordstem, cloud_wordstems$n,
-          max.words = Inf,
+          max.words = 220, # manually tested and set
           random.order = FALSE,
           fixed.asp = FALSE,
           rot.per = 0,
@@ -585,6 +585,15 @@ review_data_figure
 ```
 
 `r if(!params$private_info) {"<!--"}`
+
+### Which papers do still not hava a DASA section
+
+```{r accepted_no_dasa}
+review_data %>%
+  filter(type == "Full-paper submission") %>%
+  dplyr::filter(decision == "ACCEPT", is.na(`dasa_text`)) %>%
+  select(id, title, authors)
+```
 
 ## Reproducibility reviews
 
@@ -884,15 +893,18 @@ if (params$private_info) {
 3. Go to the [Discoure forum discussion for reproducibility reviewers](https://discourse.agile-online.org/t/repro-review-tasks-and-coordination/40) and find your assignments
 4. Conduct your reproducibility review and write the report
     - Don't forget to take a look at the scientific reviews for comments on reproducibility; do _not_ worry about the science or read the full paper, unless it really interests you
-    - If code is available on GitHub/Lab, you can fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/) respectively the [GitLab subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews); ask Daniel to get the permissions
-    - If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review
-5. Send the report to the original authors of the paper and add the reproducibility chair in CC, see template below; _only if the authors agree_ with a publication of the report, proceed with the following steps
-6. Add a new component to the [OSF project for 2021 reproducibility reviews](https://osf.io/h64sd/)
+    - If code is available on GitHub/Lab, please fork the project into the [Reproducible AGILE organisation](https://github.com/reproducible-agile/) respectively the [GitLab subgroup "reviews"](https://gitlab.com/reproducible-agile/reviews) and immediately "archive" the project so that it becomes read-only ([instructions GitHub](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-archiving-repositories), [instructions for GitLab](https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project)); ask Daniel to get the permissions for the organisations
+    - If need be, limit the review scope, e.g. reproduce only a specific figure; the reproducibility review should not take you longer (not counting computation time) than a scientific review, and even computation times should not expand longer than a working day
+5. Send the report to the original authors of the paper and add the reproducibility chair in CC, see template below;
+7. Add a new component to the [OSF project for 2021 reproducibility reviews](https://osf.io/h64sd/)
     - Use the European storage location, "Frankfurt"
     - Name the component `Reproducibility review of: FULL PAPER TITLE`
     - Add all contributors to the project
+    - Add the to be expected DOI to your report
+    - Keep the project **private** until the publication of the paper (we don't want to announce anything that is not our place to announce)
+    - Wait for final paper citation from pubisher and add it to the report
+    - Upload the report and supplemental material created by you, if suitable also the original material (add `LICENSE.md` and licensing information in the OSF project description in that case)
     - Publish the component and mint a DOI
-    - Add the DOI to your report
     - Upload a PDF of your report and any useful supplemental files
 7. Add link to the OSF project in the master spreadsheet
 
@@ -917,7 +929,7 @@ Regards,
 AGILE Reproducibility Reviews 2021
 ```
 
-### Reminder DASA + synthetic data for proprietary data
+#### Reminder DASA + synthetic data for proprietary data
 
 ```
 Dear <AUTHORS>,
@@ -943,7 +955,7 @@ Dear AUTHORS,
 
 congratulations to the acceptance of your submission "TITLE" as a full paper at the AGILE conference 2021. As part of the Reproducible AGILE initative (https://reproducible-agile.github.io/) I attempted to reproduce the results from your paper. Attached to this email you find my report on your results. I welcome your feedback before I publish the report. You can already now add the following sentence to the Data and Software Availability section:
 
-"The workflow underlying this paper was <SELECT: partially reproduced, successfully reproduced> by an independent reviewer during the AGILE reproducibility review and a reproducibility report was published at https://doi.org/10.17605/OSF.IO/<ADD 5 LETTER OSF REPO ID HERE>."
+"The workflow underlying this paper was <SELECT: partially reproduced, successfully reproduced> by an independent reviewer during the AGILE reproducibility review and a reproducibility report was published at https://doi.org/10.17605/osf.io/<ADD LOWERCASE 5 LETTER OSF REPO ID HERE BUT NO TRAILING SLASH>."
 
 [OPTIONAL:] Alongside the report I would like to publish an archive of the used data and script files, and the output files generated by myself. Note these would be published under a CC-BY license on OSF, though the original source and license are noted in the report.
 
@@ -987,6 +999,13 @@ sessionInfo()
 
 **The used MRAN snapshot is `r paste(options("repos"))`**.
 
+```{r render_private_version, eval=FALSE, include=FALSE}
+# use render command to get to Google authentication
+rmarkdown::render(input = "agile-reproducibility-reviews.Rmd",
+                  params = list(private_info = TRUE),
+                  output_format = rmarkdown::html_document(toc = TRUE, self_contained = FALSE))
+```
+
 ```{r upload_to_drive, eval=FALSE, include=FALSE}
 # upload the HTML file and source code to the Reproducibility Committee shared folder
 drive_put(media = "agile-reproducibility-reviews.html",
@@ -1003,4 +1022,3 @@ rmarkdown::render(input = "agile-reproducibility-reviews.Rmd",
                   output_dir = here::here("docs/"),
                   output_format = rmarkdown::html_document(toc = TRUE, self_contained = FALSE))
 ```
-
