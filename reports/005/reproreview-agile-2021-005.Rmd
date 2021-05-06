@@ -1,0 +1,202 @@
+---
+title: "Reproducibility review of: Automated Extraction of Labels from Large-Scale Historical Maps"
+author: "Daniel Nüst \\orcid{0000-0002-0024-5046}"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  pdf_document:
+    toc: false
+papersize: a4
+header-includes:
+  - |
+    % https://tex.stackexchange.com/questions/445563/ieeetran-how-to-include-orcid-in-tex-pdf-with-pdflatex/445583 (works with pdflatex)
+    \usepackage{scalerel}
+    \usepackage{tikz}
+    \usetikzlibrary{svg.path}
+    \definecolor{orcidlogocol}{HTML}{A6CE39}
+    \tikzset{
+      orcidlogo/.pic={
+        \fill[orcidlogocol] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z};
+        \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                     svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z     M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                     svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+      }
+    }
+    \newcommand\orcid[1]{\href{https://orcid.org/#1}{\raisebox{0.15 em}{\mbox{\scalerel*{
+    \begin{tikzpicture}[yscale=-1, transform shape]
+    \pic{orcidlogo};
+    \end{tikzpicture}
+    }{|}}}}}
+    \definecolor{agileblue}{RGB}{0,77,155}
+urlcolor: agileblue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+```{r logo, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
+temp <- tempfile(fileext = ".pdf")
+download.file(url = "https://reproducible-agile.github.io/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
+knitr::include_graphics(temp)
+```
+
+This report is part of the reproducibility review at the AGILE conference.
+For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
+This document is published on OSF at TODO OSF LINK HERE.
+To cite the report use
+
+> FULL REPORT CITATION HERE
+
+# Reviewed paper
+
+> TODO ADD FULL CITATION
+
+# Summary
+
+The provided workflow could be partially reproduced, notably the text detection and string similarity calculations could be executed and provide sufficiently similar results.
+The author does a good job of providing all input and output data for each step, however, some manual steps were included which could not be reproduced, as well as a final step due to long execution time.
+The provided computational environment documentation was a little bit incomplete, but together with the detailed instructions it was usable.
+The software stack was pretty challenging to install and the workflow is rather rough around the edges, but I have no doubt that all code and data used by the author is shared in the provided repositories and can work as advertised if the computing environment is more closely recreated.
+
+\clearpage
+
+# Reproducibility reviewer notes
+
+I started with the repository <https://doi.org/10.5281/zenodo.4721174> mentioned in the Data and Software Availability section, and was restarted with the updated version (`v1.1.2` on GitHub) from <https://doi.org/10.5281/zenodo.4738397>.
+The Zenodo record links to the GitHub repository <https://github.com/IngaSchl/Label-Extraction>.
+Let's get the data:
+
+```{bash data, eval=FALSE, size="tiny"}
+wget -O Label-Extraction-v1.1.2.zip https://zenodo.org/record/4738397/files/IngaSchl/Label-Extraction-v1.1.2.zip?download=1
+unzip Label-Extraction-v1.1.2.zip
+
+cd IngaSchl-Label-Extraction-33eae48/01\ Data/
+wget https://maps.princeton.edu/download/file/harvard-g6299-h3-1853-l5-geotiff.tif
+```
+
+The manual cropping to the area of interest of the data file cannot be reproduced, but the downloaded file seems to include the used data file.
+
+Looking at the the required software set-up of tools that suggest they are installed with `install.sh` scripts, I decide to create a `Dockerfile` to not work in my own system.
+The `Dockerfile` is published alongside this report.
+As the used version of Strabo is not mentioned, I use the default (`1.1`).
+
+```{bash build, eval=FALSE, size="tiny"}
+docker build --tag agile-2021-005 .
+```
+
+To get have OpenCV 4.0.0.21, I need Python 3.6, and tesseract only installed from the regular sources on Ubuntu 20.04. Let's see if I'm lucky.
+First try error: "ImportError: libSM.so.6: cannot open shared object file: No such file or directory", adding `libsm6` and others to Dockerfile helped.
+
+```{bash docker_text_detection, eval=FALSE, size="tiny"}
+docker run --rm -it -v $(pwd)/IngaSchl-Label-Extraction-33eae48/:/labelextraction agile-2021-005
+
+# in the container:
+python3.6 /strabo/strabo-text-recognition-deep-learning/run_command_line.py --checkpoint-path /strabo/east_icdar2015_resnet_v1_50_rbox \
+  --image /labelextraction/02\ Text\ detection/data/input/G6299_H3_1853_L5_subset.png \
+  --config /strabo/strabo-text-recognition-deep-learning/configuration.ini
+
+# ImportError: Python version mismatch: module was compiled for version 3.8, while the interpreter is running version 3.6. > fixed in Dockerfile
+```
+
+This command creates a number of `.png` files with the labels in the current working directory, which seem to match the files used for text recognition.
+The `geoJson1.json` created by me mostly matches the one provided by the authors, as the following snippet shows. Most importantly the `geometry` data is the same.
+
+```{r compare_geojson, size="tiny"}
+reproduced_geojson <- sf::read_sf("IngaSchl-Label-Extraction-33eae48/02\ Text\ detection/data/input/G6299_H3_1853_L5_subset.png_cee5616e-ae62-11eb-bfdb-0242ac110002/geoJson1.json")
+original_geojson <- sf::read_sf("IngaSchl-Label-Extraction-33eae48/02\ Text\ detection/data/output/geoJson1.json")
+waldo::compare(original_geojson, reproduced_geojson)
+```
+```{r text_detection, echo=FALSE, out.height="30%", fig.align='center', fig.cap="One output file from text recognition run."}
+knitr::include_graphics("IngaSchl-Label-Extraction-33eae48/02 Text detection/data/input/G6299_H3_1853_L5_subset.png_cee5616e-ae62-11eb-bfdb-0242ac110002/output.png")
+```
+
+Manual steps for "03 Additional adjustments" could not be reproduced, so I continued with the "04 Text recognition" step _in the container_:
+
+```{bash, eval=FALSE, size="tiny"}
+tesseract 04\ Text\ recognition/data/input/ID_24.tif 04\ Text\ recognition/data/output-reproduction/ -l deu --psm 8
+#Tesseract Open Source OCR Engine v4.1.1 with Leptonica
+#Error in pixReadFromTiffStream: tiled format is not supported
+
+# Can fix files with the following command, but text extraction still empty
+# tiffcp 04\ Text\ recognition/data/input/ID_17.tif 04\ Text\ recognition/data/input/ID_17striped.tif
+```
+
+So unfortunately I don't have a Windows system, so I seem to encounter a quirk here in the accepted input files with the TIFF library under Linux.
+I can fix the error message by converting the file, but then the text is not recognised.
+I have very little doubt though that the instructions provided by the authors don't work as advertised for them.
+
+For the "05 String Similarity" calculations I start a local Jupyter Lab instance with the required packages:
+
+```{bash, eval=FALSE, size="tiny"}
+mkvirtualenv agile-005
+# following steps in the virtual environment
+
+# need to comment out msys2-conda-epoch==20160418, not available on my Linux system
+pip install -r IngaSchl-Label-Extraction-33eae48/requirements.txt 
+pip install jupyterlab
+
+# missing dependencies
+pip install xlrd openpyxl
+
+jupyter-lab
+```
+
+I could run all cells in `String_Similarity_by_Levenshtein_Distance.ipynb`, and found the documentation to be extensive and a little bit raw, though very transparent, including tests by the author while developing the workflow etc.
+At first I got an error reading the `OCR_results.xlsx file`: `XLRDError: Excel xlsx file; not supported`, so I changed the data loading to use `openpyxl`.
+
+```{python, eval=FALSE, size="tiny"}
+# via https://stackoverflow.com/questions/65254535/xlrd-biffh-xlrderror-excel-xlsx-file-not-supported
+ocr_results = pd.read_excel("data/OCR_results.xlsx", sheet_name='Lindley', header=1, engine='openpyxl')
+```
+
+Figure 6 seems to be created using QGIS, but no project file or georeferenced version of the base map was included in the repository.
+
+I did not run the final notebook of step "06 Approximate georeferencing", because of the advertised run time, but noticed that the shapefile only is included in a ZIP archive and thus the first few cells already don't work out of the box.
+
+# Comments to the authors
+
+- Please consider properly citing the used libraries and tools (see AGILE Reproducible Paper Guidelines for a start); your work would not be possible without `strabo`, `fuzzywuzzy` and many other packages
+- The License link in the right hand sidebar of the Zenodo record is broken, but good job properly depositing the GitHub repo on Zenodo.
+- It is a bit confusing that you switch between Linux and Windows command lines; suggest to work around that in the future, e.g., by putting all required code in a container
+- "Computing time my be extensive: please provide your experiences ("on my machine with 4 CPUs this took 3 hours"), which is more helpful for readers/users.
+- Suggest to provide a files for the required dependencies for the Jupyter Notebooks, and to provide instructions on how to use the notebooks - not all readers of your paper will be familiar with Jupyter!
+- A list/table in the README file which notebook/scripts creates which figure in the paper is helpful for readers.
+- You can probably quickly make your repository [Binder-ready](https://github.com/alan-turing-institute/the-turing-way/blob/master/workshops/boost-research-reproducibility-binder/workshop-presentations/zero-to-binder-python.md) by adding GDAL to `apt.txt`
+- Don't just mention where the output files are stored, but what output files I should expect.
+- It was a bit confusing to me that some data is using pixel coordinates, while other data is properly georeferenced - maybe that can be documented better.
+- `.xlsx` files are a lot less accessible than plain text based formats such as CSV, and are not properly tracked by git - reconsider in next workflow. The same for Shapefile - the data can probably just as well be stored as GeoCSV.
+- Consider creating all Figures, especially maps, with code; would have been useful to have access to the georeferenced old map.
+
+```{r, echo=FALSE, eval=FALSE, results='hide'}
+# create ZIP of reproduction files and upload to OSF
+library("zip")
+library("here")
+
+zipfile <- here::here("PATH/agile-reproreview-YEAR-NUMBER.zip")
+file.remove(zipfile)
+zip::zipr(zipfile,
+          here::here("2020-018/files to add to the zip, if any"))
+
+library("osfr") # See docs at https://docs.ropensci.org/osfr/
+# OSF_PAT is in .Renviron in parent directory
+# We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
+
+# retrieve project
+project <- osfr::osf_retrieve_node("OSF ID")
+
+# upload files
+osfr::osf_upload(x = project,
+                 conflicts = "overwrite",
+                 path = c(list.files(here::here("PATH"),
+                                     pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$)",
+                                     full.names = TRUE),
+                          "COPYRIGHT"
+                          )
+                 )
+```
