@@ -1,0 +1,10 @@
+type;'S statistic';rho;'p-value'
+SBSOD - Map Errors;578.43;-0.5890887 ;0.03414
+SBSOD – Landmarks omitted;520.67;-0.4304142 ;0.1421
+SBSOD – Road Segments mistakes;514.8;-0.4142782 ;0.1593
+Landmarks omitted– Road Segments mistakes;376.03;-0.03304721 ;0.9147
+SBSOD – Direction estimates;289.98;0.2033434 ;0.5052
+SBSOD – Distance estimates;554.84;-0.5242723 ;0.06588
+Map Errors – Direction estimates;390.62;-0.07313824 ;0.8123
+Map Errors – Distance estimates;241.64;0.3361556 ;0.2614
+Distance estimates – Direction estimates;603.97;-0.6592547;0.01424

@@ -1,0 +1,38 @@
+Drivers spatial abilities in unfamiliar environments
+
+Group 1: Landmarks-based driving instructions - participants: 12 
+Group 2: Street-based driving instructions - participants: 13
+
+Demographics.csv:
+age
+gender
+familiarity (Likert scale 1 to 5; 1 – not at all familiar, 2 – slightly familiar, 3 – somewhat familiar, 4 – moderately familiar, 5 – extremely familiar)
+
+SBSoD_scored.csv:
+Q1-Q15: the score at each question of the Santa Barbara Sense of Direction Scale
+The recommended scoring procedure has been followed as prososed by Hegarty et al, 2002*, to ensure that all items are coded such that a high number indicates more ability and a low number indicates less ability
+
+MapError.csv:
+landmarks omitted	- The number of landmarks along the route, among those referred in the instructions, that were omitted by participants on their sketch maps
+road segments - The number of road segments that have been omitted or mistakenly added by participants on their sketch maps	
+wrong turns - The number of wrongy indicated direction turns, i.e., right turn instead of left, on sketch maps
+total map errors - The sum of the previous three columns
+landmarks score - The total number of landmarks along the route that were correctly identified and placed on sketch maps
+For the first four a low number indicates more ability (less errors), while for the fifth, the opposite holds
+
+Directions.csv:
+EST_DR1	
+EST_DR2	
+EST_DR3	
+EST_DR4
+The estimates, in degrees, made by participants on four directions among three points of the route 
+
+Distances.csv:
+ESTIM_D1	
+ESTIM_D2	
+ESTIM_D3	
+ESTIM_D4
+The estimates, in meters, made by participants on four distances of the travelled route
+
+
+*Hegarty, M. Richardson, A. E., Montello, D. R., Lovelace, K & Subbiah, I. (2002). Development of a Self-Report Measure of Environmental Spatial Ability. Intelligence, 30, 425-447.

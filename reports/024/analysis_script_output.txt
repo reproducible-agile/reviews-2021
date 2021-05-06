@@ -1,0 +1,515 @@
+> library(tidyverse)
+> 
+> # Demographic.scv contains information on the age of the study participants, their gender, and familiarity with the area of the study
+> Demographics <- read_csv("Demographics.csv")
+Parsed with column specification:
+cols(
+  Group = col_character(),
+  P_id = col_double(),
+  age = col_double(),
+  gender = col_character(),
+  familiarity = col_double()
+)
+> aggregate(Demographics[, 3], list(Demographics$Group), mean)
+  Group.1      age
+1  Group1 39.08333
+2  Group2 48.69231
+> aggregate(Demographics[, 3], list(Demographics$Group), sd)
+  Group.1      age
+1  Group1 16.05365
+2  Group2 16.85420
+> aggregate(Demographics[, 5], list(Demographics$Group), mean)
+  Group.1 familiarity
+1  Group1    2.250000
+2  Group2    2.615385
+> aggregate(Demographics[, 5], list(Demographics$Group), sd)
+  Group.1 familiarity
+1  Group1    1.138180
+2  Group2    1.325296
+> 
+> # SBSod_scored.csv includes the scored SBSoD Scale; reversed when necessary etc 
+> SBSoD_scored <- read_csv("SBSoD_scored.csv")
+Parsed with column specification:
+cols(
+  Group = col_character(),
+  P_ID = col_double(),
+  Q1 = col_double(),
+  Q2 = col_double(),
+  Q3 = col_double(),
+  Q4 = col_double(),
+  Q5 = col_double(),
+  Q6 = col_double(),
+  Q7 = col_double(),
+  Q8 = col_double(),
+  Q9 = col_double(),
+  Q10 = col_double(),
+  Q11 = col_double(),
+  Q12 = col_double(),
+  Q13 = col_double(),
+  Q14 = col_double(),
+  Q15 = col_double()
+)
+> SBSoDGroup1<-SBSoD_scored[1:12, 1:17]
+> SBSoDGroup2<-SBSoD_scored[13:25, 1:17]
+> SBSoD1<-rowMeans(SBSoDGroup1[, 3:17])
+> SBSoD2<-rowMeans(SBSoDGroup2[, 3:17])
+> SBSoD1Desc<-data.frame(mean(SBSoD1), sd(SBSoD1))
+> SBSoD2Desc<-data.frame(mean(SBSoD2), sd(SBSoD2))
+> colnames(SBSoD1Desc) <- c("Mean", "SD")
+> colnames(SBSoD2Desc) <- c("Mean", "SD")
+> shapiro.test(SBSoD1)
+
+	Shapiro-Wilk normality test
+
+data:  SBSoD1
+W = 0.85811, p-value = 0.04629
+
+> shapiro.test(SBSoD2)
+
+	Shapiro-Wilk normality test
+
+data:  SBSoD2
+W = 0.89603, p-value = 0.118
+
+> wilcox.test(SBSoD1, SBSoD2, exact = FALSE)
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  SBSoD1 and SBSoD2
+W = 47.5, p-value = 0.1023
+alternative hypothesis: true location shift is not equal to 0
+
+> 
+> # The file MapErrors.csv contains information on three map sketching elements examined.
+> # It also includes the column "landmarks score" to account for the number of correctly added landmarks on map sketches
+> MapErrors <- read_csv("MapErrors.csv")
+Parsed with column specification:
+cols(
+  Group = col_character(),
+  P_ID = col_double(),
+  `landmarks omitted` = col_double(),
+  `road segments` = col_double(),
+  `wrong turns` = col_double(),
+  `total map errors` = col_double(),
+  `landmarks score` = col_double()
+)
+> MapErrorsGroup1<-MapErrors[1:12, 1:7]
+> MapErrorsGroup2<-MapErrors[13:25, 1:7]
+> MapErrorsGroup1Desc<-data.frame(mean(MapErrorsGroup1$`landmarks omitted`), sd(MapErrorsGroup1$`landmarks omitted`), mean(MapErrorsGroup1$`road segments`), sd(MapErrorsGroup1$`road segments`), mean(MapErrorsGroup1$`total map errors`), sd(MapErrorsGroup1$`total map errors`), mean(MapErrorsGroup1$`landmarks score`), sd(MapErrorsGroup1$`landmarks score`))
+> colnames(MapErrorsGroup1Desc) <- c("MeanLandmarksOmitted", "SDLandmarksOmitted", "MeanRoadSegments", "SDRoadSegments", "MeanTotalMapErrors", "SDTotalMapErrors", "MeanLandmarksScore", "SDLandmarksScore")
+> MapErrorsGroup2Desc<-data.frame(mean(MapErrorsGroup2$`landmarks omitted`), sd(MapErrorsGroup2$`landmarks omitted`), mean(MapErrorsGroup2$`road segments`), sd(MapErrorsGroup2$`road segments`), mean(MapErrorsGroup2$`total map errors`), sd(MapErrorsGroup2$`total map errors`), mean(MapErrorsGroup2$`landmarks score`), sd(MapErrorsGroup2$`landmarks score`))
+> colnames(MapErrorsGroup2Desc) <- c("MeanLandmarksOmitted", "SDLandmarksOmitted", "MeanRoadSegments", "SDRoadSegments", "MeanTotalMapErrors", "SDTotalMapErrors", "MeanLandmarksScore", "SDLandmarksScore")
+> shapiro.test(MapErrorsGroup1$`total map errors`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup1$`total map errors`
+W = 0.9556, p-value = 0.7197
+
+> shapiro.test(MapErrorsGroup2$`total map errors`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup2$`total map errors`
+W = 0.90269, p-value = 0.1456
+
+> MapErrorsttest<-t.test(MapErrorsGroup1$`total map errors`, MapErrorsGroup2$`total map errors`)
+> shapiro.test(MapErrorsGroup1$`road segments`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup1$`road segments`
+W = 0.9239, p-value = 0.3199
+
+> shapiro.test(MapErrorsGroup2$`road segments`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup2$`road segments`
+W = 0.93114, p-value = 0.3527
+
+> Roadsegmentsttest<-t.test(MapErrorsGroup1$`road segments`, MapErrorsGroup2$`road segments`)
+> shapiro.test(MapErrorsGroup1$`landmarks omitted`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup1$`landmarks omitted`
+W = 0.94728, p-value = 0.5976
+
+> shapiro.test(MapErrorsGroup2$`landmarks omitted`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup2$`landmarks omitted`
+W = 0.97105, p-value = 0.9065
+
+> Landmarksomittedttest<-t.test(MapErrorsGroup1$`landmarks omitted`, MapErrorsGroup2$`landmarks omitted`)
+> shapiro.test(MapErrorsGroup1$`landmarks score`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup1$`landmarks score`
+W = 0.95638, p-value = 0.7312
+
+> shapiro.test(MapErrorsGroup2$`landmarks score`)
+
+	Shapiro-Wilk normality test
+
+data:  MapErrorsGroup2$`landmarks score`
+W = 0.87896, p-value = 0.06903
+
+> LandmarksScorettest<-t.test(MapErrorsGroup1$`landmarks score`, MapErrorsGroup2$`landmarks score`)
+> 
+> #The workflow that follows performs statistical analysis for Directions Estimates
+> DirEstim <- read_csv("Directions.csv") # Directions.csv contains the participants' estimates on four directions
+Parsed with column specification:
+cols(
+  Group = col_character(),
+  P_id = col_double(),
+  EST_DR1 = col_double(),
+  EST_DR2 = col_double(),
+  EST_DR3 = col_double(),
+  EST_DR4 = col_double()
+)
+> DirCorrect<-data.frame(0, 10, 270, 0) # The four values denote the correct directions that participants had to estimate
+> colnames(DirCorrect) <- c("Dir1", "Dir2", "Dir3", "Dir4")
+> DirScores<-data.frame(DirCorrect$Dir1-DirEstim$EST_DR1, DirCorrect$Dir2-DirEstim$EST_DR2, DirCorrect$Dir3-DirEstim$EST_DR3, DirCorrect$Dir4-DirEstim$EST_DR4)
+> colnames(DirScores) <- c("ScoreDir1", "ScoreDir2", "ScoreDir3", "ScoreDir4")
+> AbsDirScores<-data.frame(abs(DirScores))
+> AbsDirScores$ScoreDir2[18]=40 # Handling the estimation between 270o and 359o so that the score falls below 180o 
+> AAS <- rowMeans(AbsDirScores[,1:4]*100/180) # AAS: Absolute Accuracy Score
+> AASGroup1<-AAS[1:12]
+> AASGroup2<-AAS[13:25]
+> shapiro.test(AASGroup1)
+
+	Shapiro-Wilk normality test
+
+data:  AASGroup1
+W = 0.97056, p-value = 0.9166
+
+> shapiro.test(AASGroup2)
+
+	Shapiro-Wilk normality test
+
+data:  AASGroup2
+W = 0.83167, p-value = 0.01662
+
+> wilcox.test(AASGroup1, AASGroup2, exact = FALSE)
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  AASGroup1 and AASGroup2
+W = 85, p-value = 0.7216
+alternative hypothesis: true location shift is not equal to 0
+
+> mean(AASGroup1)
+[1] 9.201389
+> sd(AASGroup1)
+[1] 1.45442
+> mean(AASGroup2)
+[1] 8.333333
+> sd(AASGroup2)
+[1] 2.792208
+> mean(DirScores$ScoreDir2)
+[1] -39.8
+> mean(DirScores$ScoreDir3)
+[1] -32.6
+> 
+> # The workflow that follows performs statistical analysis for Distances Estimates
+> DistEstim <- read_csv("Distances.csv") # Distances.csv contains the participants' estimates on four distances
+Parsed with column specification:
+cols(
+  Group = col_character(),
+  P_id = col_double(),
+  ESTIM_D1 = col_double(),
+  ESTIM_D2 = col_double(),
+  ESTIM_D3 = col_double(),
+  ESTIM_D4 = col_double()
+)
+> DistCorrect<-data.frame(650, 60, 400, 55) # The values indicate the correct distances that participants had to estimate
+> colnames(DistCorrect) <- c("D1", "D2", "D3", "D4")
+> DistRelScores<-data.frame(DistEstim$ESTIM_D1-DistCorrect$D1, DistEstim$ESTIM_D2-DistCorrect$D2, DistEstim$ESTIM_D3-DistCorrect$D3, DistEstim$ESTIM_D4-DistCorrect$D4)
+> colnames(DistRelScores) <- c("RelScore1", "RelScore2", "RelScore3", "RelScore4")
+> DistAbScores<-data.frame(abs(DistRelScores))
+> colnames(DistAbScores) <- c("AbScore1", "AbScore2", "AbScore3", "AbScore4")
+> DistAbScores$TotalScore <- rowMeans(DistAbScores[,1:4]) # The total score in the distance estimation task is the average of the four distances estimates scores.  
+> DistAbScores<-DistAbScores[-c(3), ] # participant with p_id=3 is excluded from further analysis related to distance estimates
+> DistRelScores<-DistRelScores[-c(3), ]
+> DistAbScoreGroup1<-DistAbScores[1:11, 1:5]
+> DistAbScoreGroup2<-DistAbScores[12:24, 1:5]
+> DistAbScore1Desc<-data.frame(mean(DistAbScoreGroup1$AbScore1), sd(DistAbScoreGroup1$AbScore1), mean(DistAbScoreGroup1$AbScore2), sd(DistAbScoreGroup1$AbScore2), mean(DistAbScoreGroup1$AbScore3), sd(DistAbScoreGroup1$AbScore3), mean(DistAbScoreGroup1$AbScore4), sd(DistAbScoreGroup1$AbScore4), mean(DistAbScoreGroup1$TotalScore), sd(DistAbScoreGroup1$TotalScore))
+> colnames(DistAbScore1Desc) <- c("MeanScore1", "SDScore1", "MeanScore2","SDScore2", "MeanScore3", "SDScore3", "MeanScore4", "SDScore4", "MeanDistanceScore", "SDDistanceScore")
+> DistAbScore2Desc<-data.frame(mean(DistAbScoreGroup2$AbScore1), sd(DistAbScoreGroup2$AbScore1), mean(DistAbScoreGroup2$AbScore2), sd(DistAbScoreGroup2$AbScore2), mean(DistAbScoreGroup2$AbScore3), sd(DistAbScoreGroup2$AbScore3), mean(DistAbScoreGroup2$AbScore4), sd(DistAbScoreGroup2$AbScore4), mean(DistAbScoreGroup2$TotalScore), sd(DistAbScoreGroup2$TotalScore))
+> colnames(DistAbScore2Desc) <- c("MeanScore1", "SDScore1", "MeanScore2","SDScore2", "MeanScore3", "SDScore3", "MeanScore4", "SDScore4", "MeanDistanceScore", "SDDistanceScore")
+> shapiro.test(DistAbScoreGroup1$TotalScore)
+
+	Shapiro-Wilk normality test
+
+data:  DistAbScoreGroup1$TotalScore
+W = 0.90266, p-value = 0.1992
+
+> shapiro.test(DistAbScoreGroup2$TotalScore)
+
+	Shapiro-Wilk normality test
+
+data:  DistAbScoreGroup2$TotalScore
+W = 0.97888, p-value = 0.9737
+
+> Distancesttest<-t.test(DistAbScoreGroup1$TotalScore, DistAbScoreGroup2$TotalScore)
+> 
+> # Comparing between groups for each distance estimated; this script includes only the procedure for Distance #3
+> shapiro.test(DistAbScoreGroup1$AbScore3)
+
+	Shapiro-Wilk normality test
+
+data:  DistAbScoreGroup1$AbScore3
+W = 0.9206, p-value = 0.3237
+
+> shapiro.test(DistAbScoreGroup2$AbScore3)
+
+	Shapiro-Wilk normality test
+
+data:  DistAbScoreGroup2$AbScore3
+W = 0.64958, p-value = 0.0001816
+
+> 
+> Distance3Comp<-wilcox.test(DistAbScoreGroup1$AbScore3, DistAbScoreGroup2$AbScore3, exact = FALSE)
+> #The process that follows consists of finding absolute and relative standard errors of distance estimates
+> meanAbsError<-data.frame(mean(DistAbScores$AbScore1/DistCorrect$D1*100), mean(DistAbScores$AbScore2/DistCorrect$D2*100), mean(DistAbScores$AbScore3/DistCorrect$D3*100), mean(DistAbScores$AbScore4/DistCorrect$D4*100))
+> colnames(meanAbsError) <- c("AbsEstError1", "AbsEstError2", "AbsEstError3", "AbsEstError4")
+> meanRelError<-data.frame(mean(DistRelScores$RelScore1/DistCorrect$D1*100), mean(DistRelScores$RelScore2/DistCorrect$D2*100), mean(DistRelScores$RelScore3/DistCorrect$D3*100), mean(DistRelScores$RelScore4/DistCorrect$D4*100))
+> colnames(meanRelError) <- c("RelEstError1", "RelEstError2", "RelEstError3", "RelEstError4")
+> seD1_absolute <- function() sqrt(var((DistAbScores$AbScore1/DistCorrect$D1)*100)/24) # finding standard errors for absolute and relative distance scores (in %)
+> print(seD1_absolute())
+[1] 3.653846
+> seD2_absolute <- function() sqrt(var((DistAbScores$AbScore2/DistCorrect$D2)*100)/24)
+> print(seD2_absolute())
+[1] 5.096937
+> seD3_absolute <- function() sqrt(var((DistAbScores$AbScore3/DistCorrect$D3)*100)/24)
+> seD4_absolute <- function() sqrt(var((DistAbScores$AbScore4/DistCorrect$D4)*100)/24)
+> seD1_relative <- function() sqrt(var((DistRelScores$RelScore1/DistCorrect$D1)*100)/24)
+> seD2_relative <- function() sqrt(var((DistRelScores$RelScore2/DistCorrect$D2)*100)/24)
+> seD3_relative <- function() sqrt(var((DistRelScores$RelScore3/DistCorrect$D3)*100)/24)
+> seD4_relative <- function() sqrt(var((DistRelScores$RelScore4/DistCorrect$D4)*100)/24)
+> seAbsolute<-c(seD1_absolute(), seD2_absolute(), seD3_absolute(), seD4_absolute())
+> seRelative<-c(seD1_relative(), seD2_relative(), seD3_relative(), seD4_relative())
+> seAbsolute<-round(seAbsolute,digits=2)
+> seRelative<-round(seRelative,digits=2)
+> meanRelativeErrors<-as.vector(t(meanRelError))
+> meanRelativeErrors<-round(meanRelativeErrors,digits=2)
+> meanAbsoluteErrors<-as.vector(t(meanAbsError))
+> meanAbsoluteErrors<-round(meanAbsoluteErrors,digits=2)
+> DistCorrect<-as.vector(t(DistCorrect))
+> 
+> # What follows creates the plot of the mean and standards error bars for both relative and absolute distance estimates
+> par(mar=c(4,4,1,1))
+> plot(DistCorrect, meanAbsoluteErrors, xlim= c(0, 700), ylim=c(-15, 50),xlab="Actual Distances", ylab="Absolute and real relative estimation error (%)", pch=16, cex=2, col="blue")
+> arrows(x0=DistCorrect, y0=meanAbsoluteErrors-seAbsolute, x1=DistCorrect, y1=meanAbsoluteErrors+seAbsolute, code=3, angle=90, length=0.1)
+> text(DistCorrect, y = meanAbsoluteErrors, labels = meanAbsoluteErrors, pos = 2, offset = 0.5, cex = 0.8, col = "blue")
+> par(new=TRUE)
+> plot(DistCorrect, meanRelativeErrors, xlim= c(0, 700), ylim=c(-15, 50),xlab="Actual Distances", ylab="Absolute and real relative estimation error (%)", pch=16, cex=2, col="red")
+> arrows(x0=DistCorrect, y0=meanRelativeErrors-seRelative, x1=DistCorrect, y1=meanRelativeErrors+seRelative, code=3, angle=90, length=0.1)
+> text(DistCorrect, y = meanRelativeErrors, labels = meanRelativeErrors, pos = 2, offset = 0.5, cex = 0.8, col = "red")
+> 
+> # Correlations calculations between variables follow
+> 
+> # Correlations between variables for Group 1
+> cor.test(SBSoD1, MapErrorsGroup1$`total map errors`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD1 and MapErrorsGroup1$`total map errors`
+S = 463.24, p-value = 0.0316
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.6197337 
+
+> cor.test(SBSoD1, MapErrorsGroup1$`landmarks omitted`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD1 and MapErrorsGroup1$`landmarks omitted`
+S = 364.51, p-value = 0.3879
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.2745132 
+
+> cor.test(SBSoD1, MapErrorsGroup1$`road segments`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD1 and MapErrorsGroup1$`road segments`
+S = 471.27, p-value = 0.02274
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.6477894 
+
+> cor.test(MapErrorsGroup1$`landmarks omitted`, MapErrorsGroup1$`road segments`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  MapErrorsGroup1$`landmarks omitted` and MapErrorsGroup1$`road segments`
+S = 160.86, p-value = 0.1549
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.4375473 
+
+> cor.test(SBSoD1, AASGroup1, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD1 and AASGroup1
+S = 233.45, p-value = 0.5675
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.1837559 
+
+> cor.test(SBSoD1[-c(3)], DistAbScoreGroup1$TotalScore, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD1[-c(3)] and DistAbScoreGroup1$TotalScore
+S = 342, p-value = 0.07665
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.5545455 
+
+> cor.test(MapErrorsGroup1$`total map errors`, AASGroup1, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  MapErrorsGroup1$`total map errors` and AASGroup1
+S = 278.88, p-value = 0.9387
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+0.02491119 
+
+> cor.test(MapErrorsGroup1$`total map errors`[-c(3)], DistAbScoreGroup1$TotalScore, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  MapErrorsGroup1$`total map errors`[-c(3)] and DistAbScoreGroup1$TotalScore
+S = 102.19, p-value = 0.08958
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.5354817 
+
+> cor.test(AASGroup1[-c(3)], DistAbScoreGroup1$TotalScore, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  AASGroup1[-c(3)] and DistAbScoreGroup1$TotalScore
+S = 205.81, p-value = 0.8505
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.0645223 
+
+> 
+> # Correlations between variables for Group 2
+> cor.test(SBSoD2, MapErrorsGroup2$`total map errors`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD2 and MapErrorsGroup2$`total map errors`
+S = 578.43, p-value = 0.03414
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.5890887 
+
+> cor.test(SBSoD2, MapErrorsGroup2$`landmarks omitted`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD2 and MapErrorsGroup2$`landmarks omitted`
+S = 520.67, p-value = 0.1421
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.4304142 
+
+> cor.test(SBSoD2, MapErrorsGroup2$`road segments`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD2 and MapErrorsGroup2$`road segments`
+S = 514.8, p-value = 0.1593
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.4142782 
+
+> cor.test(MapErrorsGroup2$`landmarks omitted`, MapErrorsGroup2$`road segments`, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  MapErrorsGroup2$`landmarks omitted` and MapErrorsGroup2$`road segments`
+S = 376.03, p-value = 0.9147
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+        rho 
+-0.03304721 
+
+> cor.test(SBSoD2, AASGroup2, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD2 and AASGroup2
+S = 289.98, p-value = 0.5052
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.2033434 
+
+> cor.test(SBSoD2, DistAbScoreGroup2$TotalScore, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  SBSoD2 and DistAbScoreGroup2$TotalScore
+S = 554.84, p-value = 0.06588
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.5242723 
+
+> cor.test(MapErrorsGroup2$`total map errors`, AASGroup2, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  MapErrorsGroup2$`total map errors` and AASGroup2
+S = 390.62, p-value = 0.8123
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+        rho 
+-0.07313824 
+
+> cor.test(MapErrorsGroup2$`total map errors`, DistAbScoreGroup2$TotalScore, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  MapErrorsGroup2$`total map errors` and DistAbScoreGroup2$TotalScore
+S = 241.64, p-value = 0.2614
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.3361556 
+
+> cor.test(AASGroup2, DistAbScoreGroup2$TotalScore, method="spearman", exact = FALSE)
+
+	Spearman's rank correlation rho
+
+data:  AASGroup2 and DistAbScoreGroup2$TotalScore
+S = 603.97, p-value = 0.01424
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.6592547 
