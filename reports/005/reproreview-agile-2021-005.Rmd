@@ -48,10 +48,10 @@ knitr::include_graphics(temp)
 
 This report is part of the reproducibility review at the AGILE conference.
 For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
-This document is published on OSF at TODO OSF LINK HERE.
+This document is published on OSF at https://osf.io/anv9r/.
 To cite the report use
 
-> FULL REPORT CITATION HERE
+> Nüst, D. (2021, May 6). Reproducibility review of: Automated Extraction of Labels from Large-Scale Historical Maps. https://doi.org/10.17605/osf.io/anv9r 
 
 # Reviewed paper
 
@@ -181,7 +181,9 @@ library("here")
 zipfile <- here::here("PATH/agile-reproreview-YEAR-NUMBER.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
-          here::here("2020-018/files to add to the zip, if any"))
+          here::here("005/Dockerfile"),
+          "*.pdf",
+          "*.Rmd")
 
 library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # OSF_PAT is in .Renviron in parent directory
