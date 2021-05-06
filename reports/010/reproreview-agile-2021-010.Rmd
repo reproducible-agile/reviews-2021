@@ -1,6 +1,6 @@
 ---
 title: "Reproducibility review of: Extraction of linear structures from digital terrain models using deep learning"
-author: "Anita Graser \\orcid{0000-0001-5361-2885}, Daniel Nüst \\orcid{0000-0002-0024-5046}"
+author: "Daniel Nüst \\orcid{0000-0002-0024-5046} and Anita Graser \\orcid{0000-0001-5361-2885}"
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
   pdf_document:
@@ -48,10 +48,10 @@ knitr::include_graphics(temp)
 
 This report is part of the reproducibility review at the AGILE conference.
 For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
-This document is published on OSF at TODO OSF LINK HERE.
+This document is published on OSF at https://osf.io/2sc7g/.
 To cite the report use
 
-> FULL REPORT CITATION HERE
+> Nüst, D., & Graser, A. (2021, April 30). Reproducibility review of: Extraction of linear structures from digital terrain models using deep learning. <https://doi.org/10.17605/osf.io/2sc7g>
 
 # Reviewed paper
 
@@ -59,14 +59,17 @@ To cite the report use
 
 # Summary
 
-- Result of the reproduction
-- main outcome or figure
+The provided workflows was **partially reproduced**.
+Based on the provided test file and instructions, I was able to recreate the computing environment and run the segmentation models.
+Relevant tables from the paper could be recreated.
+The training and validation part of the workflow is irreproducible because of proprietary data, therefore no figures could be recreated.
 
 \clearpage
 
 # Reproducibility reviewer notes
 
-Started with the anonymous repo at https://github.com/Bashirkazimi/agile-submission-2021 and the author-provided draft of the DASA section.
+The first manuscript did not include a DASA section, but the authors provided a link to the project repository <https://github.com/Bashirkazimi/agile-submission-2021>.
+The README file provides a step by step documentation.
 
 ```{bash env, eval=FALSE, size="tiny"}
 git clone https://github.com/Bashirkazimi/agile-submission-2021
@@ -234,8 +237,7 @@ FileNotFoundError: [Errno 2] No such file or directory: '../data/train/filenames
 ```
 
 The path seems to be wrong, there only is  `filenames.txt` in `data/test`, but when using that, the code is missing the file `../data/valid/filenames.txt`.
-
-ASK FOR TRINING AND VALIDATION DATA.
+A second view and short exchange with the authors made clear that the dataset is proprietary and belongs to a collaboration partner.
 
 ```{bash, echo=FALSE}
 cd agile-submission-2021
@@ -247,7 +249,8 @@ The diff of all changes made to the repository is stored in the file `repro-revi
 ---------
 
 The workflow was partly reproduced. The data preparation (extraction with ArcGIS) is not reproducible, but the different segmentation algorithms could be executed.
-The actual training of the models and prediction was not reproducible because of missing training and validation datasets.
+The actual training of the models and prediction was not reproducible because of unavailable training and validation datasets.
+The code seems to be complete tough and is readable, though I cannto say if it is sensible.
 No code was provided to recreate any figures.
 
 # Comments to the authors
@@ -257,6 +260,7 @@ A decent project, but there are always some things you can do better, here are s
 - Mostly a good job with the instructions in the README - please always test your own instructions - the file `test_labels.tif` was at the wrong location in the file share; ideally you store these file in a more long term location, for example by publishing your GitHub repo and the files in a Zenodo repository
 - Suggest to provide a small script or CLI command to download the dataset, or mention to which directory the downloaded files should be extracted (`<project root>/data/dtms` or `<project root>/dtms`?)
 - Note the code you "borrowed" from <https://github.com/niecongchong/HRNet-keras-semantic-segmentation> does not have a license attached to it, so I assume you asked the original author explicitly for permission to republish the code under the MIT license
+- For machine learning workflows that use properitary data, please consider sharing a _synthetic dataset_ so that the full workflow can be executed by others
 - Please provide more explicit documentation what part of the code reflects what part of the paper (mentioning chapters in the README, mentioning scripts in the paper)
 
 ```{r, echo=FALSE, eval=FALSE, results='hide'}
