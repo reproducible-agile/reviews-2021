@@ -1012,8 +1012,8 @@ drive_put(media = "agile-reproducibility-reviews.html",
           name = paste0("agile-reproducibility-reviews_",
                  ifelse(params$private_info, "PRIVATE", "public"),
                  ".html"),
-          path = "https://drive.google.com/drive/folders/1Y2905cRV1APIE0fSbX7Kmy-xvRMXj_0y")
-drive_put("agile-reproducibility-reviews.Rmd", path = "https://drive.google.com/drive/folders/1Y2905cRV1APIE0fSbX7Kmy-xvRMXj_0y")
+          path = as_dribble("https://drive.google.com/drive/folders/1Y2905cRV1APIE0fSbX7Kmy-xvRMXj_0y"))
+drive_put("agile-reproducibility-reviews.Rmd", path = as_dribble("https://drive.google.com/drive/folders/1Y2905cRV1APIE0fSbX7Kmy-xvRMXj_0y"))
 ```
 
 ```{r render_public_version, eval=FALSE, include=FALSE}
