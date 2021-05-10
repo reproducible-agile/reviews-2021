@@ -48,10 +48,10 @@ knitr::include_graphics(temp)
 
 This report is part of the reproducibility review at the AGILE conference.
 For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
-This document is published on OSF at OSF LINK HERE.
+This document is published on OSF at https://osf.io/g4dcq/.
 To cite the report use
 
-> Graser, A. (2021, May). Reproducibility review of: Flood Impact Assessment on Road Network and Healthcare Access – at the example of Jakarta, Indonesia. <https://doi.org/TODO>
+> Graser, A. (2021, May). Reproducibility review of: Flood Impact Assessment on Road Network and Healthcare Access – at the example of Jakarta, Indonesia. <https://doi.org/10.17605/OSF.IO/G4DCQ>
 
 # Reviewed paper
 
@@ -119,14 +119,22 @@ Err:7 http://security.ubuntu.com/ubuntu focal-updates/main amd64 libpq5 amd64 12
 Ign:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpq-dev amd64 12.5-0ubuntu0.20.04.1
 Err:8 http://security.ubuntu.com/ubuntu focal-updates/main amd64 libpq-dev amd64 12.5-0ubuntu0.20.04.1
   404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/m/mysql-8.0/libmysqlclient21_8.0.22-0ubuntu0.20.04.3_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc-dev-bin_2.31-0ubuntu9.1_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/l/linux/linux-libc-dev_5.4.0-56.62_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dev_2.31-0ubuntu9.1_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/m/mysql-8.0/libmysqlclient-dev_8.0.22-0ubuntu0.20.04.3_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/c/curl/libcurl4-gnutls-dev_7.68.0-1ubuntu2.2_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/p/postgresql-12/libpq5_12.5-0ubuntu0.20.04.1_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
-E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/p/postgresql-12/libpq-dev_12.5-0ubuntu0.20.04.1_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/m/mysql-8.0/libmysqlclient21_8.0.22-0ubuntu0.20.04.3
+_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc-dev-bin_2.31-0ubuntu9.1_amd64.deb  404  
+Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/l/linux/linux-libc-dev_5.4.0-56.62_amd64.deb  404 
+Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dev_2.31-0ubuntu9.1_amd64.deb  404  
+Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/m/mysql-8.0/libmysqlclient-dev_8.0.22-0ubuntu0.20.04.3
+_amd64.deb  404  Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/c/curl/libcurl4-gnutls-dev_7.68.0-1ubuntu2.2_amd64.deb
+404  Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/p/postgresql-12/libpq5_12.5-0ubuntu0.20.04.1_amd64.deb
+404  Not Found [IP: 91.189.88.142 80]
+E: Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/p/postgresql-12/libpq-dev_12.5-0ubuntu0.20.04.1_amd64
+.deb  404  Not Found [IP: 91.189.88.142 80]
 E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
 ```
 
@@ -142,12 +150,14 @@ conda install gdal
 Preprocessing was run with the `HOT` option, as confirmed by the authors. The error message relation to `proj.db` does not seem to impact the generation of necessary output files.
 
 ```{bash step1, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.data_preprocessing.run_preprocessing HOT
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+data_preprocessing.run_preprocessing HOT
 preprocessed/hd_border.shp saved.
 preprocessed/flooded.shp saved.
 preprocessed/healthsites.shp saved.
 preprocessed/healthsites_flooded.shp saved.
-ERROR 1: PROJ: proj_identify: /home/agraser/miniconda3/envs/jakarta_venv/share/proj/proj.db lacks DATABASE.LAYOUT.VERSION.MAJOR / DATABASE.LAYOUT.VERSION.MINOR metadata. It comes from another PROJ installation.
+ERROR 1: PROJ: proj_identify: /home/agraser/miniconda3/envs/jakarta_venv/share/proj/proj.db lacks DATABASE.LAYOUT.VERSION.
+MAJOR / DATABASE.LAYOUT.VERSION.MINOR metadata. It comes from another PROJ installation.
 input/jakarta/idn_ppp_2020.tif saved.
 ```
 
@@ -158,7 +168,8 @@ input/jakarta/idn_ppp_2020.tif saved.
 The road network for Jakarta was downloaded using:
 
 ```{bash step2.1, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.network.download_network 'Jakarta, Indonesia' 'drive_service' 'normal' 'ma_jakarta/network_graphs'
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.network.
+download_network 'Jakarta, Indonesia' 'drive_service' 'normal' 'ma_jakarta/network_graphs'
 normal graph data saved in: ma_jakarta/network_graphs/normal
 ```
 
@@ -167,7 +178,8 @@ normal graph data saved in: ma_jakarta/network_graphs/normal
 Normal network centrality measures were calculated using:
 
 ```{bash step2.2a, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.network.run_network normal Betweenness Closeness
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+network.run_network normal Betweenness Closeness
 Network Properties:
 nodes, edges                    155995, 204658
 directed?                       True
@@ -202,19 +214,23 @@ Betweenness calculated
  (81095, 1.8609954542643954),
  (118364, 1.857541131419174)]
 Closeness calculated
-Centrality saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/normal/nodes_centrality.shp
+Centrality saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/
+normal/nodes_centrality.shp
 ```
 
 
 Flooded network centrality was calculated using:
 
 ```{bash step2.2b, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.network.run_network flooded Betweenness Closeness
-Directory /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded created
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+network.run_network flooded Betweenness Closeness
+Directory /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded 
+created
 flooded
 Directory /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/network_graphs/flooded created
 Amount of intersected and removed nodes: 36311
-Warning 1: One or several characters couldn't be converted correctly from UTF-8 to ISO-8859-1.  This warning will not be emitted anymore.
+Warning 1: One or several characters couldn't be converted correctly from UTF-8 to ISO-8859-1.  This warning will not be 
+emitted anymore.
 Intersected networkx graph saved
 Network Properties:
 nodes, edges                    119684, 154603
@@ -250,7 +266,8 @@ Betweenness calculated
  (71871, 1.469294387868634),
  (48382, 1.4669275261543913)]
 Closeness calculated
-Centrality saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/nodes_centrality.shp
+Centrality saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/
+flooded/nodes_centrality.shp
 ```
 
 
@@ -269,8 +286,11 @@ For the "flooded" scenario `flooded/nodes_centrality.shp`, QGIS statistics panel
 CDF and histograms of centraliy values were computed using:
 
 ```{bash step2.3.1a, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.network_resilience.emp_value_distribution Betweenness
-/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/scripts/analysis/network_resilience/emp_value_distribution.py:167: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.network_resilience.emp_value_distribution Betweenness
+/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/scripts/analysis/network_resilience/
+emp_value_distribution.py:167: UserWarning: Tight layout not applied. The left and right margins cannot be made large 
+enough to accommodate all axes decorations.
   plt.tight_layout()
 CDF results saved.
 Histogram results saved.
@@ -284,8 +304,11 @@ knitr::include_graphics(c('cdf_btwn.png','hist_btwn.png'))
 
 
 ```{bash step2.3.1b, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.network_resilience.emp_value_distribution Closeness
-/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/scripts/analysis/network_resilience/emp_value_distribution.py:167: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.network_resilience.emp_value_distribution Closeness
+/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/scripts/analysis/network_resilience/
+emp_value_distribution.py:167: UserWarning: Tight layout not applied. The left and right margins cannot be made large 
+enough to accommodate all axes decorations.
   plt.tight_layout()
 CDF results saved.
 Histogram results saved.
@@ -299,9 +322,12 @@ knitr::include_graphics(c('cdf_cls.png','hist_cls.png'))
 #### 2.3.2. Flood impact on network centrality
 
 ```{bash step2.3.2, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.network_resilience.node_difference Betweenness Closeness
-Results saved in: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data results/network/flooded/nodes_btwn_dif.shp
-Results saved in: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data results/network/flooded/nodes_cls_dif.shp
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.network_resilience.node_difference Betweenness Closeness
+Results saved in: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data results/network/
+flooded/nodes_btwn_dif.shp
+Results saved in: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data results/network/
+flooded/nodes_cls_dif.shp
 ```
 
 
@@ -317,9 +343,12 @@ knitr::include_graphics('cls_dif.PNG')
 #### 2.3.3. Small and large foreground network as well as sameness ratio
 
 ```{bash step2.3.3, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.network_resilience.resilience Betweenness
-/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/nodes_btwn_top_1.shp
-/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/nodes_btwn_top_10.shp
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.network_resilience.resilience Betweenness
+/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/
+nodes_btwn_top_1.shp
+/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/
+nodes_btwn_top_10.shp
 Column and data explanation:
 column name in_n_f = in normal and flooded foreground network
 -999 = node is flooded
@@ -327,9 +356,12 @@ column name in_n_f = in normal and flooded foreground network
 Sameness Betweenness Ratio: 0.6222193730367331
 
 
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.network_resilience.resilience Closeness
-/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/nodes_cls_top_1.shp
-/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/nodes_cls_top_10.shp
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.network_resilience.resilience Closeness
+/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/
+nodes_cls_top_1.shp
+/home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/network/flooded/
+nodes_cls_top_10.shp
 Column and data explanation:
 column name in_n_f = in normal and flooded foreground network
 -999 = node is flooded
@@ -346,18 +378,26 @@ The paper states that "The sameness ratio between the normal and the flooded sit
 ### 3.1. Healthcare supply
 
 ```{bash step3.1, eval=FALSE, size="scriptsize"}
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.health_distribution normal health_location bed_capacity
-/home/agraser/miniconda3/envs/jakarta_venv/lib/python3.7/site-packages/geopandas/tools/sjoin.py:61: UserWarning: CRS of frames being joined does not match!(None != epsg:4326)
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.health_distribution normal health_location bed_capacity
+/home/agraser/miniconda3/envs/jakarta_venv/lib/python3.7/site-packages/geopandas/tools/sjoin.py:61: UserWarning: CRS of 
+frames being joined does not match!(None != epsg:4326)
   "(%s != %s)" % (left_df.crs, right_df.crs)
-Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/health_location/grid_hs_normal.shp
-Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/bed_capacity/grid_bed_normal.shp
+Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/
+health_location/grid_hs_normal.shp
+Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/
+bed_capacity/grid_bed_normal.shp
 
 
-(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.analysis.health_distribution flooded health_location bed_capacity
-/home/agraser/miniconda3/envs/jakarta_venv/lib/python3.7/site-packages/geopandas/tools/sjoin.py:61: UserWarning: CRS of frames being joined does not match!(None != epsg:4326)
+(jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
+analysis.health_distribution flooded health_location bed_capacity
+/home/agraser/miniconda3/envs/jakarta_venv/lib/python3.7/site-packages/geopandas/tools/sjoin.py:61: UserWarning: CRS of
+frames being joined does not match!(None != epsg:4326)
   "(%s != %s)" % (left_df.crs, right_df.crs)
-Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/health_location/grid_hs_flooded.shp
-Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/bed_capacity/grid_bed_flooded.shp
+Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/
+health_location/grid_hs_flooded.shp
+Result saved: /home/agraser/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper/ma_jakarta/data/results/
+bed_capacity/grid_bed_flooded.shp
 ```
 
 
