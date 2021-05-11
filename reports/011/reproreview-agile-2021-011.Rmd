@@ -59,8 +59,9 @@ Isabell G. Klipper, Alexander Zipf and Sven Lautenbach. Flood Impact Assessment 
 
 # Summary
 
-The provided workflow was **partially reproduced**.
-The figures generated using the provided source code are not identical to the figures in the paper. However, many of the results reported in the paper could be reproduced, as described in detail in the following notes.
+The provided workflow was **partially reproduced**. The workflow combines Python and R code from multiple sources (a Github.com repo, a GitLab repo by the Uni Heidelberg, and some code and QGIS project files provided via email). The reproduction described in this report uses the Python code provided in the Github.com repo and data provided by the authors via email. 
+The figures generated using this source code are not identical to the figures in the paper (since the paper figures were fine tuned using R scripts which were provided late in the reproduction phase and therefore could not be included anymore). 
+However, many of the results reported in the paper could be reproduced, as described in detail in the following notes.
 
 
 \clearpage
@@ -73,11 +74,11 @@ The Data and Software Availability section lists two relevant repositories: <htt
 I started with the repository <https://github.com/GIScience/Jakarta_Thesis_Klipper> mentioned in the Data and Software Availability section. 
 Usage instructions are provided in the repo README.md.
 Issues in the original version <https://github.com/GIScience/Jakarta_Thesis_Klipper/tree/a6887825b28006d0a00febf656384e985bfeead3> were fixed during the reproduction period  <https://github.com/GIScience/Jakarta_Thesis_Klipper/tree/47340958ae75ed34fca75cb3942c41d4413286ac>. The repository contains test data for Heidelberg. To reproduce the results in the paper, the authors provided the Jakarta dataset via email. 
-To use the Jakarta dataset, file paths in the `settings.yml` had to be updated accordingly. The updated `settings.yml` is provided in the reproduction report repository. 
+To use the Jakarta dataset, file paths in the `settings.yml` had to be updated accordingly. The updated `settings.yml` is provided in the reproduction report repository <https://github.com/reproducible-agile/reviews-2021/tree/master/reports/011>. 
 
 
 
-## Installation (Python repo)
+## Installation (Python repo - Github.com)
 
 Readme instruction "To additionally install GDAL properly, run:
 
@@ -296,7 +297,6 @@ CDF results saved.
 Histogram results saved.
 ```
 
-The resulting plots are not identical to the plots presented in the paper in Figure 4. Therefore, it is not straightforward to compare the results:
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', fig.show='hold', out.width='0.45\\linewidth', fig.pos='H'}
 knitr::include_graphics(c('cdf_btwn.png','hist_btwn.png'))
@@ -317,6 +317,8 @@ Histogram results saved.
 ```{r, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', fig.show='hold', out.width='0.45\\linewidth', fig.pos='H'}
 knitr::include_graphics(c('cdf_cls.png','hist_cls.png'))
 ```
+
+The resulting CDF plots are not identical to the histogram plots presented in the paper in Figure 4. Therefore, it is not straightforward to compare the results. However, the dip around HC=0.5 in the closeness histogram in Figure 4 seems to correspond to the flat section in the reproduced CDF plot.
 
 
 #### 2.3.2. Flood impact on network centrality
@@ -419,7 +421,7 @@ Failed to reproduce due to problems with generating the openrouteservice car gra
 
 
 
-## Intrinsic Data Quality Assessment (R repo)
+## Intrinsic Data Quality Assessment (R code - GitLab repo by the Uni Heidelberg)
 
 Failed to reproduce in time.
 
