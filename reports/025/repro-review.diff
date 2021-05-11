@@ -1,0 +1,63 @@
+diff --git a/elasticsearch/logstash-config/json.conf b/elasticsearch/logstash-config/json.conf
+index 98a5b96..f9e3f19 100644
+--- a/elasticsearch/logstash-config/json.conf
++++ b/elasticsearch/logstash-config/json.conf
+@@ -1,7 +1,7 @@
+ input{
+ 	file{
+ 		type => "json"
+-		path => "${PWD}/experiments/agile21/echen_input_filtred/tweets/hydrating-and-extracting/*.jsonl"
++		path => "/experiments/agile21/echen_input_filtred/tweets/hydrating-and-extracting/*.jsonl"
+ 		codec => "json"
+ 		sincedb_path => "/dev/null"
+ 		start_position => "beginning"
+@@ -72,11 +72,11 @@ filter {
+ output{
+ 	#stdout { codec => rubydebug }
+ 	elasticsearch {
+-		hosts => ["localhost:9200"]
++		hosts => ["elasticsearch:9200"]
+ 		index => "twitter_agile2021"
+ 		#document_type => "tweet"
+ 		document_id => "%{[id]}"
+-		template => "${PWD}/elasticsearch/logstash-config/twitter_template.json"
++		template => "/elasticsearch/logstash-config/twitter_template.json"
+ 		template_name => "twitter_agile2021"
+ 	}
+ }
+diff --git a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_100.png b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_100.png
+index 5b30618..1fcf848 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_100.png and b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_100.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_200.png b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_200.png
+index 1360b7c..f45914e 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_200.png and b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_200.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_500.png b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_500.png
+index 6401f38..3b1c8ac 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_500.png and b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_500.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_United Kingdomvenn3.png b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_United Kingdomvenn3.png
+index 0efe1f7..8515f6b 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_United Kingdomvenn3.png and b/experiments/agile21/results/jan_2weeks_week/common/most_frequent_terms_by_country_United Kingdomvenn3.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-19.png b/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-19.png
+index a829c63..41270ef 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-19.png and b/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-19.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-26.png b/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-26.png
+index cd32ec9..11ed0db 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-26.png and b/experiments/agile21/results/jan_2weeks_week/country/wordcloud/United_Kingdom_2020-01-26.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_H-TFIDF.png b/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_H-TFIDF.png
+index 95c8c09..7dade08 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_H-TFIDF.png and b/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_H-TFIDF.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_TF-IDF on corpus by Country.png b/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_TF-IDF on corpus by Country.png
+index 1ecbac7..626ecfe 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_TF-IDF on corpus by Country.png and b/experiments/agile21/results/jan_2weeks_week/tsne/tsne_bert-embeddings_TF-IDF on corpus by Country.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/venn/venn_Deutschland.png b/experiments/agile21/results/jan_2weeks_week/venn/venn_Deutschland.png
+index ac4401c..9eda1ba 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/venn/venn_Deutschland.png and b/experiments/agile21/results/jan_2weeks_week/venn/venn_Deutschland.png differ
+diff --git "a/experiments/agile21/results/jan_2weeks_week/venn/venn_Espa\303\261a.png" "b/experiments/agile21/results/jan_2weeks_week/venn/venn_Espa\303\261a.png"
+index a2181ed..8875ecc 100644
+Binary files "a/experiments/agile21/results/jan_2weeks_week/venn/venn_Espa\303\261a.png" and "b/experiments/agile21/results/jan_2weeks_week/venn/venn_Espa\303\261a.png" differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/venn/venn_France.png b/experiments/agile21/results/jan_2weeks_week/venn/venn_France.png
+index 10119f6..55f0f71 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/venn/venn_France.png and b/experiments/agile21/results/jan_2weeks_week/venn/venn_France.png differ
+diff --git a/experiments/agile21/results/jan_2weeks_week/venn/venn_United Kingdom.png b/experiments/agile21/results/jan_2weeks_week/venn/venn_United Kingdom.png
+index bf26a53..23a140d 100644
+Binary files a/experiments/agile21/results/jan_2weeks_week/venn/venn_United Kingdom.png and b/experiments/agile21/results/jan_2weeks_week/venn/venn_United Kingdom.png differ
