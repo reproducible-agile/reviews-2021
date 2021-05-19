@@ -90,7 +90,7 @@ pip3 install tqdm
 python3 hydrate.py
 ```
 
-Ran for ~ 4 hours, then threw `RecursionError: maximum recursion depth exceeded while calling a Python object`, but luckily, `hydrate.py` skips existing files, so I just restarted the process.
+This ran for ~ 4 hours, then threw `RecursionError: maximum recursion depth exceeded while calling a Python object`, but luckily, `hydrate.py` skips existing files, so I just restarted the process.
 After several more hours, I reached out to the authors and asked for a smaller reproducible workflow.
 
 ---------
@@ -454,7 +454,7 @@ These figures resemble the ones in the paper using the full dataset.
 Therefore, I am confident the code and data underlying the analysis of the paper are available (or can be created) with the files shared in the repository.
 The authors provide detailed documentation for a pretty complex workflow.
 
-The changes made to the configuration (e.g., to make it work with my container setup) are saved to a diff-file published alongside this document and the code is forked to the [Reproducible AGILE GitLab organisation](https://gitlab.com/reproducible-agile/reviews/covid19-tweets-mood-tetis).
+The changes made to the configuration (e.g., to make it work with my container setup) using the `agile-reproducibility` branch of the repository are saved to a diff-file published alongside this document and the code is forked to the [Reproducible AGILE GitLab organisation](https://gitlab.com/reproducible-agile/reviews/covid19-tweets-mood-tetis).
 
 ```{bash, echo=FALSE}
 cd covid19-tweets-mood-tetis/
@@ -464,11 +464,11 @@ git diff --ignore-all-space > ../repro-review.diff
 # Comments to the authors
 
 - Good job using anonymous.4open.science in the original submission!
-- I don't really like the solution to put the small reproducible workflow into a branch - this means that the example code will digress from the original workflow and will at some point be likely to break; I'd prefer to have a subdirectory
+- I don't really like the solution to put the small reproducible workflow into a branch - this means that the example code will digress from the original workflow and will at some point be likely to break; I'd prefer to have a subdirectory, ideally you package the reusable parts of the workflow in a proper Python package
 - Maybe the docker-compose configuration shared with this review is useful to you - it would be great if you could come a bit closer to a "one click reproduction" with the help of containers, e.g., the steps that I did for logstash could also be automated with the help of a Dockerfile
-- Please add information to the README regarding data sizes and expected runtimes! When I started cloning the Echen repo, I did not expect to download gigabytes of data.
-- Please provide clear usage instructions in the README, including a list of table mapping scripts/commands to each figure in the manuscript (How can I recreate Figure x?)
-- You can also add repository from GitHub in your own `requirements.txt` file and make installation of twarc easier, see https://stackoverflow.com/a/35998253/261210
+- ~~Please add information to the README regarding data sizes and expected runtimes! When I started cloning the Echen repo, I did not expect to download gigabytes of data.~~ authors updated the README
+- ~~Please provide clear usage instructions in the README, including a list of table mapping scripts/commands to each figure in the manuscript (How can I recreate Figure x?)~~ authors updated the README
+- ~~You can also add repository from GitHub in your own `requirements.txt` file and make installation of twarc easier, see https://stackoverflow.com/a/35998253/261210~~ changed by authors
 - A more suitable page for installing twarc would be https://twarc-project.readthedocs.io/en/latest/
 - Please provide direct links to installation instructions for the ELK stack - IMO a ready-to-use `docker-compose` configuration would be a good idea, the one I used is published in the reproduction material; also, specify the Elasticsearch version that you used.
 - CeCILL-B free software license agreement uncommon, if possible use more generally known and understood licenses (I understand this choice might be out of your control); note that the license actually partly deanonymises you
@@ -478,19 +478,21 @@ git diff --ignore-all-space > ../repro-review.diff
 library("zip")
 library("here")
 
-zipfile <- here::here("2021-025/agile-reproreview-2021-025.zip")
+zipfile <- here::here("025/agile-reproreview-2021-025.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
-          here::here("2021-025/docker-compose.yml",
-          here::here("2021-025/repro-review.diff",
-          here::here("2021-025/*.Rmd"))
+          c(
+            here::here("025/docker-compose.yml"),
+            here::here("025/repro-review.diff"),
+            here::here("025/tweet-map.jpg"),
+            here::here("025/tweet-count.jpg")))
 
 library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # OSF_PAT is in .Renviron in parent directory
 # We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
 
 # retrieve project
-project <- osfr::osf_retrieve_node("OSF ID")
+project <- osfr::osf_retrieve_node("rdnyu")
 
 # upload files
 osfr::osf_upload(x = project,
