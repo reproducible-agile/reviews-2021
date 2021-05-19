@@ -86,3 +86,13 @@ reports/005/IngaSchl-Label-Extraction-33eae48/
 agile-reproducibility-reviews.html
 
 reports/025/covid19-tweets-mood-tetis/
+
+reports/019/routes/
+
+reports/019/Cropped OSM data/
+
+reports/019/Polygon file used for OSM cropping/
+
+reports/019/Random routes for evaluation/
+
+*.geojson
