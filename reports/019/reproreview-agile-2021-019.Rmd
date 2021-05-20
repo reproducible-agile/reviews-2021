@@ -64,7 +64,7 @@ To cite the report use
 
 # Summary
 
-The reproduction was successful. All provided scripts could be execute after clarification with the authors using the provided data. Some manual steps could not be reproduced, but all code and data are shared. The script outputs match what is presented in the paper. Most figures and tables could be recreated.
+The reproduction was successful. All provided scripts could be execute after clarification with the authors using the provided data. Some manual steps could not be reproduced, but all code and data are shared. The script outputs match what is presented in the paper considering the randomness in the workflow. Relevant figures and tables could be recreated successfully.
 
 # Reviewer notes
 
@@ -235,11 +235,23 @@ summary(route_data)
 ```
 ### Table 2
 
-```{r table2}
+```{r table2, size="scriptsize"}
 knitr::kable(sf::read_sf("routes/001_routes.geojson"),
              caption = "Reproduction of Table 3")
 ```
 
+### Table 3
+
+The spreadsheet document <https://osf.io/gb24w/> is used to calculate the value in Table 3. I downloaded it with the script below and then manually copy and pasted the columns starting with `time` from my own `route_data.csv` into `reproduction-route_success.ods` (uploaded next to this report) after opening the CSV file with LibreOffice Calc and replacing all `.` with `,`.
+
+The information about "error routes" in the provided spreadsheet does not match the information in the table, it seems because the formula for detecting NA values is broken.
+
+```{r table3ods, eval=FALSE, size="scriptsize"}
+osfr::osf_download(osfr::osf_retrieve_file(as_id("https://osf.io/gb24w/")), path = here::here("019"))
+```
+The statistics at the bottom show a considerably smaller number for identical routes, but a similar pattern that the number of identical routes increases over the years, as shown in the screenshot below.
+
+![Screenshot of statistics at the bottom of spreadsheet reproduction-route_success.ods](screenshot-route-success-spreadsheet.png)
 
 # Appendix Figures 
 
@@ -253,7 +265,7 @@ if(!file.exists("figureA1.png")) {
 knitr::include_graphics("figureA1.png")
 ```
 
-```{r figureA1table}
+```{r figureA1table, size="scriptsize"}
 knitr::kable(`001_routes`)
 ```
 
@@ -262,13 +274,13 @@ knitr::kable(`001_routes`)
 
 # Comments to the authors
 
-- Good job storing the input data in OSF, it would be helpful to have a README there though that describes how to reproduce the workflow, with precise commands and information about the to be expected data sizes and runtime of steps
+- Good job storing the input data in OSF, ~~it would be helpful to have a README there though that describes how to reproduce the workflow, with precise commands and information about the to be expected data sizes and runtime of steps~~ authors added README at <https://osf.io/f9z7w/>
 - Consider providing a `docker-compose` configuration for your containers
 - Please consider properly citing crucial tools for your workflow next time, see https://doi.org/10.5281/zenodo.3479198 for advise
 - Add a `requirements.txt` or similar with pinned versions of dependencies so others can reproduce a matching computational environment - or a `environment.yml` since you already mention Anaconda!
 - Mention the used Python version in the README/docs
 - Consider trying out if setting a seed makes your random process reproducible
-- There are many libraries for Python to create figures and maps, which facilitates automation better then Open Office or QGIS (though you can probably also script the map creation using QGIS from Python) - maybe the little R snippets in this report can help you get started if you're open to use R
+- ~~There are many libraries for Python to create figures and maps, which facilitates automation better then Open Office or QGIS (though you can probably also script the map creation using QGIS from Python) - maybe the little R snippets in this report can help you get started if you're open to use R~~ authors updated the OSF project, see folder _Reproducibility_ in <https://osf.io/rxcgj/>, though for some figures only `.tex` files are given, but no way to generate them from data
 
 ```{r, echo=FALSE, eval=FALSE, results='hide'}
 # create ZIP of reproduction files and upload to OSF
@@ -280,7 +292,8 @@ file.remove(zipfile)
 zip::zipr(zipfile,
           c(here::here("019/routes"),
             "*.geojson",
-            "route_data.csv"))
+            "route_data.csv",
+            "reproduction-route_success.ods"))
 
 library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # OSF_PAT is in .Renviron in parent directory
