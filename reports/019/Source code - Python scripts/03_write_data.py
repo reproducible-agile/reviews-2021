@@ -15,17 +15,13 @@ with open('route_data.csv', mode='w', newline='') as write_file:
 		time16 = gj1['features'][9]['properties']['duration']
 		time17 = gj1['features'][10]['properties']['duration']
 		time18 = gj1['features'][11]['properties']['duration']
-		#time19 = gj1['features'][12]['properties']['duration']
+		time19 = gj1['features'][12]['properties']['duration']
 		dist20 = gj1['features'][6]['properties']['distance']
 		dist14 = gj1['features'][7]['properties']['distance']
 		dist15 = gj1['features'][8]['properties']['distance']
 		dist16 = gj1['features'][9]['properties']['distance']
 		dist17 = gj1['features'][10]['properties']['distance']
 		dist18 = gj1['features'][11]['properties']['distance']
-		#dist19 = gj1['features'][12]['properties']['distance']
+		dist19 = gj1['features'][12]['properties']['distance']
 		print(number_str[1:] + " done")
-		csv_writer.writerow([number_str[1:], time20, time14, time15, time16, time17, time18, 
-			"999", #time19,
-			dist20, dist14, dist15, dist16, dist17, dist18, 
-			"999" #dist19
-			])
+		csv_writer.writerow([number_str[1:], time20, time14, time15, time16, time17, time18, time19, dist20, dist14, dist15, dist16, dist17, dist18, dist19])

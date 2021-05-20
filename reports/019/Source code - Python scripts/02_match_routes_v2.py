@@ -50,7 +50,7 @@ for number in number_array:
 		gj1 = load(read_file)
 	fastest_list = []
 	#import pdb; pdb.set_trace()
-	for i in range(0,6):
+	for i in range(0,7):
 		fastest_geometry = gj1['features'][i]['geometry']
 		fastest_route = route_list_to_string(gj1['features'][i]['geometry']['coordinates'])
 		fastest_time = gj1['features'][i]['properties']['duration']

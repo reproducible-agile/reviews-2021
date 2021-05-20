@@ -120,7 +120,7 @@ This took only a few minutes on my machine. Next is starting the routing service
 It seems each of these Wien datasets represent a year and should be served on separate ports at the same time.
 
 ```{bash routingservices, size="tiny", eval=FALSE}
-for i in $(seq 14 20); do
+for i in $(seq 14 21); do
     docker run -t -i -d -p 50${i}:5000 -v "${PWD}/Cropped OSM data/:/data" osrm/osrm-backend osrm-routed --algorithm mld /data/wien${i}.pbf --max-matching-size 10000
 done
 
@@ -211,14 +211,14 @@ Running `02_match_routes_v2.py` first resulted in errors for both reproducibilit
 Looking into the code, we find a line that defines the inputs, the 1001 is used to identify 001_fastest... maybe it's only for the zero padding. But it only contains 1 ID. For all 500 this could be `number_array = range(1001,1501)`, which was confirmed by the author after request for clarification.
 Debugging the `match_route()` function and some searching, and the `docker run` commands in the thesis were needed to fix the error `{"message":"Too many trace coordinates","code":"TooBig"}` by adding the missing configuration parameter (see above).
 
-With the range configuration as above, the following command creates 500 `nnn_routes.geojson` files and takes a few minutes to run.
+With the range configuration as above, the following command creates 500 `nnn_routes.geojson` files and takes ~ 15 minutes to run.
 
 ```{bash match, size="scriptsize", eval=FALSE}
 # in the environment agile-019 created above
 python Source\ code\ -\ Python\ scripts/02_match_routes_v2.py
 ```
 
-Now the travel times and distances are exported to a CSV file:
+Now the travel times and distances are exported to a CSV file, which takes less than a minute:
 
 ```{bash summarise, size="scriptsize", eval=FALSE}
 # in the environment agile-019 created above
@@ -227,14 +227,12 @@ mv *_routes.geojson routes
 python Source\ code\ -\ Python\ scripts/03_write_data.py
 ```
 
-**TODO FIX STEP 3**
+The resulting table contains columns for times and distances across years for all routes.
 
 ```{r route_data}
 route_data <- read.csv("route_data.csv")
 summary(route_data)
 ```
-
-
 ### Table 2
 
 ```{r table2}
@@ -260,7 +258,7 @@ knitr::kable(`001_routes`)
 ```
 
 
-**Figure A2** was not reproduced as suitable sample needs to be seleted manually.
+**Figure A2** was not reproduced as suitable sample needs to be selected manually and no map project/instructions were provided.
 
 # Comments to the authors
 
@@ -270,6 +268,7 @@ knitr::kable(`001_routes`)
 - Add a `requirements.txt` or similar with pinned versions of dependencies so others can reproduce a matching computational environment - or a `environment.yml` since you already mention Anaconda!
 - Mention the used Python version in the README/docs
 - Consider trying out if setting a seed makes your random process reproducible
+- There are many libraries for Python to create figures and maps, which facilitates automation better then Open Office or QGIS (though you can probably also script the map creation using QGIS from Python) - maybe the little R snippets in this report can help you get started if you're open to use R
 
 ```{r, echo=FALSE, eval=FALSE, results='hide'}
 # create ZIP of reproduction files and upload to OSF
