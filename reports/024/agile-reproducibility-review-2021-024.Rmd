@@ -53,14 +53,13 @@ knitr::include_graphics(temp)
 This report is part of the reproducibility review at the AGILE conference.
 For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
 This document is published on OSF at https://osf.io/dx92a.
-
 To cite the report use
 
-*Friese, Philipp A. (2021). Reproducibility review of: Investigating drivers’ geospatial abilities in unfamiliar environments. https://doi.org/10.17605/OSF.IO/DX92A*
+> Friese, Philipp A. (2021, May). Reproducibility review of: Investigating drivers’ geospatial abilities in unfamiliar environments. https://doi.org/10.17605/OSF.IO/DX92A
 
 # Reviewed paper
 
-*Dafni Karkasina, Margarita Kokla and Eleni Tomai (2021). Investigating drivers’ geospatial abilities in unfamiliar environments.*
+> Karkasina, D., Kokla, M., and Tomai, E.: Investigating drivers’ geospatial abilities in unfamiliar environments, AGILE GIScience Ser., 2, 3, https://doi.org/10.5194/agile-giss-2-3-2021, 2021.
 
 
 # Summary
@@ -101,7 +100,7 @@ The provided analysis script only generates Figure 1. The values for Table 1 and
 
 The R script contains helpful comments but no further formatting and I found it hard to associate the output with the values for Table 1 and 2. *I recommend formatting the R script according to best practices such as the tidyverse style guide at [https://style.tidyverse.org](https://style.tidyverse.org).*
 
-The provided readme comprises a description of the files included in the DASA section. However it does not contain associations between files or scripts and the figures or tables they generate. *I recommend adding a statement associating scripts or functions to figures and tables in your paper.*
+The provided readme comprises a description of the files included in the DASA section. However it does not contain associations between files or scripts and the figures or tables they generate. *I recommend adding a statement associating scripts or functions to figures and tables in your paper.* [Addressed by authors]
 
 
 ```{r, echo=FALSE, eval=FALSE, results='hide'}
@@ -125,7 +124,7 @@ project <- osfr::osf_retrieve_node("dx92a")
 # upload files
 osfr::osf_upload(x = project,
                 conflicts = "overwrite",
-                path = c(list.files(here::here("submission_24"),
+                path = c(list.files(here::here("024"),
                                     pattern = "agile-reproducibility-review-.*(pdf$|Rmd$|zip$)",
                                     full.names = TRUE)
                          #,"COPYRIGHT"
