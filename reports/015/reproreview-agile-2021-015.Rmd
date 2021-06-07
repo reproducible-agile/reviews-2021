@@ -112,12 +112,12 @@ The authors provided these immediately upon request.
 Overall, the authors did a commendable job at making a paper on user experiments as reproducible as possible. The following recommendations for improvement are desirable:
 
 1. data on participants (age, gender, experience with maps, etc.) are "hidden" in the input CSV files - an explicit file with that information would be convenient
-2. the link between the variable names in the script and the tables in the paper is not always immediately clear, but can be inferred
-3. the origin of the Excel tables need to be clarified - where do these come from? an author is given, but that is insufficient
-4. the repository needs a license file for both the software and the data
-5. the code and data repository should be properly archived (e.g., on Zenodo [with the GitHub-Zenodo-Integration](https://guides.github.com/activities/citable-code/)) and own code/data cited in the paper with a DOI
+2. ~~the link between the variable names in the script and the tables in the paper is not always immediately clear, but can be inferred~~ README was later updated by authors
+3. the origin of the Excel tables need to be clarified - where do these come from? an author is given, but that is incomplete
+4. ~~the repository needs a license file for both the software and the data~~ partly resolved through <https://github.com/duckravel/Metadata/commit/2da3036c680b370e13578429673c80eb26c9dec3> (Apache is not a suitable license for _data_)
+5. ~~the code and data repository should be properly archived (e.g., on Zenodo [with the GitHub-Zenodo-Integration](https://guides.github.com/activities/citable-code/)) and own code/data cited in the paper with a DOI~~ resolved through <https://doi.org/10.5281/zenodo.4739991>
 6. ~~after acceptance, the Figshare record should be made public and missing metadata (authors etc.) should be added~~ - authors did this, see <https://doi.org/10.6084/m9.figshare.14207735.v2>
-7. use the [`here`](https://here.r-lib.org/) package in R to resolve file names, it should not be required to fix paths manually
+7. ~~use the [`here`](https://here.r-lib.org/) package in R to resolve file names, it should not be required to fix paths manually~~ - seems resolved through relative file paths in <https://doi.org/10.6084/m9.figshare.14207735.v3> (not tested!)
 
 ```{r, echo=FALSE, eval=FALSE, results='hide'}
 library("osfr") # See docs at https://docs.ropensci.org/osfr/

@@ -1,0 +1,457 @@
+---
+title: "Reproducibility review of: An Approach to Assess the Effect of Currentness of Spatial Data on Routing Quality"
+author: "Daniel Nüst \\orcid{0000-0002-0024-5046}, Alexander Kmoch \\orcid{0000-0003-4386-4450}"
+date: "`r format(Sys.time(), '%Y-%m-%d')`"
+output:
+  pdf_document:
+    toc: false
+    latex_engine: xelatex
+    pandoc_args:
+      # https://github.com/chdemko/pandoc-latex-fontsize/wiki
+      - '--filter=pandoc-latex-fontsize'
+pandoc-latex-fontsize:
+  - classes: [smallcontent]
+    size: tiny
+papersize: a4
+header-includes:
+  - |
+    % https://tex.stackexchange.com/questions/445563/ieeetran-how-to-include-orcid-in-tex-pdf-with-pdflatex/445583 (works with pdflatex)
+    \usepackage{scalerel}
+    \usepackage{tikz}
+    \usetikzlibrary{svg.path}
+    \definecolor{orcidlogocol}{HTML}{A6CE39}
+    \tikzset{
+      orcidlogo/.pic={
+        \fill[orcidlogocol] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z};
+        \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                     svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z     M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                     svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+      }
+    }
+    \newcommand\orcid[1]{\href{https://orcid.org/#1}{\raisebox{0.15 em}{\mbox{\scalerel*{
+    \begin{tikzpicture}[yscale=-1, transform shape]
+    \pic{orcidlogo};
+    \end{tikzpicture}
+    }{|}}}}}
+    \definecolor{agileblue}{RGB}{0,77,155}
+    \usepackage{url}
+urlcolor: agileblue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+```{r logo, eval=TRUE, echo=FALSE, message=FALSE, fig.align='center', out.width='0.3\\linewidth', fig.pos='H'}
+temp <- tempfile(fileext = ".pdf")
+download.file(url = "https://reproducible-agile.github.io/public/images/reproducible-AGILE-logo-square.pdf", destfile = temp)
+knitr::include_graphics(temp)
+```
+
+This report is part of the reproducibility review at the AGILE conference.
+For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
+This document is published on OSF at <TODO>.
+To cite the report use
+
+> TODO
+
+# Reviewed paper
+
+> TODO ADD FULL CITATION
+
+# Summary
+
+TODO
+
+# Reviewer notes
+
+The Data and Software Availability section includes references to the GitHub project <https://github.com/mwernerds/agile21_abstaining>, which is the starting point of this reproduction.
+
+```{bash, size="tiny", eval=FALSE}
+git clone https://github.com/mwernerds/agile21_abstaining
+```
+
+The repository contains a `Dockerfile`, which only installs the also given Python environment description.
+I continue with a Python virtual environment:
+
+```{bash, size="tiny", eval=FALSE}
+mkvirtualenv agile-004
+# all commands below executed in this environment
+
+pip install -r agile21_abstaining/requirements.txt
+```
+
+Next, I go through the instructions in the README:
+
+```{bash, size="scriptsize", eval=FALSE}
+tar -xjf agile21_abstaining/la.tbz
+```
+
+The creates many `.txt` files in a directory `la` with subdirectories `left` and `right`.
+I don't run `00_create_public_dataset.py` as this is documented as creating said test data.
+Next is the "first experiment" using the file `02_single_classifiers.py`.
+In absence of other instructions, I simply try to run it:
+
+```{bash, size="scriptsize", eval=FALSE}
+python 02_single_classifiers.py 
+```
+
+This prints a number of different training results to the console.
+Without a reference, I don't know if these are the correct values tough.
+
+```{.smallcontent}
+Loading LA
+32266 documents - 2.177MB (training set)
+32265 documents - 2.178MB (test set)
+
+Extracting features from the training data using a sparse vectorizer
+done in 0.340165s at 6.399MB/s
+n_samples: 32266, n_features: 21038
+
+Extracting features from the test data using the same vectorizer
+done in 0.323204s at 6.737MB/s
+n_samples: 32265, n_features: 21038
+
+================================================================================
+Ridge Classifier
+________________________________________________________________________________
+Training: 
+RidgeClassifier(tol=0.01)
+train time: 0.300s
+test time:  0.001s
+accuracy:   0.548
+dimensionality: 21038
+density: 1.000000
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.78      0.78      0.78     16133
+ residential       0.78      0.78      0.78     16133
+
+    accuracy                           0.78     32266
+   macro avg       0.78      0.78      0.78     32266
+weighted avg       0.78      0.78      0.78     32266
+
+
+================================================================================
+Perceptron
+________________________________________________________________________________
+Training: 
+Perceptron(max_iter=50)
+train time: 0.142s
+test time:  0.002s
+accuracy:   0.541
+dimensionality: 21038
+density: 0.838245
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.74      0.77      0.75     16133
+ residential       0.76      0.73      0.74     16133
+
+    accuracy                           0.75     32266
+   macro avg       0.75      0.75      0.75     32266
+weighted avg       0.75      0.75      0.75     32266
+
+
+================================================================================
+Passive-Aggressive
+________________________________________________________________________________
+Training: 
+PassiveAggressiveClassifier(max_iter=50)
+train time: 0.276s
+test time:  0.001s
+accuracy:   0.548
+dimensionality: 21038
+density: 0.942247
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.80      0.78      0.79     16133
+ residential       0.79      0.81      0.80     16133
+
+    accuracy                           0.80     32266
+   macro avg       0.80      0.80      0.80     32266
+weighted avg       0.80      0.80      0.80     32266
+
+
+================================================================================
+MaxEnt
+________________________________________________________________________________
+Training: 
+LogisticRegression(C=0.1, dual=True, multi_class='ovr', n_jobs=1,
+                   solver='liblinear')
+train time: 0.190s
+test time:  0.001s
+accuracy:   0.541
+dimensionality: 21038
+density: 1.000000
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.65      0.71      0.68     16133
+ residential       0.68      0.63      0.65     16133
+
+    accuracy                           0.67     32266
+   macro avg       0.67      0.67      0.67     32266
+weighted avg       0.67      0.67      0.67     32266
+
+
+================================================================================
+L2 penalty
+________________________________________________________________________________
+Training: 
+LinearSVC(dual=False, tol=0.001)
+train time: 0.877s
+test time:  0.002s
+accuracy:   0.549
+dimensionality: 21038
+density: 1.000000
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.79      0.80      0.79     16133
+ residential       0.80      0.79      0.79     16133
+
+    accuracy                           0.79     32266
+   macro avg       0.79      0.79      0.79     32266
+weighted avg       0.79      0.79      0.79     32266
+
+
+________________________________________________________________________________
+Training: 
+SGDClassifier(max_iter=50)
+train time: 0.213s
+test time:  0.001s
+accuracy:   0.547
+dimensionality: 21038
+density: 0.962116
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.68      0.74      0.71     16133
+ residential       0.71      0.65      0.68     16133
+
+    accuracy                           0.69     32266
+   macro avg       0.70      0.69      0.69     32266
+weighted avg       0.70      0.69      0.69     32266
+
+
+================================================================================
+L1 penalty
+________________________________________________________________________________
+Training: 
+LinearSVC(dual=False, penalty='l1', tol=0.001)
+train time: 0.346s
+test time:  0.001s
+accuracy:   0.546
+dimensionality: 21038
+density: 0.405552
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.76      0.77      0.77     16133
+ residential       0.77      0.76      0.76     16133
+
+    accuracy                           0.77     32266
+   macro avg       0.77      0.77      0.77     32266
+weighted avg       0.77      0.77      0.77     32266
+
+
+________________________________________________________________________________
+Training: 
+SGDClassifier(max_iter=50, penalty='l1')
+train time: 0.164s
+test time:  0.001s
+accuracy:   0.540
+dimensionality: 21038
+density: 0.023054
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.57      0.72      0.64     16133
+ residential       0.62      0.45      0.52     16133
+
+    accuracy                           0.58     32266
+   macro avg       0.59      0.58      0.58     32266
+weighted avg       0.59      0.58      0.58     32266
+
+
+================================================================================
+Elastic-Net penalty
+________________________________________________________________________________
+Training: 
+SGDClassifier(max_iter=50, penalty='elasticnet')
+train time: 0.177s
+test time:  0.001s
+accuracy:   0.545
+dimensionality: 21038
+density: 0.338911
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.65      0.72      0.68     16133
+ residential       0.68      0.61      0.64     16133
+
+    accuracy                           0.66     32266
+   macro avg       0.66      0.66      0.66     32266
+weighted avg       0.66      0.66      0.66     32266
+
+
+================================================================================
+NearestCentroid (aka Rocchio classifier)
+________________________________________________________________________________
+Training: 
+NearestCentroid()
+train time: 0.006s
+test time:  0.005s
+accuracy:   0.529
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.61      0.69      0.65     16133
+ residential       0.64      0.55      0.59     16133
+
+    accuracy                           0.62     32266
+   macro avg       0.63      0.62      0.62     32266
+weighted avg       0.63      0.62      0.62     32266
+
+
+================================================================================
+Naive Bayes
+________________________________________________________________________________
+Training: 
+MultinomialNB(alpha=0.01)
+train time: 0.012s
+test time:  0.007s
+accuracy:   0.547
+/home/daniel/.virtualenvs/agile-004/lib/python3.8/site-packages/sklearn/utils/deprecation.py:101: FutureWarning: Attribute coef_ was deprecated in version 0.24 and will be removed in 1.1 (renaming of 0.26).
+  warnings.warn(msg, category=FutureWarning)
+dimensionality: 21038
+density: 1.000000
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.76      0.79      0.78     16133
+ residential       0.78      0.75      0.77     16133
+
+    accuracy                           0.77     32266
+   macro avg       0.77      0.77      0.77     32266
+weighted avg       0.77      0.77      0.77     32266
+
+
+________________________________________________________________________________
+Training: 
+BernoulliNB(alpha=0.01)
+train time: 0.018s
+test time:  0.010s
+accuracy:   0.548
+/home/daniel/.virtualenvs/agile-004/lib/python3.8/site-packages/sklearn/utils/deprecation.py:101: FutureWarning: Attribute coef_ was deprecated in version 0.24 and will be removed in 1.1 (renaming of 0.26).
+  warnings.warn(msg, category=FutureWarning)
+dimensionality: 21038
+density: 1.000000
+
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.74      0.80      0.77     16133
+ residential       0.79      0.71      0.75     16133
+
+    accuracy                           0.76     32266
+   macro avg       0.76      0.76      0.76     32266
+weighted avg       0.76      0.76      0.76     32266
+
+
+================================================================================
+LinearSVC with L1-based feature selection
+________________________________________________________________________________
+Training: 
+Pipeline(steps=[('feature_selection',
+                 SelectFromModel(estimator=LinearSVC(dual=False, penalty='l1',
+                                                     tol=0.001))),
+                ('classification', LinearSVC())])
+train time: 0.391s
+test time:  0.003s
+accuracy:   0.547
+trainig
+              precision    recall  f1-score   support
+
+  commercial       0.77      0.78      0.78     16133
+ residential       0.78      0.77      0.78     16133
+
+    accuracy                           0.78     32266
+   macro avg       0.78      0.78      0.78     32266
+weighted avg       0.78      0.78      0.78     3226
+```
+
+**Next script.**
+
+```{bash, size="scriptsize", eval=FALSE}
+python 03_abstain_la.py
+```
+
+Again, a lot of log output which I don't have anything to compare against.
+The final bit seems to be relevant:
+
+```
+abstained in 31237 of 32265 cases
+A = 0.968139
+[[  763    44 15326]
+ [   39   182 15911]
+ [    0     0     0]]
+```
+
+------
+
+1. UNCLEAR HOW THE GIVEN ANALYSIS CONTRIBUTES TO THE PAPER, OR HOW SPECIFICC FIGURES FROM THE PAPER CAN BE RECREATED.
+2. PAPER MENTIONS OPENSTREETMAP DATA - UNCLEAR HOW THAT WAS CREATED OR WHERE IT IS.
+3. DATA AND SOFTWARE AVAILABILIIY - SECTION MENTIONS "OSM DATA EXPORTED.." - WHERE IS IT EXPORTED TO?
+
+# Comments to the authors
+
+- Re. Twitter data sharing: please consider next time storing the IDs of the used Tweets, which allows to recreate the dataset with a tool like [twarc](https://twarc-project.readthedocs.io/)
+- The README is not easy to understand, with incomplete sentences in several places and some formatting problems towards the end; I suggest to use the fact that you are multiple co-authors to work through the instructions and improve them from a reader perspective
+
+```{r, echo=FALSE, eval=FALSE, results='hide'}
+# create ZIP of reproduction files and upload to OSF
+library("zip")
+library("here")
+
+zipfile <- here::here("004/agile-reproreview-2021-004.zip")
+file.remove(zipfile)
+zip::zipr(zipfile,
+          c(here::here("004/..")))
+
+library("osfr") # See docs at https://docs.ropensci.org/osfr/
+# OSF_PAT is in .Renviron in parent directory
+# We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
+
+# retrieve project
+project <- osfr::osf_retrieve_node("")
+
+# upload files
+osfr::osf_upload(x = project,
+                 conflicts = "overwrite",
+                 path = c(list.files(here::here("PATH"),
+                                     pattern = "reproreview-agile.*(pdf$|Rmd$|zip$)",
+                                     full.names = TRUE),
+                          "COPYRIGHT"
+                          )
+                 )
+```
