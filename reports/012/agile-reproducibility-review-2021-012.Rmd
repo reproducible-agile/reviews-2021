@@ -54,14 +54,13 @@ knitr::include_graphics(temp)
 This report is part of the reproducibility review at the AGILE conference.
 For more information see [https://reproducible-agile.github.io/](https://reproducible-agile.github.io/).
 This document is published on OSF at https://osf.io/RSF4M/.
-
 To cite the report use
 
-*Friese, Philipp A. (2021). Reproducibility review of: Building Change Detection of Airborne Laser Scanning and Dense Image Matching Point Clouds using Height and Class Information. https://doi.org/10.17605/OSF.IO/RSF4M* 
+> Friese, Philipp A. (2021, May). Reproducibility review of: Building Change Detection of Airborne Laser Scanning and Dense Image Matching Point Clouds using Height and Class Information. https://doi.org/10.17605/OSF.IO/RSF4M
 
 # Reviewed paper
 
-*Florian Politz, Monika Sester and Claus Brenner (2021). Building Change Detection of Airborne Laser Scanning and Dense Image Matching Point Clouds using Height and Class Information.*
+> Politz, F., Sester, M., and Brenner, C.: Building Change Detection of Airborne Laser Scanning and Dense Image Matching Point Clouds using Height and Class Information, AGILE GIScience Ser., 2, 10, https://doi.org/10.5194/agile-giss-2-10-2021, 2021.
 
 
 # Summary
@@ -217,7 +216,7 @@ project <- osfr::osf_retrieve_node("rsf4m")
 osfr::osf_upload(x = project,
                 conflicts = "overwrite",
                 path = c(list.files(here::here("submission_12"),
-                                    pattern = "agile-reproducibility-review-.*(pdf$|Rmd$|zip$)",
+                                    pattern = agile-reproducibility-review-.*(pdf$|Rmd$|zip$)",
                                     full.names = TRUE)
                          #,"COPYRIGHT"
                          )
