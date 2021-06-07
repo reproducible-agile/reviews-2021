@@ -13,4 +13,6 @@ install.packages("xml2")
 install.packages("rvest")
 install.packages("tidyr")
 install.packages("ggplot2")
+install.packages("zip")
+install.packages("osfr")
 remotes::install_github("tidyverse/googledrive", ref = "v1.0.0") # more convenience for upload/update in newer version
