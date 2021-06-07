@@ -60,7 +60,7 @@ To cite the report use
 
 # Reviewed paper
 
-> TODO ADD FULL CITATION
+> Decoupes, R., Kafando, R., Roche, M., and Teisseire, M.: H-TFIDF: What makes areas specific over time in the massive flow of tweets related to the covid pandemic?, AGILE GIScience Ser., 2, 2, <https://doi.org/10.5194/agile-giss-2-2-2021>, 2021.
 
 # Summary
 
@@ -478,11 +478,10 @@ git diff --ignore-all-space > ../repro-review.diff
 library("zip")
 library("here")
 
-zipfile <- here::here("025/agile-reproreview-2021-025.zip")
+zipfile <- here::here("025/reproreview-agile-2021-025.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
-          c(
-            here::here("025/docker-compose.yml"),
+          c(here::here("025/docker-compose.yml"),
             here::here("025/repro-review.diff"),
             here::here("025/tweet-map.jpg"),
             here::here("025/tweet-count.jpg")))
@@ -497,10 +496,9 @@ project <- osfr::osf_retrieve_node("rdnyu")
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here::here("PATH"),
-                                     pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$)",
-                                     full.names = TRUE),
-                          "COPYRIGHT"
+                 path = c(list.files(here::here("025"),
+                                     pattern = "reproreview-agile-.*(pdf$|Rmd$|zip$)",
+                                     full.names = TRUE)
                           )
                  )
 ```

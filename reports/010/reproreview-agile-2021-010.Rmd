@@ -55,11 +55,11 @@ To cite the report use
 
 # Reviewed paper
 
-> TODO ADD FULL CITATION
+> Satari, R., Kazimi, B., and Sester, M.: Extraction of linear structures from digital terrain models using deep learning, AGILE GIScience Ser., 2, 11, <https://doi.org/10.5194/agile-giss-2-11-2021>, 2021.
 
 # Summary
 
-The provided workflows was **partially reproduced**.
+The provided workflow was **partially reproduced**.
 Based on the provided test file and instructions, I was able to recreate the computing environment and run the segmentation models.
 Relevant tables from the paper could be recreated.
 The training and validation part of the workflow is irreproducible because of proprietary data, therefore no figures could be recreated.
@@ -89,7 +89,7 @@ mkvirtualenv agile-010 -p python3.5 -r requirements.txt
 pip install GDAL==3.2.1
 ```
 
-Next, I downloaded and unzipped the data per instructions, and tried to run the script.
+Next, I downloaded and unzipped the data per instructions from [here](https://seafile.cloud.uni-hannover.de/d/95a74b9a5b0e4e639077/), and tried to run the script.
 
 ```{bash create_dataset, eval=FALSE, size="tiny"}
 python create_dataset.py
@@ -122,13 +122,10 @@ sudo lshw -C display
 
 Problem: I don't have the right graphics card!
 The authors said it should be possible with `tensorflow-cpu`, so I create `requirements-cpu.txt` with `tensorflow-cpu` version `1.15.0`, the only one for version `1.x`.
-Furthermore, I needed to move a file to a different folder.
 
 ```{bash cpu, eval=FALSE, size="tiny"}
 pip uninstall tensorflow_gpu
 pip install -r requirements-cpu.txt
-
-mv data/dtms/test_labels.tif data/labels/
 ```
 
 Need to make adjustments in `utils/utils.py` for my version of GDAL, later also in `HRNetBinary../evaluate.py`
@@ -149,7 +146,7 @@ python create_dataset.py
 Creates a lot of `.tif` files in `data/test`.
 
 ```{r tree, size="tiny"}
-list.dirs("agile-submission-2021/data/")
+list.dirs(here::here("010/agile-submission-2021/data/"), full.names = FALSE)
 ```
 
 ## Evaluate segmentations
@@ -166,7 +163,7 @@ Non-trainable params: 13,570
 # [..]
 ```
 
-Takes some time to run... then finishes with
+Takes some time to run... then finishes with:
 
 ```{bash, eval=FALSE, size="tiny"}
 [...]
@@ -183,7 +180,7 @@ cd SegnetBinarySegmentation
 python3 evaluate.py --evaluation_file=evaluation_file.csv
 ```
 
-This finished with a minute!
+This finished within a minute!
 These values match the column `SegNet` of Table 1, within a level of precision to be expected from such a classification.
 
 ```{r table1, size="scriptsize", message=FALSE, caption = "Reproduction of Table 1 in the paper"}
@@ -241,16 +238,16 @@ A second view and short exchange with the authors made clear that the dataset is
 
 ```{bash, echo=FALSE}
 cd agile-submission-2021
-git diff --ignore-all-space > ../repro-review.diff
+git diff --ignore-all-space 0c1f128d..59524a71 > ../repro-review.diff
 ```
 
-The diff of all changes made to the repository is stored in the file `repro-review.diff` published with this report.
+The diff of all changes made to the repository is stored in the file `repro-review.diff` published with this report and also in the fork [github.com/reproducible-agile/agile-submission-2021](https://github.com/reproducible-agile/agile-submission-2021).
 
 ---------
 
 The workflow was partly reproduced. The data preparation (extraction with ArcGIS) is not reproducible, but the different segmentation algorithms could be executed.
 The actual training of the models and prediction was not reproducible because of unavailable training and validation datasets.
-The code seems to be complete tough and is readable, though I cannto say if it is sensible.
+The code seems to be complete tough and is readable, documented, and structured.
 No code was provided to recreate any figures.
 
 # Comments to the authors
@@ -268,25 +265,24 @@ A decent project, but there are always some things you can do better, here are s
 library("zip")
 library("here")
 
-zipfile <- here::here("PATH/agile-reproreview-2021-010.zip")
+zipfile <- here::here("010/reproreview-agile-2021-010.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
-          here::here("2020-018/files to add to the zip, if any"))
+          here::here("010/repro-review.diff"))
 
 library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # OSF_PAT is in .Renviron in parent directory
 # We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
 
 # retrieve project
-project <- osfr::osf_retrieve_node("OSF ID")
+project <- osfr::osf_retrieve_node("2sc7g")
 
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here::here("PATH"),
-                                     pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$)",
-                                     full.names = TRUE),
-                          "COPYRIGHT"
+                 path = c(list.files(here::here("010"),
+                                     pattern = "reproreview-agile-.*(pdf$|Rmd$|zip$)",
+                                     full.names = TRUE)
                           )
                  )
 ```

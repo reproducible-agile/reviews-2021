@@ -85,10 +85,10 @@ To facilitate reproduction, authors are encouraged to check the [AGILE Reproduci
 library("zip")
 library("here")
 
-zipfile <- here::here("PATH/agile-reproreview-YEAR-NUMBER.zip")
+zipfile <- here::here("014/reproreview-agile-2021-014.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
-          here::here("2020-018/files to add to the zip, if any"))
+          here::here("014/files to add to the zip, if any"))
 
 library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # OSF_PAT is in .Renviron in parent directory
@@ -101,7 +101,7 @@ project <- osfr::osf_retrieve_node("OSF ID")
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
                  path = c(list.files(here::here("PATH"),
-                                     pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$)",
+                                     pattern = "reproreview-agile-.*(pdf$|Rmd$|zip$)",
                                      full.names = TRUE),
                           "COPYRIGHT"
                           )

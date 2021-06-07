@@ -1,5 +1,5 @@
 diff --git a/HRNetBinarySegmentation/evaluate.py b/HRNetBinarySegmentation/evaluate.py
-index 239b345..3ad751f 100644
+index 239b345..e2dd8ee 100644
 --- a/HRNetBinarySegmentation/evaluate.py
 +++ b/HRNetBinarySegmentation/evaluate.py
 @@ -28,7 +28,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
@@ -11,6 +11,14 @@ index 239b345..3ad751f 100644
  import keras
  from sklearn.model_selection import train_test_split
  import argparse
+diff --git a/HRNetBinarySegmentation/files/evaluation_file.csv b/HRNetBinarySegmentation/files/evaluation_file.csv
+new file mode 100644
+index 0000000..9550529
+--- /dev/null
++++ b/HRNetBinarySegmentation/files/evaluation_file.csv
+@@ -0,0 +1,2 @@
++acc,f1_m,loss,model_type,precision_m,recall_m,specific_name
++0.9069677637591589,0.7762661981036123,0.2579103708461288,hrnet,0.8187425669110917,0.7393777735160645,simple_binary
 diff --git a/HRNetBinarySegmentation/predict.py b/HRNetBinarySegmentation/predict.py
 index 4fb6b2e..d4bd0f2 100644
 --- a/HRNetBinarySegmentation/predict.py
@@ -51,7 +59,7 @@ index b549c60..1b52712 100644
  from sklearn.model_selection import train_test_split
  import argparse
 diff --git a/SegnetBinarySegmentation/evaluate.py b/SegnetBinarySegmentation/evaluate.py
-index 5472b3b..f6b12fd 100644
+index 5472b3b..1ae8698 100644
 --- a/SegnetBinarySegmentation/evaluate.py
 +++ b/SegnetBinarySegmentation/evaluate.py
 @@ -29,7 +29,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
@@ -63,6 +71,14 @@ index 5472b3b..f6b12fd 100644
  import keras
  from sklearn.model_selection import train_test_split
  import argparse
+diff --git a/SegnetBinarySegmentation/files/evaluation_file.csv b/SegnetBinarySegmentation/files/evaluation_file.csv
+new file mode 100644
+index 0000000..b0e0212
+--- /dev/null
++++ b/SegnetBinarySegmentation/files/evaluation_file.csv
+@@ -0,0 +1,2 @@
++acc,f1_m,loss,model_type,precision_m,recall_m,specific_name
++0.8787796161360466,0.6977567337366031,0.30944988930340267,segnetCustomized,0.7688989593480272,0.6399856043781083,simple_binary
 diff --git a/SegnetBinarySegmentation/predict.py b/SegnetBinarySegmentation/predict.py
 index eda40a9..8c658c8 100644
 --- a/SegnetBinarySegmentation/predict.py
@@ -103,7 +119,7 @@ index ca5b5c0..b66e3d9 100644
  from sklearn.model_selection import train_test_split
  import argparse
 diff --git a/multiclassSegmentation/evaluate.py b/multiclassSegmentation/evaluate.py
-index 2295669..cfdeb6b 100644
+index 2295669..2a93a90 100644
 --- a/multiclassSegmentation/evaluate.py
 +++ b/multiclassSegmentation/evaluate.py
 @@ -27,7 +27,7 @@ from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
@@ -115,6 +131,14 @@ index 2295669..cfdeb6b 100644
  import keras
  from sklearn.model_selection import train_test_split
  from sklearn.metrics import classification_report
+diff --git a/multiclassSegmentation/files/evaluation_file.csv b/multiclassSegmentation/files/evaluation_file.csv
+new file mode 100644
+index 0000000..f6a7818
+--- /dev/null
++++ b/multiclassSegmentation/files/evaluation_file.csv
+@@ -0,0 +1,2 @@
++f1-score_0,f1-score_1,f1-score_2,f1-score_3,f1-score_4,f1-score_5,loss,macro avg f1-score,macro avg precision,macro avg recall,micro avg f1-score,micro avg precision,micro avg recall,model_type,prediction_0,prediction_1,prediction_2,prediction_3,prediction_4,prediction_5,recall_0,recall_1,recall_2,recall_3,recall_4,recall_5,sparse_iou_0,sparse_iou_1,sparse_iou_2,sparse_iou_3,sparse_iou_4,sparse_iou_5,sparse_mean_iou,specific_name,support_0,support_1,support_2,support_3,support_4,support_5,weighted avg f1-score,weighted avg f1-score ignoring bg,weighted avg precision,weighted avg precision ignoring bg,weighted avg recall,weighted avg recall ignoring bg
++0.9445415690390874,0.38110009982152476,0.07217937426433668,0.8662593266889461,0.6246345193121702,0.25564731837794574,0.42059548077685166,0.5240603679173351,0.5808625421600077,0.5076590068235934,0.709227670351253,0.7672440900552258,0.6593684444435753,hrnet,0.9265770798468963,0.3874484931375162,0.3275804101759498,0.881741322492203,0.7069532342046573,0.2548747131028226,0.9632164223077959,0.37495639120000845,0.040557978622536524,0.8513116286221936,0.5594869982757479,0.25642462191327803,0.8949878248084054,0.20859225167691275,0.03426551682196871,0.7641346080441684,0.45686348580264524,0.14002082697459112,0.41647741660440796,hrnetMulti,49091663,945910,1081045,7855806,3336519,587233,0.8878958054911612,0.6864811011068988,0.8846528844993418,0.735583494599929,0.8965200358115313,0.6593684444435753
 diff --git a/multiclassSegmentation/predict.py b/multiclassSegmentation/predict.py
 index da9dbea..0fba5cc 100644
 --- a/multiclassSegmentation/predict.py
@@ -154,8 +178,22 @@ index 802d67d..43ba4a9 100644
  import keras
  from sklearn.model_selection import train_test_split
  import argparse
+diff --git a/requirements-cpu.txt b/requirements-cpu.txt
+new file mode 100644
+index 0000000..b8455ad
+--- /dev/null
++++ b/requirements-cpu.txt
+@@ -0,0 +1,7 @@
++scikit_image==0.15.0
++tensorflow_cpu==1.12.0
++numpy==1.18.5
++Keras==2.2.4
++pandas==0.23.4
++osr==0.0.1
++scikit-learn==0.20.0
+\ No newline at end of file
 diff --git a/utils/utils.py b/utils/utils.py
-index 95db452..a88ee1f 100644
+index 95db452..b4a747e 100644
 --- a/utils/utils.py
 +++ b/utils/utils.py
 @@ -9,7 +9,7 @@ np.random.seed(42)

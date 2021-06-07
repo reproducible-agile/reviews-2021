@@ -1,5 +1,5 @@
 ---
-title: "Reproducibility review of: An Approach to Assess the Effect of Currentness of Spatial Data on Routing Quality"
+title: "Reproducibility review of: Information-optimal Abstaining for Reliable Classification of Building Functions"
 author: "Daniel Nüst \\orcid{0000-0002-0024-5046}, Alexander Kmoch \\orcid{0000-0003-4386-4450}"
 date: "`r format(Sys.time(), '%Y-%m-%d')`"
 output:
@@ -433,7 +433,7 @@ A = 0.968139
 library("zip")
 library("here")
 
-zipfile <- here::here("004/agile-reproreview-2021-004.zip")
+zipfile <- here::here("004/reproreview-agile-2021-004.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
           c(here::here("004/..")))
@@ -448,7 +448,7 @@ project <- osfr::osf_retrieve_node("")
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here::here("PATH"),
+                 path = c(list.files(here::here("004"),
                                      pattern = "reproreview-agile.*(pdf$|Rmd$|zip$)",
                                      full.names = TRUE),
                           "COPYRIGHT"

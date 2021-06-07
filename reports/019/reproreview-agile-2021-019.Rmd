@@ -60,7 +60,7 @@ To cite the report use
 
 # Reviewed paper
 
-> TODO ADD FULL CITATION
+> Schmidl, M., Navratil, G., and Giannopoulos, I.: An Approach to Assess the Effect of Currentness of Spatial Data on Routing Quality, AGILE GIScience Ser., 2, 13, <https://doi.org/10.5194/agile-giss-2-13-2021>, 2021.
 
 # Summary
 
@@ -287,11 +287,11 @@ knitr::kable(`001_routes`)
 library("zip")
 library("here")
 
-zipfile <- here::here("019/agile-reproreview-2021-019.zip")
+zipfile <- here::here("019/reproreview-agile-2021-019.zip")
 file.remove(zipfile)
 zip::zipr(zipfile,
           c(here::here("019/routes"),
-            "*.geojson",
+            list.files(here::here("019"), pattern = "*_fastest.geojson"),
             "route_data.csv",
             "reproduction-route_success.ods"))
 
@@ -300,15 +300,14 @@ library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
 
 # retrieve project
-project <- osfr::osf_retrieve_node("")
+project <- osfr::osf_retrieve_node("bdu28")
 
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here::here("PATH"),
+                 path = c(list.files(here::here("019"),
                                      pattern = "reproreview-agile.*(pdf$|Rmd$|zip$)",
-                                     full.names = TRUE),
-                          "COPYRIGHT"
+                                     full.names = TRUE)
                           )
                  )
 ```

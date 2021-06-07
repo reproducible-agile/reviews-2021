@@ -55,7 +55,7 @@ To cite the report use
 
 # Reviewed paper
 
-> TODO ADD FULL CITATION
+> Schlegel, I.: Automated Extraction of Labels from Large-Scale Historical Maps, AGILE GIScience Ser., 2, 12, <https://doi.org/10.5194/agile-giss-2-12-2021>, 2021.
 
 # Summary
 
@@ -108,7 +108,8 @@ This command creates a number of `.png` files with the labels in the current wor
 The `geoJson1.json` created by me mostly matches the one provided by the authors, as the following snippet shows. Most importantly the `geometry` data is the same.
 
 ```{r compare_geojson, size="tiny"}
-reproduced_geojson <- sf::read_sf("IngaSchl-Label-Extraction-33eae48/02\ Text\ detection/data/input/G6299_H3_1853_L5_subset.png_cee5616e-ae62-11eb-bfdb-0242ac110002/geoJson1.json")
+reproduced_geojson <- sf::read_sf(
+  "IngaSchl-Label-Extraction-33eae48/02\ Text\ detection/data/input/G6299_H3_1853_L5_subset.png_cee5616e-ae62-11eb-bfdb-0242ac110002/geoJson1.json")
 original_geojson <- sf::read_sf("IngaSchl-Label-Extraction-33eae48/02\ Text\ detection/data/output/geoJson1.json")
 waldo::compare(original_geojson, reproduced_geojson)
 ```
@@ -178,27 +179,24 @@ I did not run the final notebook of step "06 Approximate georeferencing", becaus
 library("zip")
 library("here")
 
-zipfile <- here::here("PATH/agile-reproreview-YEAR-NUMBER.zip")
+zipfile <- here::here("005/reproreview-agile-2021-005.zip")
 file.remove(zipfile)
-zip::zipr(zipfile,
-          here::here("005/Dockerfile"),
-          "*.pdf",
-          "*.Rmd")
+zip::zipr(zipfile = zipfile,
+          files = c(here::here("005/Dockerfile")))
 
 library("osfr") # See docs at https://docs.ropensci.org/osfr/
 # OSF_PAT is in .Renviron in parent directory
 # We cannot use osfr to create a new component (with osfr::osf_create_component(x = osfr::osf_retrieve_node("6k5fh"), ...) because that will set the storage location to outside Europe.
 
 # retrieve project
-project <- osfr::osf_retrieve_node("OSF ID")
+project <- osfr::osf_retrieve_node("anv9r")
 
 # upload files
 osfr::osf_upload(x = project,
                  conflicts = "overwrite",
-                 path = c(list.files(here::here("PATH"),
-                                     pattern = "agile-reproreview-.*(pdf$|Rmd$|zip$)",
-                                     full.names = TRUE),
-                          "COPYRIGHT"
+                 path = c(list.files(here::here("005"),
+                                     pattern = "reproreview-agile-.*(pdf$|Rmd$|zip$)",
+                                     full.names = TRUE)
                           )
                  )
 ```
