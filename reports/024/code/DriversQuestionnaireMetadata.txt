@@ -1,0 +1,14 @@
+Questionnaire Instructions
+
+Page 1 - Demographics Questions (0) - common for both groups.
+Pages 2 and 3 - Santa Barbara Sense of Direction Scale (1) - common for both groups
+Page 4 - Map Sketch task (2) - common for both groups
+Pages 5, 6, 7, and 8 - Directions estimates section (3). Black bold fonts denote the instructions for Group1 (given the landmarks-based driving instructions), while red bold fonts, denote the instructions for Group 2 (given the descriptive driving instructions).
+Page 9 - Distances estimates section (4). Black bold fonts denote the instructions for Group1 (given the landmarks-based driving instructions), while red bold fonts, denote the instructions for Group 2 (given the descriptive driving instructions). 
+(5) and (6) are follow-up questions asking participants to comment on the procedure.
+
+Sections (0) and (1) are answered by participants right before the actual driving task takes place.
+Sections (2) - (6) are answered in situ after the driving part of the survey and after participants return to the starting point driving a different route on the way back.
+
+Rectangle dimensions on page 4 for section (2): 15cm X 19cm
+Radius dimension for circle on pages 5-8 for section (3): r = 15.5cm
