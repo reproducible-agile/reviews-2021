@@ -55,7 +55,7 @@ To cite the report use
 
 # Reviewed paper
 
-Isabell G. Klipper, Alexander Zipf and Sven Lautenbach. Flood Impact Assessment on Road Network and Healthcare Access – at the example of Jakarta, Indonesia
+Klipper, I. G., Zipf, A., and Lautenbach, S.: Flood Impact Assessment on Road Network and Healthcare Access at the example of Jakarta, Indonesia, AGILE GIScience Ser., 2, 4, https://doi.org/10.5194/agile-giss-2-4-2021, 2021.
 
 # Summary
 
@@ -148,7 +148,7 @@ conda install gdal
 
 ## 1. Data preprocessing
 
-Preprocessing was run with the `HOT` option, as confirmed by the authors. The error message relation to `proj.db` does not seem to impact the generation of necessary output files.
+Preprocessing was run with the `HOT` option, as confirmed by the authors. The error message relating to `proj.db` does not seem to impact the generation of necessary output files.
 
 ```{bash step1, eval=FALSE, size="scriptsize"}
 (jakarta_venv) agraser@anitas-pc:~/agile-reproductions/paper-2021-11/Jakarta_Thesis_Klipper$ python -m ma_jakarta.scripts.
