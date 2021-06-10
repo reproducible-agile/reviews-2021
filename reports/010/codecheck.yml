@@ -1,0 +1,32 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "Extraction of linear structures from digital terrain models using deep learning"
+  authors:
+    - name: Ramish Satari
+    - name: Bashir Kazimi
+      ORCID: 0000-0003-1802-7511
+    - name: Monika Sester
+      ORCID: 0000-0002-6656-8809
+  reference: https://doi.org/10.5194/agile-giss-2-11-2021
+
+codechecker:
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+  - name: Anita Graser
+    ORCID: 0000-0001-5361-2885
+
+report: https://doi.org/10.17605/osf.io/2sc7g
+summary: |
+    The provided workflow was partially reproduced. Based on the provided test file and instructions, we
+    were able to recreate the computing environment and run the segmentation models. Relevant tables from
+    the paper could be recreated. The training and validation part of the workflow is irreproducible because
+    of proprietary data, therefore no figures could be recreated.
+repository: https://github.com/reproducible-agile/agile-submission-2021
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-004

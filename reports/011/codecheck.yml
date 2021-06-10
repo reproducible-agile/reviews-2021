@@ -1,0 +1,29 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "Flood Impact Assessment on Road Network and Healthcare Access at the example of Jakarta, Indonesia"
+  authors:
+    - name: Isabell G. Klipper
+    - name: Alexander Zipf
+      ORCID: 0000-0003-4916-9838
+    - name: Sven Lautenbach
+      ORCID: 0000-0003-1825-9996
+  reference: https://doi.org/10.5194/agile-giss-2-4-2021
+
+codechecker:
+  - name: Anita Graser
+    ORCID: 0000-0001-5361-2885
+
+report: https://doi.org/10.17605/osf.io/g4dcq
+summary: |
+    The provided workflow was partially reproduced. The reproduction described in this report uses the Python code provided
+    in the Github.com repo and data provided by the authors via email. The figures generated using this
+    source code are not identical to the figures in the paper. However, many of the results reported in the paper could be reproduced.
+repository: https://github.com/reproducible-agile/Jakarta_Thesis_Klipper
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-008

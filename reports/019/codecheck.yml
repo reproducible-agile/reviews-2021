@@ -1,0 +1,32 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "An Approach to Assess the Effect of Currentness of Spatial Data on Routing Quality"
+  authors:
+    - name: Martin Schmidl
+    - name: Gerhard Navratil
+      ORCID: 0000-0002-2978-5724
+    - name: Ioannis Giannopoulos
+      ORCID: 0000-0002-2556-5230
+  reference: https://doi.org/10.5194/agile-giss-2-13-2021
+
+codechecker:
+  - name: Alexander Kmoch
+    ORCID: 0000-0003-4386-4450
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/osf.io/bdu28
+summary: |
+    The reproduction was successful. All provided scripts could be execute after clarification with the authors
+    using the provided data. Some manual steps could not be reproduced, but all code and data are shared.
+    The script outputs match what is presented in the paper considering the randomness in the workflow.
+    Relevant figures and tables could be recreated successfully.
+repository: https://doi.org/10.17605/OSF.IO/RXCGJ
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-010

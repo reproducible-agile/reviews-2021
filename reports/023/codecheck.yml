@@ -1,0 +1,35 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "A Socially Aware Huff Model for Destination Choice in Nature-based Tourism"
+  authors:
+    - name: Meilin Shi
+    - name: Krzysztof Janowicz
+    - name: Ling Cai
+      ORCID: 0000-0001-7106-4907
+    - name: Gengchen Mai
+      ORCID: 0000-0002-7818-7309
+    - name: Rui Zhu
+      ORCID: 0000-0002-8910-9445
+  reference: https://doi.org/10.5194/agile-giss-2-14-2021
+
+codechecker:
+  - name: Jakub Krukar
+    ORCID: 0000-0003-2615-8757
+
+report: https://doi.org/10.17605/OSF.IO/4CPM3
+summary: |
+    The code, sample API query, and downloaded data were published in a public GitHub repository with a
+    working Binder link. All files containing the code could be executed and all tables presented in the paper
+    could be reproduced with only minor changes to the code. However, the code does not create figures
+    contained in the paper and an attempt to change the results of the model evaluation by changing its
+    numerical assumption was unsuccessful. The authors demonstrate concern for the reproducibility of their
+    work and actively improved the reproducibility workflow throughout the reproducibility review process.
+repository: https://github.com/reproducible-agile/Socially-aware-Huff-model
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-006

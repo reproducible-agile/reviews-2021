@@ -1,0 +1,34 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "A Comparative Study of Typing and Speech For Map Metadata Creation"
+  authors:
+    - name: Pei-Chun Lai
+    - name: Auriol Degbelo
+      ORCID: 0000-0001-5087-8776
+  reference: https://doi.org/10.5194/agile-giss-2-7-2021
+
+codechecker:
+  - name: Frank Ostermann
+    ORCID: 0000-0002-9317-8291
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/osf.io/7fqtm
+summary: |
+    The paper presents the results of a user experiment to improve GI-metadata using speech. A complete
+    reproduction is practically impossible to achieve. This reproducibility report therefore investigated two
+    components: First, whether sufficient information is provided to replicate the experiment elsewhere with
+    a different group of participants. Second, whether sufficient information is provided to reproduce the
+    analysis of the experimental results. The conclusion is positive for both. The original 
+    prototype is accessible online at the time of this writing. To reproduce the results, the provided
+    input data, R code, and Excel spreadsheet lead to the same results as given in the paper and the 
+    prototype for the user experiment could be run locally.
+repository: https://github.com/reproducible-agile/map-metadata-creation
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-005

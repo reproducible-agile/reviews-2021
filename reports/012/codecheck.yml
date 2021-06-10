@@ -1,0 +1,32 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "Building Change Detection of Airborne Laser Scanning and Dense Image Matching Point Clouds using Height and Class Information"
+  authors:
+    - name:  Florian Politz
+    - name: Monika Sester
+      ORCID: 0000-0002-6656-8809
+    - name: Claus Brenner
+      ORCID: 0000-0002-6459-0682
+  reference: https://doi.org/10.5194/agile-giss-2-10-2021
+
+codechecker:
+  - name: Philipp A. Friese
+    ORCID: 0000-0002-3124-5364
+
+report: https://doi.org/10.17605/osf.io/rsf4m
+summary: |
+    The reproduction was partially successful.
+    The paper data and software are not publicly available due to licence issues with the cooperating parties.
+    For the scope of this reproduction however, the authors provided a synthetic data set, a script to 
+    generating a synthetic data set from a publicly available data source, and the analysis code.
+    Using the provided synthetic data set the executability of the provided analysis code was confirmed.
+    The methodology behind all figures has been reproduced.
+repository: https://doi.org/10.17605/osf.io/rsf4m
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-002

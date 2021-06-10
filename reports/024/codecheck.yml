@@ -1,0 +1,28 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "Investigating drivers’ geospatial abilities in unfamiliar environments"
+  authors:
+    - name: Dafni Karkasina
+    - name: Margarita Kokla
+    - name: Eleni Tomai
+      ORCID: 0000-0003-1162-7389
+  reference: https://doi.org/10.5194/agile-giss-2-3-2021
+
+codechecker:
+  - name: Philipp A. Friese
+    ORCID: 0000-0002-3124-5364
+
+report: https://doi.org/10.17605/osf.io/dx92a
+summary: |
+    The updated submission contains a DASA section and provides the analysis script, dataset and questionnaires.
+    The provided R script computes all statistical analyses presented in the paper and generates the key figure
+    and data for both presented tables. The reproduction was successful.
+repository: https://doi.org/10.6084/m9.figshare.14460102.v4
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-003

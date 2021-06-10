@@ -1,0 +1,33 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "H-TFIDF: What makes areas specific over time in the massive flow of tweets related to the covid pandemic?"
+  authors:
+    - name: Rémy Decoupes
+      ORCID: 0000-0003-0863-9581
+    - name: Rodrique Kafando
+      ORCID: 0000-0002-7190-9225
+    - name: Mathieu Roche
+      ORCID: 0000-0003-3272-8568
+    - name: Maguelonne Teisseire
+      ORCID: 0000-0001-9313-6414
+  reference: https://doi.org/10.5194/agile-giss-2-13-2021
+
+codechecker:
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/rdnyu
+summary: |
+    The authors provide a well documented workflow analysing a large number of Tweets over a considerable
+    time span. Because of the data size, the authors provided instructions for a data subset, for which the
+    code could be executed successfully and the created figures match the provided baseline, and also confirm
+    that data can be created and the code is available for the results reported in the paper.
+repository: https://gitlab.irstea.fr/remy.decoupes/covid19-tweets-mood-tetis
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-009

@@ -1,0 +1,27 @@
+---
+version: https://codecheck.org.uk/spec/config/1.0/
+
+manifest:
+  - file: NA
+    comment: "The AGILE 2021 Reproducibility Review did not include manifest documentation, see https://github.com/codecheckers/register/issues/38"
+
+paper:
+  title: "Automated Extraction of Labels from Large-Scale Historical Maps"
+  authors:
+    - name: Inga Schlegel
+      ORCID: 0000-0003-1468-4944
+  reference: https://doi.org/10.5194/agile-giss-2-12-2021
+
+codechecker:
+  - name: Daniel Nüst
+    ORCID: 0000-0002-0024-5046
+
+report: https://doi.org/10.17605/osf.io/anv9r
+summary: |
+    The provided workflow could be partially reproduced, notably the text detection and string similarity
+    calculations could be executed and provide sufficiently similar results. Some manual steps were included which
+    could not be reproduced, as well as a final step due to long execution time. The software stack was challenging
+    to install but overall well documented.
+repository: https://github.com/reproducible-agile/Label-Extraction
+check_time: "2021-06-10 12:00:00"
+certificate: 2021-007
